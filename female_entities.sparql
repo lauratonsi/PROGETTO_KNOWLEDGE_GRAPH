@@ -1,0 +1,9 @@
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?person ?name
+WHERE {
+  ?person rdf:type cpv:Person ;
+          cpv:sex "Female" ;
+          cpv:fullName ?name .
+}
