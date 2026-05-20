@@ -24,7 +24,7 @@
         cpv:fullName  "LUCIANO TOSO MONTANARI" ;
         cpv:sex       "Male" .
 
-<https://w3id.org/bologna/resource/street/48900>
+<https://w3id.org/bologna/resource/street/48900>git init
         rdf:type           clv:Street ;
         clv:hasStreetName  "VIA GEROLAMO RAINALDI" ;
         clv:isDedicatedTo  <https://w3id.org/bologna/resource/person/7adf8eb5840f88dd646f9a873455af5a> .
