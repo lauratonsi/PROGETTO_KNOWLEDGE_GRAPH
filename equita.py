@@ -36,6 +36,31 @@ falsi_maschi = [
     "LA BASTIA", "LA VENETA"
 ]
 
+# Persone classificate erroneamente come Toponimo → Male
+falsi_toponimi = [
+    # Artisti/scrittori noti con soprannome o nome singolo
+    "DANTE", "DONATELLO", "CARAVAGGIO", "GIAMBOLOGNA", "GIORGIONE",
+    # Persone storiche bolognesi (soprannome)
+    "ARETUSI",
+    "TINTORETTO", "PINTURICCHIO", "STENDHAL", "MOLIERE", "TRILUSSA",
+    "WILIGELMO",
+    # Politici e artisti noti con cognome o soprannome
+    "CAVOUR", "DEL PERUGINO", "DEI GRACCHI",
+    # Persone con nome completo
+    "EDMONDO DE AMICIS", "EUGENIO CURIEL", "FELICE BATTAGLIA",
+    "MASSIMO D'AZEGLIO", "RODOLFO MONDOLFO", "ODOFREDO", "GRAZIANO",
+    "ROLANDINO", "GUERRAZZI", "GAROFALO", "CICERUACCHIO", "CAIROLI",
+    "PAGANINO BONAFEDE", "SIGISMONDO CAMPAGNOLI", "MAGGIORE LEOPOLDO SERRA",
+    "FRANCESCO RISMONDO",
+    # Fratelli (tutti maschi o denominazione maschile collettiva)
+    "FRATELLI BORDONI", "FRATELLI CARPIGIANI", "FRATELLI CERVI",
+    "FRATELLI DANDOLO", "FRATELLI GRUPPI", "FRATELLI MUSI",
+    "FRATELLI PINARDI", "FRATELLI ROSSELLI",
+    "PASSAGGIO FRATELLI MARINCOLA",
+    # Collettivi maschili
+    "RAGAZZI DEL '99",
+]
+
 # Donne classificate erroneamente come Male
 vere_femmine = [
     "ARTEMISIA GENTILESCHI",   # pittrice barocca (1593-1654)
@@ -55,6 +80,7 @@ try:
         donne_rimosse = 0
         uomini_rimossi = 0
         donne_recuperate = 0
+        toponimi_recuperati = 0
 
         for row in reader:
             nome = str(row['NOME_PULITO']).strip().upper()
@@ -70,6 +96,9 @@ try:
             elif nome in vere_femmine and genere == 'Male':
                 row['GENERE'] = 'Female'
                 donne_recuperate += 1
+            elif nome in falsi_toponimi and genere == 'Toponimo':
+                row['GENERE'] = 'Male'
+                toponimi_recuperati += 1
 
             writer.writerow(row)
 
@@ -77,6 +106,7 @@ try:
     print(f" -> False donne rimosse: {donne_rimosse}")
     print(f" -> Falsi uomini rimossi: {uomini_rimossi}")
     print(f" -> Vere donne recuperate: {donne_recuperate}")
+    print(f" -> Uomini recuperati da Toponimo: {toponimi_recuperati}")
 
 except Exception as e:
     print(f"Errore critico: {e}")
