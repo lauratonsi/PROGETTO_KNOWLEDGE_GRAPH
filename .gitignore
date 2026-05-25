@@ -1,0 +1,10 @@
+# Ambienti virtuali
+venv/
+env/
+__pycache__/
+
+# Binari e file di esecuzione
+*.jar
+
+# File di sistema macOS
+.DS_Store

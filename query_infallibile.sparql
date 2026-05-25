@@ -1,0 +1,42 @@
+PREFIX fx:  <http://sparql.xyz/facade-x/ns/>
+PREFIX xyz: <http://sparql.xyz/facade-x/data/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+
+CONSTRUCT {
+  ?viaURI a clv:Street ;
+          clv:hasStreetName ?nomeIntero ;
+          clv:isDedicatedTo ?personaURI .
+  
+  ?personaURI a cpv:Person ;
+              cpv:fullName ?nomePulitissimo ;
+              cpv:sex ?genere .
+}
+WHERE {
+  SERVICE <x-sparql-anything:csv.headers=true,location=bologna_KG_ready.csv> {
+    ?row xyz:CODVIA ?codVia ;
+         xyz:NOMEVIA ?nomeIntero ;
+         xyz:NOME_PULITO ?nomePuroRaw ;
+         xyz:GENERE ?genere .
+         
+    FILTER(?genere = "Male" || ?genere = "Female")
+  }
+  
+  BIND(REPLACE(STR(?nomePuroRaw), "^(VIA |VIALE |PIAZZA |PIAZZETTA |PIAZZALE |PASSAGGIO |ROTONDA |GALLERIA |PONTE |LARGO |LOCALITA' |MURA |SOTTOPASSO |VICOLO |SALITA )", "") AS ?nomeSenzaPrefissi)
+  
+  BIND(REPLACE(?nomeSenzaPrefissi, "^\\s+|\\s+$", "") AS ?nomePulitissimo)
+
+  FILTER(?nomePulitissimo NOT IN (
+    "NOME VIA DA ISTITUIRE", "VIGILI DEL FUOCO", "DE LA BIRRA", "CAVOUR", 
+    "DISPERSI DEL NAUFRAGIO DEL PIROSCAFO ORIA", "SANTISSIMA ANNUNZIATA", 
+    "DECORATI AL VALOR MILITARE", "BRIGATA BOLERO", "BRIGATE PARTIGIANE", 
+    "FONTI DI CASAGLIA", "VOLTO SANTO", "CONSIGLIO D'EUROPA", 
+    "MEMORIALE DELLA SHOAH", "GRANATIERI DI SARDEGNA", "CASTELL'ARIENTI", 
+    "DE LA BOVA", "MASSA CARRARA", "SURROGAZIONE RENO", "BUON PASTORE",
+    "LA BASTIA", "LA VENETA"
+  ))
+
+  BIND(IRI(CONCAT("https://w3id.org/bologna/resource/street/", STR(?codVia))) AS ?viaURI)
+  BIND(IRI(CONCAT("https://w3id.org/bologna/resource/person/", MD5(?nomePulitissimo))) AS ?personaURI)
+}
