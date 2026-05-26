@@ -8,3 +8,11 @@ __pycache__/
 
 # File di sistema macOS
 .DS_Store
+# Generated/intermediate project files
+bologna_entita_uniche.csv
+bologna_entita_uniche_comma.csv
+bologna_data_sacra.csv
+integrazione.txt
+rifter_arcstra_table.csv
+bologna_gender_gap.ttl
+bologna_grafo.ttl
