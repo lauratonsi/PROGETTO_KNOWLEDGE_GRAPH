@@ -5,15 +5,68 @@ file_output = 'bologna_KG_ready.csv'
 
 # Le "False Femmine" da declassare a Toponimo
 false_femmine = [
-    "SANTA BARBARA", "SANT'AGNESE", "SANTA MARIA", "SANTA LUCIA", "SANTA CHIARA", 
-    "SANTA CATERINA DI QUARTO", "SANT'ANNA", "SANTA CATERINA", "SANTA MARGHERITA AL COLLE", 
-    "SANTA MARGHERITA", "SANTA LIBERATA", "SANT'APOLLONIA", "SANTA RITA", 
-    "LEMONIA", "VALERIA", "LICINIA", "POMPONIA", "EGNAZIA", "CAMONIA", 
-    "CROCEROSSINE", "VITTORIA", "LETIZIA", "SERENA", "ALTABELLA"
+    "SANTA BARBARA", "SANT'AGNESE", "SANTA MARIA", "SANTA LUCIA", "SANTA CHIARA",
+    "SANTA CATERINA DI QUARTO", "SANT'ANNA", "SANTA CATERINA", "SANTA MARGHERITA AL COLLE",
+    "SANTA MARGHERITA", "SANTA LIBERATA", "SANT'APOLLONIA", "SANTA RITA",
+    "LEMONIA", "VALERIA", "LICINIA", "POMPONIA", "EGNAZIA", "CAMONIA",
+    "CROCEROSSINE", "VITTORIA", "LETIZIA", "SERENA", "ALTABELLA",
+    "SANTISSIMA ANNUNZIATA", "DUE MADONNE"
 ]
 
-# L'ultimo falso maschio
-falsi_maschi = ["RIO POLO"]
+# I "Falsi Maschi" da declassare a Toponimo
+falsi_maschi = [
+    "RIO POLO",
+    # Collettivi/istituzioni
+    "GRANATIERI DI SARDEGNA", "VIGILI DEL FUOCO", "DECORATI AL VALOR MILITARE",
+    "CONSIGLIO D'EUROPA", "DISPERSI DEL NAUFRAGIO DEL PIROSCAFO ORIA",
+    "BRIGATA BOLERO", "BRIGATE PARTIGIANE",
+    "COLLEGIO DI SPAGNA", "DECORATO VALORE CIVILE", "LIBER PARADISUS",
+    # Luoghi e toponimi geografici
+    "BAGNI DI MARIO", "BASSA DEI SASSI", "BERRETTA ROSSA", "BOCCA DI LUPO",
+    "CA' SELVATICA", "CAPO DI LUCCA", "CAVEDONE", "DALLA VOLTA",
+    "ESTRO MENABUE", "FANTUZZI", "FOSSA CAVA", "LA CASTIGLIA",
+    "MICHELINO", "PAGLIA CORTA", "PELLEGRINO", "QUARTO DI SOPRA",
+    "RIZZOLA LEVANTE", "SALITA DI SAN BENEDETTO", "SANTO STEFANO",
+    "SAVENA ANTICO", "SERAGNOLI", "SPIRITO SANTO", "STAZIONE ROVERI",
+    "VAL D'APOSA", "VITTORIO VENETO",
+    # Gia' filtrati nel SPARQL ma ancora Male nel CSV
+    "NOME VIA DA ISTITUIRE", "FONTI DI CASAGLIA", "VOLTO SANTO",
+    "MEMORIALE DELLA SHOAH", "LOCALITA' CASTELL'ARIENTI", "SURROGAZIONE RENO",
+    "BUON PASTORE", "MASSA CARRARA", "DE LA BIRRA", "DE LA BOVA",
+    "LA BASTIA", "LA VENETA"
+]
+
+# Persone classificate erroneamente come Toponimo → Male
+falsi_toponimi = [
+    # Artisti/scrittori noti con soprannome o nome singolo
+    "DANTE", "DONATELLO", "CARAVAGGIO", "GIAMBOLOGNA", "GIORGIONE",
+    # Persone storiche bolognesi (soprannome)
+    "ARETUSI",
+    "TINTORETTO", "PINTURICCHIO", "STENDHAL", "MOLIERE", "TRILUSSA",
+    "WILIGELMO",
+    # Politici e artisti noti con cognome o soprannome
+    "CAVOUR", "DEL PERUGINO", "DEI GRACCHI",
+    # Persone con nome completo
+    "EDMONDO DE AMICIS", "EUGENIO CURIEL", "FELICE BATTAGLIA",
+    "MASSIMO D'AZEGLIO", "RODOLFO MONDOLFO", "ODOFREDO", "GRAZIANO",
+    "ROLANDINO", "GUERRAZZI", "GAROFALO", "CICERUACCHIO", "CAIROLI",
+    "PAGANINO BONAFEDE", "SIGISMONDO CAMPAGNOLI", "MAGGIORE LEOPOLDO SERRA",
+    "FRANCESCO RISMONDO",
+    # Fratelli (tutti maschi o denominazione maschile collettiva)
+    "FRATELLI BORDONI", "FRATELLI CARPIGIANI", "FRATELLI CERVI",
+    "FRATELLI DANDOLO", "FRATELLI GRUPPI", "FRATELLI MUSI",
+    "FRATELLI PINARDI", "FRATELLI ROSSELLI",
+    "PASSAGGIO FRATELLI MARINCOLA",
+    # Collettivi maschili
+    "RAGAZZI DEL '99",
+]
+
+# Donne classificate erroneamente come Male
+vere_femmine = [
+    "ARTEMISIA GENTILESCHI",   # pittrice barocca (1593-1654)
+    "BITTISIA GOZZADINI",      # giurista medievale bolognese (1209-1261)
+    "PROPERZIA DE ROSSI"       # scultrice rinascimentale bolognese (c.1490-1530)
+]
 
 try:
     with open(file_input, mode='r', encoding='utf-8') as fin, \
@@ -26,11 +79,13 @@ try:
 
         donne_rimosse = 0
         uomini_rimossi = 0
+        donne_recuperate = 0
+        toponimi_recuperati = 0
 
         for row in reader:
             nome = str(row['NOME_PULITO']).strip().upper()
             genere = row['GENERE']
-            
+
             # Applichiamo l'equità
             if nome in false_femmine and genere == 'Female':
                 row['GENERE'] = 'Toponimo'
@@ -38,12 +93,20 @@ try:
             elif nome in falsi_maschi and genere == 'Male':
                 row['GENERE'] = 'Toponimo'
                 uomini_rimossi += 1
-                
+            elif nome in vere_femmine and genere == 'Male':
+                row['GENERE'] = 'Female'
+                donne_recuperate += 1
+            elif nome in falsi_toponimi and genere == 'Toponimo':
+                row['GENERE'] = 'Male'
+                toponimi_recuperati += 1
+
             writer.writerow(row)
 
     print(f"OPERAZIONE EQUITA' COMPLETATA. File '{file_output}' creato.")
     print(f" -> False donne rimosse: {donne_rimosse}")
     print(f" -> Falsi uomini rimossi: {uomini_rimossi}")
+    print(f" -> Vere donne recuperate: {donne_recuperate}")
+    print(f" -> Uomini recuperati da Toponimo: {toponimi_recuperati}")
 
 except Exception as e:
     print(f"Errore critico: {e}")
