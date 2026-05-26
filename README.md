@@ -36,7 +36,19 @@ cd /Users/lauratonsi/METODI
 java -jar sparql-anything-0.9.0.jar -q female_entities.sparql -l bologna_KG_definitivo.ttl -f CSV > female_entities.csv
 ```
 
-4) Arricchimento (opzionale)
+4) Esportare le triple per LLM
+
+Per preparare il grafo all'integrazione con modelli linguistici, esporta le triple in formato JSONL:
+
+```bash
+cd /Users/lauratonsi/METODI
+source venv/bin/activate
+python export_kg_for_llm.py
+```
+
+Produce: `triples_for_llm.jsonl` (formato compatto: uno per riga, {s: subject, p: predicate, o: object})
+
+5) Arricchimento con occupazioni (opzionale)
 
 Lo script `P106.py` usa `female_entities.sparql` su `bologna_KG_definitivo.ttl` e interroga Wikidata per P106 (professioni). Esempio:
 
