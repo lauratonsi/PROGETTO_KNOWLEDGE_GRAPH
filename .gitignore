@@ -8,3 +8,7 @@ __pycache__/
 
 # File di sistema macOS
 .DS_Store
+
+# File generati dagli script Python
+wikidata_cache.json
+wikidata_log.txt

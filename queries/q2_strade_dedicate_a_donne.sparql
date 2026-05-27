@@ -1,0 +1,21 @@
+## Query 2 — Lista completa delle strade dedicate a donne
+## Keywords: FILTER, DISTINCT, ORDER BY, LIMIT
+##
+## Domanda: quali strade di Bologna sono intitolate a donne?
+## Risultato: nome della via + nome della persona, ordinate alfabeticamente.
+
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+
+SELECT DISTINCT ?nomeVia ?nomePersona
+WHERE {
+  ?via a clv:Street ;
+       clv:hasStreetName ?nomeVia ;
+       clv:isDedicatedTo ?persona .
+  ?persona a cpv:Person ;
+           cpv:fullName ?nomePersona ;
+           cpv:sex ?genere .
+  FILTER(?genere = "Female")
+}
+ORDER BY ?nomePersona
+LIMIT 100
