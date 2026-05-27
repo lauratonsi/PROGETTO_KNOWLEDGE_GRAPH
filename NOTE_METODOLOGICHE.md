@@ -12,8 +12,8 @@ Poiché lo stradario comunale di base non include nativamente una classificazion
 --- 
 ## Quadro Normativo e Vincoli — Regolamento Toponomastico
 L'attività di proposta di nuove intitolazioni è subordinata al rispetto della normativa vigente. Il principale vincolo normativo è stabilito dalla **Legge 23 giugno 1927, n. 1188**, la quale prescrive che la denominazione di aree pubbliche o monumenti a persone deve avvenire **solo dopo il decorso di almeno dieci anni dal decesso** della persona in questione.
-- Deroghe: Il Regolamento Toponomastico del Comune di Bologna prevede la possibilità di richiedere deroghe a tale limite temporale per personalità di comprovata rilevanza storica e culturale, previa autorizzazione prefettizia.
-- Procedure: Ai sensi dell'art. 12 del Regolamento Toponomastico, le proposte possono essere avanzate da consessi istituzionali (Consigli di Quartiere, Consiglio Comunale) o da gruppi di cittadini (minimo 20 firmatari). Ogni proposta deve essere corredata da una relazione illustrativa che ne giustifichi il merito, supportata da documentazione biografica.
+- **Deroghe**: Il Regolamento Toponomastico del Comune di Bologna prevede la possibilità di richiedere deroghe a tale limite temporale per personalità di comprovata rilevanza storica e culturale, previa autorizzazione prefettizia.
+- **Procedure**: Ai sensi dell'art. 12 del Regolamento Toponomastico, le proposte possono essere avanzate da consessi istituzionali (Consigli di Quartiere, Consiglio Comunale) o da gruppi di cittadini (minimo 20 firmatari). Ogni proposta deve essere corredata da una relazione illustrativa che ne giustifichi il merito, supportata da documentazione biografica.
 Questa analisi, unita alla documentazione sul gender gap qui prodotta, costituisce la base conoscitiva necessaria per avanzare proposte formali di intitolazione volte al riequilibrio della toponomastica cittadina.
 ---
 
