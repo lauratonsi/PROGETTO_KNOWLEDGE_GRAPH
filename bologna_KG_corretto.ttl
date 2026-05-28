@@ -1,5 +1,6 @@
 @prefix clv: <https://w3id.org/italia/onto/CLV/> .
 @prefix cpv: <https://w3id.org/italia/onto/CPV/> .
+@prefix ex:  <https://w3id.org/bologna/ontology#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
 <https://w3id.org/bologna/resource/street/43800>
@@ -11306,3 +11307,33 @@
         rdf:type      cpv:Person ;
         cpv:fullName  "AMALIA BETTINI" ;
         cpv:sex       "Female" .
+
+<https://w3id.org/bologna/resource/person/bcc550638a59267a2584f4195872ce54>
+    a cpv:Person ;
+    cpv:fullName "Rina Monti (Cesarina Monti Stella)" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" .
+
+<https://w3id.org/bologna/resource/person/2759b8f3325633312f2f0217f01ad298>
+    a cpv:Person ;
+    cpv:fullName "Margherita Hack" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" .
+
+<https://w3id.org/bologna/resource/person/b8646ec35fd93b509bf2d5b0e038108f>
+    a cpv:Person ;
+    cpv:fullName "Ada Buffulini" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" .
+
+<https://w3id.org/bologna/resource/person/c5c848a98e6c14503a5ad39272d09a00>
+    a cpv:Person ;
+    cpv:fullName "Maria Dalle Donne (Maria Carolina Nanni Dalle Donne, anche Anna Maria Dalle Donne)" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" .
+
+<https://w3id.org/bologna/resource/person/11b2a8c00b437dc116442598739462a4>
+    a cpv:Person ;
+    cpv:fullName "Alessandro Zijno (detta 'l'Ambigua')" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" .
