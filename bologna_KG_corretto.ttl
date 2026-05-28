@@ -22,7 +22,7 @@
         cpv:fullName  "PIETRO LORETA" ;
         cpv:sex       "Male" .
 
-<https://w3id.org/bologna/resource/street/61900>
+<https://w3id.org/bologna/resource/street/48900>git init
         rdf:type           clv:Street ;
         clv:hasStreetName  "VIA SANTE VINCENZI" ;
         clv:isDedicatedTo  <https://w3id.org/bologna/resource/person/665e649a6e5b7ab1e115c10258f356fd> .
