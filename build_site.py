@@ -380,6 +380,19 @@ footer p { margin-bottom: 0.4rem; }
   #navbar.open .nav-links { display: flex; }
   .hero { padding: 3rem 1rem 2.5rem; }
 }
+.btn-webvowl {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-webvowl:hover { background: var(--primary-light); color: #fff; }
+.webvowl-note { font-size: 0.85rem; color: #555; margin-top: 0.75rem; }
 '''
 
 (DOCS / 'style.css').write_text(CSS, encoding='utf-8')
@@ -627,6 +640,22 @@ METHODOLOGY = page('Metodologia', '''
     cpv:sex "Female" ;
     ex:proposta "true" ;
     ex:statoProposta "attiva" .</code></pre>
+
+  <h2>Visualizzazione dell'ontologia (WebVOWL)</h2>
+  <p>Lo schema delle classi e proprietà è disponibile nel file <code>schema.ttl</code> in formato OWL/Turtle.
+  Puoi esplorarlo interattivamente con <strong>WebVOWL</strong>, uno strumento open source per la
+  visualizzazione grafica di ontologie OWL sviluppato dall'Università di Stoccarda.</p>
+  <div style="text-align:center; margin:2rem 0">
+    <a class="btn-webvowl"
+       href="https://vowl.visualdataweb.org/webvowl.html#iri=https://lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH/schema.ttl"
+       target="_blank" rel="noopener">
+      Apri lo schema in WebVOWL &rarr;
+    </a>
+    <p class="webvowl-note">WebVOWL carica <code>schema.ttl</code> da GitHub Pages e mostra le classi
+    (<em>Street</em>, <em>Person</em>), la proprietà oggetto <em>isDedicatedTo</em> e le proprietà dato
+    (<em>hasStreetName</em>, <em>sex</em>, <em>fullName</em>, <em>proposta</em>, <em>statoProposta</em>)
+    come grafo interattivo navigabile.</p>
+  </div>
 
   <h2>Strumenti utilizzati</h2>
   <div class="card-grid">

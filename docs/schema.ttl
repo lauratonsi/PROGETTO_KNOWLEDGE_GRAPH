@@ -1,0 +1,81 @@
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix clv:  <https://w3id.org/italia/onto/CLV/> .
+@prefix cpv:  <https://w3id.org/italia/onto/CPV/> .
+@prefix ex:   <https://w3id.org/bologna/ontology#> .
+
+# ── Ontology declaration ──────────────────────────────────────────────────────
+
+<https://w3id.org/bologna/ontology>
+    a owl:Ontology ;
+    rdfs:label "Ontologia Toponomastica di Bologna"@it ;
+    rdfs:label "Bologna Street Toponymy Ontology"@en ;
+    rdfs:comment "Ontologia per la classificazione di genere della toponomastica del Comune di Bologna. Riutilizza vocabolari controllati italiani (CLV, CPV) ed estende con proprietà custom per la gestione delle proposte di intitolazione."@it .
+
+# ── Classes ───────────────────────────────────────────────────────────────────
+
+clv:Street
+    a owl:Class ;
+    rdfs:label "Strada"@it ;
+    rdfs:label "Street"@en ;
+    rdfs:comment "Arco stradale del grafo viario del Comune di Bologna (viale, via, piazza, passaggio, largo, ecc.)."@it .
+
+cpv:Person
+    a owl:Class ;
+    rdfs:label "Persona"@it ;
+    rdfs:label "Person"@en ;
+    rdfs:comment "Persona storica a cui è intitolata una strada, oppure candidatura proposta dal gruppo di ricerca per una futura intitolazione."@it .
+
+# ── Object Properties ─────────────────────────────────────────────────────────
+
+clv:isDedicatedTo
+    a owl:ObjectProperty ;
+    rdfs:label "è dedicata a"@it ;
+    rdfs:label "is dedicated to"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  cpv:Person ;
+    rdfs:comment "Collega una strada alla persona a cui è intitolata. Presente solo per le strade con classificazione di genere Male o Female."@it .
+
+# ── Datatype Properties ───────────────────────────────────────────────────────
+
+clv:hasStreetName
+    a owl:DatatypeProperty ;
+    rdfs:label "nome della strada"@it ;
+    rdfs:label "street name"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Denominazione ufficiale della strada come da stradario comunale di Bologna."@it .
+
+cpv:fullName
+    a owl:DatatypeProperty ;
+    rdfs:label "nome completo"@it ;
+    rdfs:label "full name"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Nome e cognome completi della persona."@it .
+
+cpv:sex
+    a owl:DatatypeProperty ;
+    rdfs:label "classificazione di genere"@it ;
+    rdfs:label "gender classification"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Classificazione di genere assegnata dal gruppo di ricerca: 'Male' (persona maschile o collettivo maschile), 'Female' (persona femminile), 'Toponimo' (luogo, concetto, istituzione o famiglia senza individuo identificabile)."@it .
+
+ex:proposta
+    a owl:DatatypeProperty ;
+    rdfs:label "proposta di intitolazione"@it ;
+    rdfs:label "naming proposal"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:boolean ;
+    rdfs:comment "Vale 'true' se la persona è una candidatura proposta dal gruppo di ricerca per una futura intitolazione stradale, non una persona già onorata nello stradario attuale."@it .
+
+ex:statoProposta
+    a owl:DatatypeProperty ;
+    rdfs:label "stato della proposta"@it ;
+    rdfs:label "proposal status"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Stato temporale della proposta rispetto al vincolo normativo (Legge 1188/1927): 'attiva' = deceduta da oltre 10 anni, immediatamente candidabile; 'futura' = deceduta da meno di 10 anni, ancora in vita, o data di morte incerta."@it .
