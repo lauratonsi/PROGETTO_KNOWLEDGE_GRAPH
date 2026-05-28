@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home — Gender Gap Bologna</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html" class="active">Bologna Gender Gap KG</a>
+    <button class="nav-toggle" onclick="document.getElementById('navbar').classList.toggle('open')" aria-label="menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="topic.html">Il Tema</a></li>
+      <li><a href="methodology.html">Metodologia</a></li>
+      <li><a href="sparql.html">Query SPARQL</a></li>
+      <li><a href="llm.html">LLM &amp; Prompt</a></li>
+      <li><a href="results.html">Risultati</a></li>
+      <li><a href="proposals.html">Proposte</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+
+<div class="hero">
+  <h1>Gender Gap nella Toponomastica di Bologna</h1>
+  <p>Un Knowledge Graph RDF per analizzare e visualizzare il divario di genere
+     nelle intitolazioni stradali della città di Bologna.</p>
+  <div class="hero-stat">
+    5.8%
+    <small>delle strade dedicate a persone è intitolata a una donna</small>
+  </div>
+</div>
+
+<div class="section-alt"><div class="section">
+  <h2>Il Progetto</h2>
+  <p>Questo progetto nasce nell'ambito del corso di <em>Metodologie e Tecniche di Simulazione</em>
+  (GEPID 2024–25, Università di Bologna) con l'obiettivo di costruire un
+  <strong>Knowledge Graph (KG)</strong> dello stradario bolognese e analizzare la distribuzione
+  di genere nelle intitolazioni. Su <strong>1,960 strade</strong> censite, solo <strong>66</strong>
+  (5.8%) sono intitolate a donne identificate. Il gap è drammatico: le strade maschili
+  superano quelle femminili in un rapporto di circa 16 a 1.</p>
+
+  <p>Il KG è stato costruito a partire dagli
+  <a href="https://opendata.comune.bologna.it/" target="_blank">Open Data del Comune di Bologna</a>,
+  classificando ogni intitolazione con l'ausilio di modelli linguistici avanzati
+  (LLM) e arricchendo i dati biografici tramite l'<a href="https://www.wikidata.org/" target="_blank">API di Wikidata</a>.</p>
+
+  <div class="stat-grid">
+    <div class="stat-box stat-male">
+      <div class="number">1066</div>
+      <div class="label">Strade maschili</div>
+    </div>
+    <div class="stat-box stat-female">
+      <div class="number">66</div>
+      <div class="label">Strade femminili</div>
+    </div>
+    <div class="stat-box stat-topo">
+      <div class="number">828</div>
+      <div class="label">Toponimi / istituzionali</div>
+    </div>
+    <div class="stat-box stat-pct">
+      <div class="number">5.8%</div>
+      <div class="label">Quota femminile (su pers.)</div>
+    </div>
+  </div>
+</div></div>
+
+<div class="section">
+  <h2>Il Team</h2>
+  <p>Progetto sviluppato da due studentesse del corso di Laurea Magistrale
+  in Geography and Environmental Processes in the Digital Age (GEPID).</p>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar">S</div>
+      <h3>Susanna Cioni</h3>
+      <p>Università di Bologna<br>GEPID 2024–25</p>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">L</div>
+      <h3>Laura Tonsi</h3>
+      <p>Università di Bologna<br>GEPID 2024–25</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-alt"><div class="section">
+  <h2>Struttura del sito</h2>
+  <div class="card-grid">
+    <div class="card"><h3><a href="topic.html">Il Tema</a></h3>
+      <p>Il gender gap toponomastico: cos'è, perché è importante, il contesto bolognese.</p></div>
+    <div class="card"><h3><a href="methodology.html">Metodologia</a></h3>
+      <p>Come è stato costruito il KG: dati, classificazione, arricchimento Wikidata, strumenti usati.</p></div>
+    <div class="card"><h3><a href="sparql.html">Query SPARQL</a></h3>
+      <p>Cinque query sul KG con codice, spiegazione e risultati. Tutte le keyword obbligatorie.</p></div>
+    <div class="card"><h3><a href="llm.html">LLM &amp; Prompt</a></h3>
+      <p>Le tre tecniche di prompting, i modelli confrontati (Claude, ChatGPT, Gemini, DeepSeek, Copilot) e le sfide.</p></div>
+    <div class="card"><h3><a href="results.html">Risultati</a></h3>
+      <p>Grafici interattivi sul divario di genere e classificazione professionale. Tabella delle strade femminili.</p></div>
+    <div class="card"><h3><a href="proposals.html">Proposte</a></h3>
+      <p>34 candidature per nuove intitolazioni stradali a donne, persone trans e non binarie.</p></div>
+  </div>
+</div></div>
+
+<div class="section">
+  <h2>Risorse</h2>
+  <ul>
+    <li><a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH" target="_blank">Repository GitHub del progetto</a></li>
+    <li><a href="https://opendata.comune.bologna.it/explore/dataset/rifter_arcstra_li/information/" target="_blank">Open Data Comune di Bologna — Archi Stradali</a></li>
+    <li><a href="https://opendata.comune.bologna.it/explore/dataset/le-aree-verdi-e-le-vie-di-bologna-dedicate-alle-donne/information/" target="_blank">Open Data — Vie dedicate alle donne</a></li>
+    <li><a href="https://www.wikidata.org/" target="_blank">Wikidata</a></li>
+    <li><a href="https://w3id.org/italia/onto/CPV/" target="_blank">Ontologia CPV — Persone</a></li>
+    <li><a href="https://w3id.org/italia/onto/CLV/" target="_blank">Ontologia CLV — Luoghi</a></li>
+  </ul>
+</div>
+
+</main>
+<footer>
+  <div class="footer-inner">
+    <p>Progetto universitario — Corso di <em>Metodologie e Tecniche di Simulazione</em>, GEPID 2024–25, Università di Bologna</p>
+    <p>Dati: <a href="https://opendata.comune.bologna.it/" target="_blank">Open Data Comune di Bologna</a> ·
+       Knowledge Graph: <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH" target="_blank">GitHub</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

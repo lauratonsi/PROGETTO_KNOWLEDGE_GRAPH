@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Il Tema — Gender Gap Bologna</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Bologna Gender Gap KG</a>
+    <button class="nav-toggle" onclick="document.getElementById('navbar').classList.toggle('open')" aria-label="menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="topic.html" class="active">Il Tema</a></li>
+      <li><a href="methodology.html">Metodologia</a></li>
+      <li><a href="sparql.html">Query SPARQL</a></li>
+      <li><a href="llm.html">LLM &amp; Prompt</a></li>
+      <li><a href="results.html">Risultati</a></li>
+      <li><a href="proposals.html">Proposte</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+
+<div class="hero" style="padding:3.5rem 1.5rem 3rem">
+  <h1>Il Tema: Gender Gap Toponomastico</h1>
+  <p>Le strade che percorriamo ogni giorno raccontano chi siamo — o meglio, chi <em>non</em> siamo.</p>
+</div>
+
+<div class="section">
+  <h2>Cos'è il gender gap toponomastico</h2>
+  <p>La <strong>toponomastica urbana</strong> — l'insieme dei nomi attribuiti a vie, piazze, parchi e spazi pubblici —
+  è uno specchio della memoria collettiva di una città. Ogni intitolazione è una scelta: si decide chi merita
+  di essere ricordato nello spazio condiviso, chi entra nella coscienza quotidiana dei cittadini.</p>
+
+  <p>Quando la grande maggioranza delle strade è intitolata a uomini, la città stessa diventa un testo
+  che racconta una storia parziale: la storia di chi ha detenuto il potere, l'accesso all'istruzione,
+  la visibilità pubblica. Le donne, i cui contributi sono stati spesso ignorati o sminuiti dalla storiografia
+  tradizionale, restano assenti dallo spazio urbano.</p>
+
+  <div class="info-box">
+    <strong>Dati europei:</strong> secondo il progetto <a href="https://equalstreetnames.org/" target="_blank">Equal Street Names</a>,
+    nella maggior parte delle città europee meno del 15% delle strade intitolate a persone porta il nome di una donna.
+    Bologna, con il 5,8%, è significativamente al di sotto di questa media già bassa.
+  </div>
+
+  <h2>Il caso di Bologna</h2>
+  <p>Bologna è una città progressista, con una lunga tradizione di amministrazione di sinistra e di
+  attenzione alle questioni di genere. Eppure, il suo stradario racconta un'altra storia.
+  Su <strong>1.960 archi stradali</strong> censiti:</p>
+
+  <ul>
+    <li><strong>1.066</strong> sono intitolati a persone di genere maschile</li>
+    <li><strong>66</strong> sono intitolati a persone di genere femminile</li>
+    <li><strong>828</strong> sono toponimi, nomi istituzionali o riferimenti a luoghi</li>
+  </ul>
+
+  <p>Il rapporto tra strade maschili e femminili è di circa <strong>16:1</strong>.
+  Per ogni donna ricordata nello spazio pubblico bolognese, ci sono sedici uomini.</p>
+
+  <h2>Le tre categorie di classificazione</h2>
+  <p>Ogni intitolazione stradale del dataset è stata classificata in una di tre categorie:</p>
+  <ul>
+    <li><strong>Male</strong> — intitolata a una persona di genere maschile, o a un gruppo denominato
+    con sostantivo maschile (es. <em>Fratelli Cervi</em>, <em>Ragazzi del '99</em>).</li>
+    <li><strong>Female</strong> — intitolata a una persona di genere femminile.</li>
+    <li><strong>Toponimo</strong> — intitolata a un luogo, un concetto, un'istituzione, un mestiere,
+    un evento storico, o un nome di famiglia senza un referente individuale identificabile.</li>
+  </ul>
+
+  <div class="warn-box">
+    <strong>Nota critica — Fratelli Marincola:</strong> il Passaggio Fratelli Marincola è intitolato
+    a Giorgio <em>e</em> Isabella Marincola, fratello e sorella, entrambi partigiani.
+    L'uso del termine grammaticale "fratelli" rende invisibile la presenza di Isabella.
+    Abbiamo classificato questa strada come <em>Male</em> per rispettare la denominazione ufficiale,
+    ma segnaliamo esplicitamente questa ingiustizia linguistica.
+  </div>
+
+  <h2>Perché costruire un Knowledge Graph</h2>
+  <p>Un semplice foglio di calcolo può contare le strade, ma un Knowledge Graph permette
+  di <em>connettere</em> le informazioni: la persona alla sua professione, al suo contesto storico,
+  alle sue date di nascita e morte, ad altre risorse sul web (Wikidata, Wikipedia).
+  Questa connettività è ciò che trasforma un dataset in conoscenza navigabile e riusabile.</p>
+
+  <p>Il KG di questo progetto utilizza le ontologie italiane
+  <a href="https://w3id.org/italia/onto/CLV/" target="_blank">CLV</a> (luoghi) e
+  <a href="https://w3id.org/italia/onto/CPV/" target="_blank">CPV</a> (persone),
+  seguendo gli standard del Semantic Web e garantendo l'interoperabilità con altri dataset aperti.</p>
+</div>
+
+</main>
+<footer>
+  <div class="footer-inner">
+    <p>Progetto universitario — Corso di <em>Metodologie e Tecniche di Simulazione</em>, GEPID 2024–25, Università di Bologna</p>
+    <p>Dati: <a href="https://opendata.comune.bologna.it/" target="_blank">Open Data Comune di Bologna</a> ·
+       Knowledge Graph: <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH" target="_blank">GitHub</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM & Prompt — Gender Gap Bologna</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Bologna Gender Gap KG</a>
+    <button class="nav-toggle" onclick="document.getElementById('navbar').classList.toggle('open')" aria-label="menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="topic.html">Il Tema</a></li>
+      <li><a href="methodology.html">Metodologia</a></li>
+      <li><a href="sparql.html">Query SPARQL</a></li>
+      <li><a href="llm.html" class="active">LLM &amp; Prompt</a></li>
+      <li><a href="results.html">Risultati</a></li>
+      <li><a href="proposals.html">Proposte</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+
+<div class="hero" style="padding:3.5rem 1.5rem 3rem">
+  <h1>LLM &amp; Prompt Engineering</h1>
+  <p>Tre tecniche di prompting, cinque modelli confrontati, e le sfide incontrate.</p>
+</div>
+
+<div class="section">
+  <h2>Ruolo degli LLM nel progetto</h2>
+  <p>I Large Language Models sono stati usati in due fasi distinte:</p>
+  <ol>
+    <li><strong>Classificazione di genere</strong> delle 1.960 strade (Male / Female / Toponimo),
+    la parte più onerosa e soggetta a ambiguità.</li>
+    <li><strong>Generazione di triple RDF</strong> per arricchire il KG con dati biografici
+    e per costruire le proposte di intitolazione.</li>
+  </ol>
+  <p>In entrambe le fasi abbiamo applicato le tre tecniche di prompting standard e confrontato
+  i risultati di cinque modelli diversi.</p>
+
+  <h2>Tecnica 1 — Zero-shot Prompting</h2>
+  <p>Il modello risponde senza esempi preliminari. Usato per classificazioni rapide di strade
+  con nome inequivocabile.</p>
+
+  <div class="prompt-label">Prompt</div>
+  <div class="prompt-box">
+    Classifica questa intitolazione stradale bolognese in una delle tre categorie:
+    <strong>Male</strong> (persona maschile), <strong>Female</strong> (persona femminile),
+    <strong>Toponimo</strong> (luogo, concetto, istituzione, famiglia).<br><br>
+    Strada: <em>VIA LAURA BASSI</em><br>
+    Rispondi con una sola parola.
+  </div>
+  <div class="prompt-label">Risposta (Claude, ChatGPT, Gemini)</div>
+  <div class="response-box">Female</div>
+
+  <div class="prompt-label">Prompt (caso ambiguo)</div>
+  <div class="prompt-box">
+    Classifica questa intitolazione stradale bolognese: <em>VIA VITTORIA</em><br>
+    Rispondi con una sola parola: Male, Female, o Toponimo.
+  </div>
+  <div class="prompt-label">Risposta variabile tra modelli</div>
+  <div class="response-box">
+    <strong>ChatGPT:</strong> Female (confonde con persona)<br>
+    <strong>Claude:</strong> Toponimo (riconosce che si riferisce a un concetto astratto)<br>
+    <strong>Gemini:</strong> Toponimo<br>
+    <strong>DeepSeek:</strong> Female<br>
+    <strong>Copilot:</strong> Toponimo
+  </div>
+
+  <h2>Tecnica 2 — Few-shot Prompting</h2>
+  <p>Prima di fare la domanda principale, si forniscono esempi di input-output.
+  Aumenta significativamente la coerenza su casi ambigui e nomi di famiglia.</p>
+
+  <div class="prompt-label">Prompt</div>
+  <div class="prompt-box">
+    Classifica le intitolazioni stradali bolognesi in Male, Female o Toponimo.<br>
+    Esempi:<br>
+    VIA DANTE → Male (poeta, uomo)<br>
+    VIA LAURA BASSI → Female (fisica, donna)<br>
+    VIA DRAPPERIE → Toponimo (mestiere)<br>
+    VIA ACHILLINI → Toponimo (nome di famiglia)<br>
+    VIA FRATELLI CERVI → Male (collettivo maschile, uomini)<br><br>
+    Ora classifica: <em>VIA CARRACCI</em>
+  </div>
+  <div class="prompt-label">Risposta (tutti i modelli)</div>
+  <div class="response-box">
+    Toponimo — la Via Carracci si riferisce alla famiglia di pittori bolognesi (Annibale, Agostino, Ludovico),
+    non a un singolo individuo identificabile.
+  </div>
+
+  <h2>Tecnica 3 — Chain-of-Thought (CoT)</h2>
+  <p>Si chiede al modello di ragionare esplicitamente prima di rispondere.
+  Usata per i casi più complessi e per la generazione di triple RDF.</p>
+
+  <div class="prompt-label">Prompt (classificazione)</div>
+  <div class="prompt-box">
+    Devi classificare questa strada bolognese: <em>PASSAGGIO FRATELLI MARINCOLA</em><br><br>
+    Ragiona passo per passo:<br>
+    1. A chi è dedicata questa strada?<br>
+    2. Di che genere sono i referenti storici?<br>
+    3. Il nome grammaticale suggerisce un genere specifico?<br>
+    4. Qual è la classificazione corretta?
+  </div>
+  <div class="prompt-label">Risposta (Claude)</div>
+  <div class="response-box">
+    1. Il Passaggio Fratelli Marincola è dedicato a Giorgio e Isabella Marincola,
+    fratello e sorella partigiani afrodiscendenti attivi nella Resistenza italiana.<br>
+    2. I referenti storici sono uno di genere maschile (Giorgio) e una di genere femminile (Isabella).<br>
+    3. Il termine "Fratelli" è grammaticalmente maschile, anche quando include donne —
+    è il maschile inclusivo italiano, che cancella la presenza femminile.<br>
+    4. Classificazione: <strong>Male</strong>, in base alla denominazione ufficiale.
+    Nota: questa scelta rende invisibile Isabella Marincola, che merita riconoscimento esplicito.
+  </div>
+
+  <div class="prompt-label">Prompt (generazione RDF)</div>
+  <div class="prompt-box">
+    Usando le ontologie CLV (<code>https://w3id.org/italia/onto/CLV/</code>) e
+    CPV (<code>https://w3id.org/italia/onto/CPV/</code>),
+    genera le triple RDF in formato Turtle per questa intitolazione:<br><br>
+    Strada: VIA LAURA BASSI<br>
+    Persona: Laura Bassi Veratti, fisica e accademica, 1711–1778, Bologna<br>
+    Genere: Female<br><br>
+    Pensa prima alla struttura del grafo, poi scrivi il Turtle.
+  </div>
+  <div class="prompt-label">Risposta (Claude)</div>
+  <div class="response-box">
+<pre style="font-size:0.85rem;line-height:1.5">@prefix clv: &lt;https://w3id.org/italia/onto/CLV/&gt; .
+@prefix cpv: &lt;https://w3id.org/italia/onto/CPV/&gt; .
+
+&lt;https://w3id.org/bologna/resource/street/via-laura-bassi&gt;
+    a clv:Street ;
+    clv:hasStreetName "VIA LAURA BASSI" ;
+    clv:isDedicatedTo &lt;https://w3id.org/bologna/resource/person/laura-bassi&gt; .
+
+&lt;https://w3id.org/bologna/resource/person/laura-bassi&gt;
+    a cpv:Person ;
+    cpv:fullName "Laura Bassi Veratti" ;
+    cpv:sex "Female" .</pre>
+  </div>
+
+  <h2>Confronto tra modelli</h2>
+  <div class="table-wrap"><table class="llm-table">
+    <tr>
+      <th>Aspetto</th>
+      <th>Claude</th>
+      <th>ChatGPT</th>
+      <th>Gemini</th>
+      <th>DeepSeek</th>
+      <th>Copilot</th>
+    </tr>
+    <tr>
+      <td>Classificazioni zero-shot accurate</td>
+      <td class="check">✓ Alta</td>
+      <td class="check">✓ Alta</td>
+      <td class="partial">~ Media</td>
+      <td class="partial">~ Media</td>
+      <td class="partial">~ Media</td>
+    </tr>
+    <tr>
+      <td>Gestione nomi ambigui (es. Vittoria, Serena)</td>
+      <td class="check">✓ Corretto</td>
+      <td class="cross">✗ Confonde</td>
+      <td class="check">✓ Corretto</td>
+      <td class="cross">✗ Confonde</td>
+      <td class="check">✓ Corretto</td>
+    </tr>
+    <tr>
+      <td>Generazione Turtle RDF con ontologie corrette</td>
+      <td class="check">✓ Ottima</td>
+      <td class="partial">~ Buona</td>
+      <td class="partial">~ Buona</td>
+      <td class="partial">~ Discreta</td>
+      <td class="partial">~ Buona</td>
+    </tr>
+    <tr>
+      <td>Ragionamento esplicito (CoT)</td>
+      <td class="check">✓ Dettagliato</td>
+      <td class="check">✓ Buono</td>
+      <td class="partial">~ Superficiale</td>
+      <td class="partial">~ Superficiale</td>
+      <td class="partial">~ Medio</td>
+    </tr>
+    <tr>
+      <td>Sensibilità alle questioni di genere</td>
+      <td class="check">✓ Alta</td>
+      <td class="check">✓ Alta</td>
+      <td class="partial">~ Media</td>
+      <td class="cross">✗ Bassa</td>
+      <td class="partial">~ Media</td>
+    </tr>
+    <tr>
+      <td>Conoscenza storia locale bolognese</td>
+      <td class="partial">~ Media</td>
+      <td class="partial">~ Media</td>
+      <td class="partial">~ Media</td>
+      <td class="cross">✗ Scarsa</td>
+      <td class="partial">~ Media</td>
+    </tr>
+  </table></div>
+
+  <h2>Sfide e soluzioni</h2>
+  <div class="card-grid">
+    <div class="card">
+      <h3>Nomi ambigui di genere</h3>
+      <p><em>Via Vittoria</em>, <em>Via Serena</em>, <em>Via Letizia</em> sono nomi femminili ma
+      si riferiscono a concetti astratti o eventi storici. I modelli zero-shot li classificano
+      spesso come Female.</p>
+      <p><strong>Soluzione:</strong> few-shot prompting con esempi di questi pattern;
+      validazione manuale di tutti i casi dubbi.</p>
+    </div>
+    <div class="card">
+      <h3>Soprannomi storici</h3>
+      <p><em>Via Dante</em>, <em>Via Donatello</em>, <em>Via Caravaggio</em>:
+      il modello deve sapere che si tratta di persone reali, non di concetti.</p>
+      <p><strong>Soluzione:</strong> few-shot con esempi di artisti, scrittori e poeti italiani
+      noti per soprannome.</p>
+    </div>
+    <div class="card">
+      <h3>Allucinazioni sui QID Wikidata</h3>
+      <p>Chiedendo agli LLM i codici Wikidata (QID) delle persone, i modelli spesso
+      inventavano QID plausibili ma errati (es. Q1064 restituito come Carducci era Manzoni).</p>
+      <p><strong>Soluzione:</strong> ricerca programmatica via API Wikidata
+      (<code>wbsearchentities</code>) senza passare per LLM per i QID.</p>
+    </div>
+    <div class="card">
+      <h3>Rate limiting Wikidata</h3>
+      <p>L'API Wikidata impone limiti alle richieste ravvicinate. Alcune ricerche
+      restituivano risultati vuoti per throttling.</p>
+      <p><strong>Soluzione:</strong> aggiunto attesa tra le richieste (<code>time.sleep()</code>)
+      e sistema di cache locale in <code>wikidata_cache.json</code>.</p>
+    </div>
+    <div class="card">
+      <h3>Identità transgender</h3>
+      <p>Marcella Di Folco (1943–2010) è nata con un nome maschile ma ha vissuto come donna.
+      Wikidata la classifica in modo inconsistente tra le versioni.</p>
+      <p><strong>Soluzione:</strong> classificazione manuale come <em>Female</em>,
+      rispettando l'identità autodichiarata, con documentazione esplicita nella
+      <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/NOTE_METODOLOGICHE.md" target="_blank">nota metodologica</a>.</p>
+    </div>
+    <div class="card">
+      <h3>Figure locali non su Wikidata</h3>
+      <p>~15 persone di rilevanza puramente locale (es. Vittorio Sabena, Don Giuseppe Nozzi,
+      Carlo Pelagalli) non erano documentate su Wikidata.</p>
+      <p><strong>Soluzione:</strong> ricerca manuale su ANPI Bologna,
+      Storia e Memoria di Bologna, archivi parrocchiali e segnalazioni del gruppo di ricerca.</p>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>
+  <div class="footer-inner">
+    <p>Progetto universitario — Corso di <em>Metodologie e Tecniche di Simulazione</em>, GEPID 2024–25, Università di Bologna</p>
+    <p>Dati: <a href="https://opendata.comune.bologna.it/" target="_blank">Open Data Comune di Bologna</a> ·
+       Knowledge Graph: <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH" target="_blank">GitHub</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
