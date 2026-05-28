@@ -1,0 +1,40 @@
+## Query 4 — Strade intitolate a "Fratelli" o a nomi con particella nobiliare
+## Keywords: REGEX, FILTER, DISTINCT, ORDER BY
+##
+## Due sotto-query collegate dalla stessa logica REGEX:
+##
+## 4a) Strade con "FRATELLI" nel nome (tutti classificati Male):
+##     evidenzia quanto il maschile grammaticale oscuri la presenza femminile
+##     (caso emblematico: Passaggio Fratelli Marincola, che include Isabella Marincola).
+##
+## 4b) Strade dedicate a donne il cui nome contiene "MARIA":
+##     mostra la presenza (o assenza) di figure femminili con nome comune.
+
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+
+## -- 4a: strade "Fratelli" (Male per denominazione grammaticale) --
+SELECT DISTINCT ?nomeVia ?nomePersona ?genere
+WHERE {
+  ?via a clv:Street ;
+       clv:hasStreetName ?nomeVia ;
+       clv:isDedicatedTo ?persona .
+  ?persona cpv:fullName ?nomePersona ;
+           cpv:sex ?genere .
+  FILTER(REGEX(?nomeVia, "FRATELLI", "i"))
+}
+ORDER BY ?nomeVia
+
+## -- 4b: donne con "MARIA" nel nome --
+## (decommenta questa query e commenta quella sopra per eseguirla)
+
+# SELECT DISTINCT ?nomeVia ?nomePersona
+# WHERE {
+#   ?via a clv:Street ;
+#        clv:hasStreetName ?nomeVia ;
+#        clv:isDedicatedTo ?persona .
+#   ?persona cpv:fullName ?nomePersona ;
+#            cpv:sex "Female" .
+#   FILTER(REGEX(?nomePersona, "MARIA", "i"))
+# }
+# ORDER BY ?nomePersona

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metodologia — Gender Gap Bologna</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Bologna Gender Gap KG</a>
+    <button class="nav-toggle" onclick="document.getElementById('navbar').classList.toggle('open')" aria-label="menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="topic.html">Il Tema</a></li>
+      <li><a href="methodology.html" class="active">Metodologia</a></li>
+      <li><a href="sparql.html">Query SPARQL</a></li>
+      <li><a href="llm.html">LLM &amp; Prompt</a></li>
+      <li><a href="results.html">Risultati</a></li>
+      <li><a href="proposals.html">Proposte</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+
+<div class="hero" style="padding:3.5rem 1.5rem 3rem">
+  <h1>Metodologia</h1>
+  <p>Dal dataset grezzo del Comune di Bologna al Knowledge Graph arricchito: i passi del progetto.</p>
+</div>
+
+<div class="section">
+  <h2>Flusso di lavoro</h2>
+  <ol class="step-list">
+    <li><div><strong>Acquisizione dati</strong><br>
+      Download degli <a href="https://opendata.comune.bologna.it/" target="_blank">Open Data del Comune di Bologna</a>:
+      il dataset degli archi stradali (<em>rifter_arcstra</em>, 1.960 record) e il dataset
+      "Vie dedicate alle donne" (157 record). I dati sono in formato CSV.</div></li>
+    <li><div><strong>Classificazione di genere</strong><br>
+      Per ogni strada è stato identificato il referente (persona, luogo, concetto) e assegnata
+      la categoria <em>Male</em>, <em>Female</em> o <em>Toponimo</em>.
+      Questa operazione — la più impegnativa — è stata condotta con l'ausilio di LLM
+      (DeepSeek, Gemini, ChatGPT, Claude, Copilot) e validata manualmente.</div></li>
+    <li><div><strong>Costruzione del Knowledge Graph</strong><br>
+      Lo script <code>genera_ttl.py</code> (Python + <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>)
+      legge il CSV classificato e genera il file <code>bologna_KG_corretto.ttl</code>
+      in formato Turtle (6.783 triple). Ogni strada è un nodo <code>clv:Street</code>;
+      le strade dedicate a persone sono collegate tramite <code>clv:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
+    <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
+      Per le ~470 persone identificate, lo script <code>wikidata_fetch.py</code> interroga
+      l'<a href="https://www.wikidata.org/w/api.php" target="_blank">API JSON di Wikidata</a>
+      recuperando professione (P106), data/luogo di nascita (P569/P19) e
+      data/luogo di morte (P570/P20). I dati sono salvati nel file <code>F_M DATE.xlsx</code>.</div></li>
+    <li><div><strong>Classificazione professionale</strong><br>
+      Lo script <code>classifica_professioni.py</code> assegna una delle 12 macro-categorie
+      a ciascuna delle 1.192 persone classificate (1.091 uomini + 67 donne storiche + 34 proposte),
+      usando il matching per parole chiave sulle professioni Wikidata.</div></li>
+    <li><div><strong>Proposte di intitolazione</strong><br>
+      Il gruppo di ricerca ha identificato e documentato 34 candidature
+      (29 attive + 5 future) per nuove intitolazioni a donne, persone trans e non binarie
+      con legame con Bologna o rilevanza nazionale. I dati sono in
+      <code>proposte_intitolazioni_future.csv</code> e <code>proposte_KG.ttl</code>.</div></li>
+  </ol>
+
+  <h2>Struttura del Knowledge Graph</h2>
+  <p>Il KG utilizza due ontologie del Semantic Web italiano:</p>
+  <ul>
+    <li><a href="https://w3id.org/italia/onto/CLV/" target="_blank"><strong>CLV</strong></a>
+    (Core Location Vocabulary) — per modellare le strade</li>
+    <li><a href="https://w3id.org/italia/onto/CPV/" target="_blank"><strong>CPV</strong></a>
+    (Core Person Vocabulary) — per modellare le persone</li>
+  </ul>
+
+  <p>Esempio di triple per una strada femminile:</p>
+  <pre class="code-block"><code>&lt;https://w3id.org/bologna/resource/street/abc123&gt;
+    a clv:Street ;
+    clv:hasStreetName "VIA LAURA BASSI" ;
+    clv:isDedicatedTo &lt;https://w3id.org/bologna/resource/person/def456&gt; .
+
+&lt;https://w3id.org/bologna/resource/person/def456&gt;
+    a cpv:Person ;
+    cpv:fullName "Laura Bassi Veratti" ;
+    cpv:sex "Female" .</code></pre>
+
+  <p>Per le proposte di intitolazione, abbiamo esteso il vocabolario con una proprietà custom:</p>
+  <pre class="code-block"><code>@prefix ex: &lt;https://w3id.org/bologna/ontology#&gt; .
+
+&lt;https://w3id.org/bologna/resource/person/...&gt;
+    a cpv:Person ;
+    cpv:fullName "Maria Dalle Donne" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .</code></pre>
+
+  <h2>Strumenti utilizzati</h2>
+  <div class="card-grid">
+    <div class="card">
+      <h3>Python 3 + rdflib</h3>
+      <p>Generazione e manipolazione del KG in formato Turtle.
+      <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a> è la libreria Python
+      standard per il Semantic Web.</p>
+    </div>
+    <div class="card">
+      <h3>openpyxl</h3>
+      <p>Lettura e scrittura del file <code>F_M DATE.xlsx</code> con i dati biografici
+      delle 1.160 persone censite.</p>
+    </div>
+    <div class="card">
+      <h3>Wikidata API</h3>
+      <p>Recupero automatico di professioni e date biografiche per ~470 persone tramite
+      <a href="https://www.wikidata.org/w/api.php" target="_blank">wbsearchentities</a> e
+      <code>wbgetentities</code>.</p>
+    </div>
+    <div class="card">
+      <h3>SPARQL-Anything</h3>
+      <p>Tool Java per eseguire query SPARQL CONSTRUCT su file CSV, usato nelle
+      fasi iniziali del progetto per generare le triple RDF.</p>
+    </div>
+    <div class="card">
+      <h3>LLM (5 modelli)</h3>
+      <p>DeepSeek, Gemini, ChatGPT, Claude e Copilot per la classificazione di genere
+      e l'arricchimento del KG. Vedi la sezione
+      <a href="llm.html">LLM &amp; Prompt</a> per il confronto.</p>
+    </div>
+    <div class="card">
+      <h3>Chart.js + HTML/CSS/JS</h3>
+      <p>Visualizzazioni interattive in questo sito. Tutto il codice è pubblicamente
+      disponibile nel <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH" target="_blank">repository GitHub</a>.</p>
+    </div>
+  </div>
+
+  <h2>Note metodologiche complete</h2>
+  <p>La documentazione dettagliata delle scelte classificatorie (santi → Toponimo,
+  soprannomi storici → Male/Female, Fratelli → Male, persone transgender, casi critici)
+  è disponibile nel file
+  <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/NOTE_METODOLOGICHE.md" target="_blank">NOTE_METODOLOGICHE.md</a>
+  nel repository.</p>
+</div>
+
+</main>
+<footer>
+  <div class="footer-inner">
+    <p>Progetto universitario — Corso di <em>Metodologie e Tecniche di Simulazione</em>, GEPID 2024–25, Università di Bologna</p>
+    <p>Dati: <a href="https://opendata.comune.bologna.it/" target="_blank">Open Data Comune di Bologna</a> ·
+       Knowledge Graph: <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH" target="_blank">GitHub</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

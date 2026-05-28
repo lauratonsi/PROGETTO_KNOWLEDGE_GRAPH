@@ -1,0 +1,34 @@
+## Query 3 — Strade dedicate a donne per tipologia (Via vs Piazza/Piazzale)
+## Keywords: UNION, FILTER, DISTINCT, ORDER BY
+##
+## Domanda: le strade intitolate a donne sono prevalentemente
+## "Via", "Piazza" o "Piazzale"? La tipologia di intitolazione
+## (strada minore vs spazio pubblico) riflette un'ulteriore
+## gerarchia simbolica nel riconoscimento delle donne.
+
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+
+SELECT DISTINCT ?tipologia ?nomeVia ?nomePersona
+WHERE {
+  {
+    ?via a clv:Street ;
+         clv:hasStreetName ?nomeVia ;
+         clv:isDedicatedTo ?persona .
+    ?persona cpv:fullName ?nomePersona ;
+             cpv:sex "Female" .
+    FILTER(STRSTARTS(?nomeVia, "VIA "))
+    BIND("Via" AS ?tipologia)
+  }
+  UNION
+  {
+    ?via a clv:Street ;
+         clv:hasStreetName ?nomeVia ;
+         clv:isDedicatedTo ?persona .
+    ?persona cpv:fullName ?nomePersona ;
+             cpv:sex "Female" .
+    FILTER(STRSTARTS(?nomeVia, "PIAZZA ") || STRSTARTS(?nomeVia, "PIAZZALE "))
+    BIND("Piazza / Piazzale" AS ?tipologia)
+  }
+}
+ORDER BY ?tipologia ?nomePersona

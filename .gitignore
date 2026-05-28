@@ -8,6 +8,10 @@ __pycache__/
 
 # File di sistema macOS
 .DS_Store
+
+# File generati dagli script Python
+wikidata_cache.json
+wikidata_log.txt
 # Generated/intermediate project files
 bologna_entita_uniche.csv
 bologna_entita_uniche_comma.csv

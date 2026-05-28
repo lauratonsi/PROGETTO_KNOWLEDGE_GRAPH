@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risultati — Gender Gap Bologna</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Bologna Gender Gap KG</a>
+    <button class="nav-toggle" onclick="document.getElementById('navbar').classList.toggle('open')" aria-label="menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="topic.html">Il Tema</a></li>
+      <li><a href="methodology.html">Metodologia</a></li>
+      <li><a href="sparql.html">Query SPARQL</a></li>
+      <li><a href="llm.html">LLM &amp; Prompt</a></li>
+      <li><a href="results.html" class="active">Risultati</a></li>
+      <li><a href="proposals.html">Proposte</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+
+<div class="hero" style="padding:3.5rem 1.5rem 3rem">
+  <h1>Risultati</h1>
+  <p>Visualizzazioni del divario di genere e classificazione professionale delle 1.192 persone nel KG.</p>
+</div>
+
+<div class="section">
+  <h2>Il divario in numeri</h2>
+  <div class="stat-grid">
+    <div class="stat-box stat-male"><div class="number">1066</div><div class="label">Strade maschili</div></div>
+    <div class="stat-box stat-female"><div class="number">66</div><div class="label">Strade femminili</div></div>
+    <div class="stat-box stat-topo"><div class="number">828</div><div class="label">Toponimi</div></div>
+    <div class="stat-box stat-pct"><div class="number">5.8%</div><div class="label">Quota femminile</div></div>
+  </div>
+
+  <h2>Distribuzione strade per genere</h2>
+  <div class="chart-wrap" style="max-width:400px">
+    <canvas id="donutChart"></canvas>
+  </div>
+
+  <h2>Categorie professionali per genere</h2>
+  <p>Confronto tra la distribuzione per categoria professionale degli uomini onorati (1.091),
+  delle donne storicamente onorate (67) e delle donne proposte (34).
+  I dati rivelano pattern significativi: le donne già onorate sono concentrate
+  nello spettacolo (25,4%), mentre le proposte correggono questo squilibrio con
+  un forte peso della Resistenza (32,4%) e dell'attivismo civile (17,6%).</p>
+  <div class="chart-wrap-full">
+    <canvas id="barChart"></canvas>
+  </div>
+
+  <h2>Strade dedicate a donne (123 intitolazioni a persone)</h2>
+  <p>Tabella filtrabile delle strade bolognesi intitolate a donne identificate.
+  Escluse le intitolazioni a sante, nomi generici e nominativi non individuali (157 totali nel dataset del Comune).</p>
+
+  <div style="display:flex;flex-wrap:wrap;gap:0.8rem;align-items:center;margin-bottom:1rem">
+    <input type="text" id="search-box" placeholder="Cerca nome, professione, quartiere…">
+    <div class="filters" id="tfilters">
+      <button class="filter-btn active" data-f="">Tutte</button>
+      <button class="filter-btn" data-f="Via">Solo Vie</button>
+      <button class="filter-btn" data-f="Piazza">Piazze</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="women-table">
+      <thead><tr>
+        <th>Intitolazione</th>
+        <th>Nome completo</th>
+        <th>Professione</th>
+        <th>Dati anagrafici</th>
+        <th>Anno</th>
+        <th>Quartiere</th>
+      </tr></thead>
+      <tbody id="women-tbody"></tbody>
+    </table>
+  </div>
+  <p id="women-count" style="font-size:0.85rem;color:var(--text-muted);margin-top:0.5rem"></p>
+</div>
+
+</main>
+<footer>
+  <div class="footer-inner">
+    <p>Progetto universitario — Corso di <em>Metodologie e Tecniche di Simulazione</em>, GEPID 2024–25, Università di Bologna</p>
+    <p>Dati: <a href="https://opendata.comune.bologna.it/" target="_blank">Open Data Comune di Bologna</a> ·
+       Knowledge Graph: <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH" target="_blank">GitHub</a></p>
+  </div>
+</footer>
+<script>
+const WOMEN = [{"nome": "Maria Rachele Ventre", "label": "Largo Mariele Ventre", "tipologia": "Largo", "quartiere": "", "anno": "1997", "professione": "Musicista ed educatrice", "dati": "Bologna, 1939-1995"}, {"nome": "Clementina Merlin detta Tina", "label": "Piazzale Tina Merlin", "tipologia": "Piazzale", "quartiere": "", "anno": "2016", "professione": "Giornalista", "dati": "Trichiana (BL), 1926 - Belluno, 1991"}, {"nome": "Elena Lucrezia Cornaro Piscopia", "label": "Rotonda Elena Lucrezia Corner Piscopia", "tipologia": "Rotonda", "quartiere": "", "anno": "2016", "professione": "Prima donna laureata al mondo", "dati": "Venezia, 1646 - Padova, 1684"}, {"nome": "Patrizia Vicinelli", "label": "Rotonda Patrizia Vicinelli", "tipologia": "Rotonda", "quartiere": "", "anno": "2014", "professione": "Poetessa", "dati": "Bologna, 1943-1991"}, {"nome": "Alfonsa Rosa Maria Morini", "label": "Passaggio Alfonsina Morini", "tipologia": "Passaggio", "quartiere": "", "anno": "2016", "professione": "Ciclista", "dati": "Castelfranco Emilia (MO), 1891 - Milano, 1959"}, {"nome": "Velleda Cesari", "label": "Passaggio Velleda Cesari", "tipologia": "Passaggio", "quartiere": "", "anno": "2016", "professione": "Schermitrice", "dati": "Bologna, 1920 - Genova, 2003"}, {"nome": "Olave St. Clair Soames Baden-Powell", "label": "Parco Olave e Robert Baden Powell", "tipologia": "Parco", "quartiere": "", "anno": "2006", "professione": "Moglie del fondatore dello Scoutismo", "dati": "Chesterfield (Regno Unito), 1889 - Bramley (Regno Unito), 1977"}, {"nome": "Aurelia Zama", "label": "Giardino Aurelia Zama", "tipologia": "Giardino", "quartiere": "", "anno": "2016", "professione": "Partigiana e Consigliera Comunale", "dati": "Modena, 1903 - Bologna, 1987"}, {"nome": "Janis Lyn Joplin", "label": "Giardino Janis Joplin", "tipologia": "Giardino", "quartiere": "", "anno": "2014", "professione": "Cantante", "dati": "Port Arthur (USA), 1943 - Los Angeles (USA), 1970"}, {"nome": "Penelope Veronesi detta Lucia", "label": "Giardino Penelope Veronesi", "tipologia": "Giardino", "quartiere": "", "anno": "2016", "professione": "Partigiana e Consigliera Comunale", "dati": "Bologna, 1916-1999"}, {"nome": "Adalgisa Gallarani, detta Tosca", "label": "Parco Delcisa Gallarani", "tipologia": "Parco", "quartiere": "", "anno": "2004", "professione": "Partigiana", "dati": "Bologna, 1905-1944"}, {"nome": "Leonilde Iotti, detta Nilde", "label": "Giardino Nilde Iotti", "tipologia": "Giardino", "quartiere": "", "anno": "2012", "professione": "Politica italiana", "dati": "Reggio Emilia, 1920 - Poli (Roma), 1999"}, {"nome": "Norma Mascellani", "label": "Giardino Norma Mascellani", "tipologia": "Giardino", "quartiere": "", "anno": "2013", "professione": "Pittrice", "dati": "Bologna, 1909-2009"}, {"nome": "Amelia Rosselli", "label": "Giardino Amelia Rosselli", "tipologia": "Giardino", "quartiere": "", "anno": "2016", "professione": "Poetessa e traduttrice", "dati": "Parigi (Francia), 1930 - Roma, 1996"}, {"nome": "Adelaide Borghi Mamo", "label": "Via Adelaide Borghi Mamo", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Cantante lirica", "dati": "Bologna, 1829-1901"}, {"nome": "Adelaide Ristori", "label": "Via Adelaide Ristori", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Attrice drammatica", "dati": "Cividale del Friuli (UD), 1822 - Torino, 1906"}, {"nome": "Amalia Bettini", "label": "Via Amalia Bettini", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Attrice drammatica", "dati": "Milano, 1809 - Roma, 1894"}, {"nome": "Argentina Bonetti Altobelli", "label": "Via Argentina Altobelli", "tipologia": "Via", "quartiere": "", "anno": "1967", "professione": "Sindacalista", "dati": "Imola (BO), 1866 - Roma, 1942"}, {"nome": "Clelia Barbieri", "label": "Via Clelia Barbieri", "tipologia": "Via", "quartiere": "", "anno": "1974", "professione": "Benefattrice e religiosa", "dati": "Budrie di San Giovanni in Persiceto (BO), 1847 - Bologna, 1870"}, {"nome": "Eleonora Sanguinetti", "label": "Via Eleonora Sanguinetti", "tipologia": "Via", "quartiere": "", "anno": "2010", "professione": "Benefattrice", "dati": "Bologna, 1906-2003"}, {"nome": "Giacinta Pezzana", "label": "Via Giacinta Pezzana", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Attrice drammatica", "dati": "Torino, 1841 - Aci Castello (CT), 1919"}, {"nome": "Greta Lovisa Gustafsson, in arte Greta Garbo", "label": "Via Greta Garbo", "tipologia": "Via", "quartiere": "", "anno": "2013", "professione": "Attrice", "dati": "Stoccolma (Svezia), 1905 - New York (USA), 1990"}, {"nome": "Laura Maria Caterina Bassi Veratti", "label": "Via Laura Bassi Veratti", "tipologia": "Via", "quartiere": "", "anno": "1925", "professione": "Scienziata", "dati": "Bologna, 1711-1778"}, {"nome": "Trebisonda Valla, detta Ondina", "label": "Via Ondina Valla", "tipologia": "Via", "quartiere": "", "anno": "2007", "professione": "Campionessa di atletica leggera", "dati": "Bologna, 1916 - L'Aquila, 2006"}, {"nome": "Angela Teresa Muratori", "label": "Giardino Angela Teresa Muratori", "tipologia": "Giardino", "quartiere": "", "anno": "2019", "professione": "Pittrice e Musicista", "dati": "Bologna, 1661-1709"}, {"nome": "Gemma Wohl", "label": "Giardino Gemma Volli e Bianca Colbi Finzi", "tipologia": "Giardino", "quartiere": "", "anno": "2022", "professione": "Protagonista di Bologna ebraica", "dati": "Trieste, 1900 - Bologna, 1971"}, {"nome": "Alda Giuseppina Angela Merini", "label": "Giardino Alda Merini", "tipologia": "Giardino", "quartiere": "", "anno": "2021", "professione": "Poetessa", "dati": "Milano, 1931-2009"}, {"nome": "Bianca Colbi Finzi", "label": "Giardino Gemma Volli e Bianca Colbi Finzi", "tipologia": "Giardino", "quartiere": "", "anno": "2022", "professione": "Protagonista di Bologna ebraica", "dati": "Knittelfeld (Austria), 1916 - Torino, 2007"}, {"nome": "Lea Colliva", "label": "Rotonda Lea Colliva", "tipologia": "Rotonda", "quartiere": "", "anno": "2023", "professione": "Pittrice", "dati": "Bologna, 1901-1975"}, {"nome": "Isabella Marincola/Timira Hassan", "label": "Passaggio Fratelli Marincola", "tipologia": "Passaggio", "quartiere": "", "anno": "2022", "professione": "Cittadina resistente afrodiscendente", "dati": "Mogadiscio (Somalia), 1925 - Bologna, 2010"}, {"nome": "Lea Garofalo", "label": "Passaggio Lea Garofalo", "tipologia": "Passaggio", "quartiere": "", "anno": "2023", "professione": "Vittima di mafia", "dati": "Petilia Policastro (KR), 1974 - Milano, 2009"}, {"nome": "Fernanda Pivano", "label": "Via Fernanda Pivano", "tipologia": "Via", "quartiere": "", "anno": "2023", "professione": "Scrittrice", "dati": "Genova, 1917 - Milano, 2009"}, {"nome": "Maria Chiara Serra", "label": "Passaggio Maestre pioniere delle scuole all'aperto", "tipologia": "Passaggio", "quartiere": "", "anno": "2024", "professione": "Insegnante ed educatrice", "dati": "San Giovanni in Persiceto (BO), 1890 - Casalecchio di Reno (BO), 1977"}, {"nome": "Antonietta Benni", "label": "Giardino Maestre di Monte Sole", "tipologia": "Giardino", "quartiere": "", "anno": "2024", "professione": "Insegnante ed educatrice", "dati": "Bologna, 1899 - Gardelletta (BO), 1974"}, {"nome": "Ena Frazzoni, detta Nicoletta", "label": "Giardino Ena Frazzoni", "tipologia": "Giardino", "quartiere": "", "anno": "2023", "professione": "Insegnante e partigiana", "dati": "Bologna, 1917-1975"}, {"nome": "Maria Anna Walburga Ignatia Mozart detta Nannerl", "label": "Giardino Maria Anna Mozart", "tipologia": "Giardino", "quartiere": "", "anno": "2025", "professione": "Musicista", "dati": "Salisburgo (Austria), 1751-1829"}, {"nome": "Giulia Casagrande", "label": "Giardino Maestre di Monte Sole", "tipologia": "Giardino", "quartiere": "", "anno": "2024", "professione": "Insegnante ed educatrice", "dati": "Castelfranco Emilia (MO), 1917 - Marzabotto (BO), 1944"}, {"nome": "Maria Nerina Fiori", "label": "Giardino Maestre di Monte Sole", "tipologia": "Giardino", "quartiere": "", "anno": "2024", "professione": "Insegnante ed educatrice", "dati": "San Benedetto Val di Sambro (BO), 1901 - Marzabotto (BO), 1944"}, {"nome": "Giuseppina Cattani", "label": "Giardino Giuseppina Cattani", "tipologia": "Giardino", "quartiere": "", "anno": "2023", "professione": "Scienziata", "dati": "Imola (BO), 1859-1914"}, {"nome": "Anna Kulišëva italianizzato in Anna Kuliscioff, pseudonimo di Anna Moiseevna Rozenštejn", "label": "Giardino Anna Kuliscioff", "tipologia": "Giardino", "quartiere": "", "anno": "2025", "professione": "Politica ed emancipazionista", "dati": "Sinferopoli (Russia), 1854 - Milano, 1925"}, {"nome": "Bettisia Gozzadini", "label": "Rotonda Bettisia Gozzadini", "tipologia": "Rotonda", "quartiere": "", "anno": "2008", "professione": "Giurista", "dati": "Bologna, 1209-1261"}, {"nome": "Anjezë Gonxhe Bojaxhiu", "label": "Rotonda Madre Teresa di Calcutta", "tipologia": "Rotonda", "quartiere": "", "anno": "2008", "professione": "Religiosa, benefattrice dell'umanita', Premio Nobel per la Pace", "dati": "Skopje (Macedonia), 1910 - Calcutta (India), 1997"}, {"nome": "Orsola Mezzini", "label": "Rotonda Orsola Mezzini", "tipologia": "Rotonda", "quartiere": "", "anno": "2004", "professione": "Religiosa", "dati": "Campeggio di Monghidoro (Bologna), 1853 - Bologna, 1919"}, {"nome": "Ermanna Orsoni", "label": "Passaggio Ermanna Orsoni", "tipologia": "Passaggio", "quartiere": "", "anno": "2016", "professione": "Campionessa di atletica leggera, allenatrice", "dati": "Bologna, 1927-1992"}, {"nome": "Diana Sabbi", "label": "Giardino Diana Sabbi", "tipologia": "Giardino", "quartiere": "", "anno": "2016", "professione": "Partigiana", "dati": "Pianoro (BO), 1922-2005"}, {"nome": "Zelinda Resca detta Lulu'", "label": "Giardino Zelinda Resca", "tipologia": "Giardino", "quartiere": "", "anno": "2016", "professione": "Partigiana", "dati": "Castello d'Argile (BO), 1924 - Bologna, 1999"}, {"nome": "Edmea Pirami Emiliani", "label": "Giardino Edmea Pirami", "tipologia": "Giardino", "quartiere": "", "anno": "2006", "professione": "Pediatra e animatrice di attivita' filantropiche", "dati": "Ascoli Piceno, 1899 - Bologna, 1978"}, {"nome": "Rosa Louise McCauley", "label": "Giardino Rosa Parks", "tipologia": "Giardino", "quartiere": "", "anno": "2009", "professione": "Attivista per i diritti civili", "dati": "Tuskegee (USA), 1913 - Detroit (USA), 2005"}, {"nome": "Teresa Noce", "label": "Giardino Teresa Noce", "tipologia": "Giardino", "quartiere": "", "anno": "1990", "professione": "Sindacalista e antifascista", "dati": "Torino, 1900 - Bologna, 1980"}, {"nome": "Giulia Anna Masina", "label": "Giardino Giulietta Masina", "tipologia": "Giardino", "quartiere": "", "anno": "2014", "professione": "Attrice", "dati": "San Giorgio di Piano (BO), 1921 - Roma, 1994"}, {"nome": "Sarah Jay Cusma' Piccione", "label": "Giardino Sarah Jay", "tipologia": "Giardino", "quartiere": "", "anno": "2006", "professione": "Bambina, vittima di violenza", "dati": "Bologna, 1992-2001"}, {"nome": "Ilaria Alpi", "label": "Giardino Ilaria Alpi", "tipologia": "Giardino", "quartiere": "", "anno": "2018", "professione": "Giornalista", "dati": "Roma, 1961 - Mogadiscio (Somalia) 1994"}, {"nome": "Ada Negri", "label": "Via Ada Negri", "tipologia": "Via", "quartiere": "", "anno": "1973", "professione": "Poetessa e prosatrice", "dati": "Lodi (MI), 1870 - Milano, 1945"}, {"nome": "Anna Grassetti Zanardi", "label": "Via Anna Grassetti", "tipologia": "Via", "quartiere": "", "anno": "2006", "professione": "Patriota", "dati": "Bologna, 1815-1896"}, {"nome": "Argia Magazzari", "label": "Via Argia Magazzari", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Attrice drammatica", "dati": "Bologna, 1844-1934"}, {"nome": "Carlotta Marchionni", "label": "Via Carlotta Marchionni", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Attrice", "dati": "Pescia (PT), 1769 - Torino, 1861"}, {"nome": "Carolina Coronedi Berti", "label": "Via Carolina Coronedi Berti", "tipologia": "Via", "quartiere": "", "anno": "1978", "professione": "Scrittrice dialettale", "dati": "Bologna, 1820-1911"}, {"nome": "Cristina da Pizzano - Christine de Pisan", "label": "Via Cristina da Pizzano", "tipologia": "Via", "quartiere": "", "anno": "2008", "professione": "Scrittrice", "dati": "Venezia, 1365 - Monastero di Poissy (Francia), 1430 circa"}, {"nome": "Eleonora Duse", "label": "Via Eleonora Duse", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Attrice drammatica", "dati": "Vigevano (PV), 1859 - Pittsburg (USA), 1924"}, {"nome": "Giovanna Zaccherini Alvisi detta Giannina", "label": "Via Giovanna Zaccherini Alvisi", "tipologia": "Via", "quartiere": "", "anno": "1977", "professione": "Perseguitata politica", "dati": "Castel Bolognese (RA), 1890 - Bologna, 1961"}, {"nome": "Laura Trombetti, in arte Laura Betti", "label": "Via Laura Betti", "tipologia": "Via", "quartiere": "", "anno": "2006", "professione": "Attrice, regista e cantante", "dati": "Casalecchio di Reno (BO), 1927 - Roma, 2004"}, {"nome": "Lyda Borelli", "label": "Via Lyda Borelli", "tipologia": "Via", "quartiere": "", "anno": "1987", "professione": "Attrice", "dati": "La Spezia, 1887 - Roma, 1959"}, {"nome": "Maria Gaetana Agnesi", "label": "Via Maria Gaetana Agnesi", "tipologia": "Via", "quartiere": "", "anno": "1940", "professione": "Matematica, erudita e filantropa", "dati": "Milano, 1718-1799"}, {"nome": "Maria Melato", "label": "Via Maria Melato", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Attrice drammatica", "dati": "Reggio Emilia, 1885 - Forte dei Marmi (LU), 1950"}, {"nome": "Properzia de' Rossi", "label": "Via Properzia de' Rossi", "tipologia": "Via", "quartiere": "", "anno": "2007", "professione": "Scultrice", "dati": "Bologna, 1490-1530"}, {"nome": "Virginia Reiterer", "label": "Via Virginia Reiter", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Attrice drammatica", "dati": "Modena, 1862-1937"}, {"nome": "Manuela Gallon", "label": "Giardino Natalia Agostini e Manuela Gallon", "tipologia": "Giardino", "quartiere": "", "anno": "1982", "professione": "Vittima della Strage del 2 agosto 1980", "dati": "Bologna, 1969-1980"}, {"nome": "Novella Corazza", "label": "Giardino Novella Corazza", "tipologia": "Giardino", "quartiere": "", "anno": "2019", "professione": "Partigiana", "dati": "Bologa, 1918-1995"}, {"nome": "Isabella Ceola", "label": "Giardino Isabella Ceola", "tipologia": "Giardino", "quartiere": "", "anno": "2021", "professione": "Paladina dei diritti umani", "dati": "Bologna, 1969-1997"}, {"nome": "Iside de Piccoli detta Nerina", "label": "Piazzale Nerina de Piccoli", "tipologia": "Piazzale", "quartiere": "", "anno": "2024", "professione": "Filantropa", "dati": "Bologna, 1872-1916"}, {"nome": "Francesca Alinovi", "label": "Passaggio Francesca Alinovi", "tipologia": "Passaggio", "quartiere": "", "anno": "2024", "professione": "Ricercatrice e critica d’arte", "dati": "Parma, 1948 - Bologna, 1983"}, {"nome": "Argia Mingarelli", "label": "Passaggio Maestre pioniere delle scuole all'aperto", "tipologia": "Passaggio", "quartiere": "", "anno": "2024", "professione": "Insegnante ed educatrice", "dati": "Grizzana (BO), 1874 - Bologna, 1962"}, {"nome": "Rita Levi Montalcini", "label": "Parco Rita Levi Montalcini", "tipologia": "Parco", "quartiere": "", "anno": "2023", "professione": "Scienziata, Premio Nobel per la medicina 1986", "dati": "Torino, 1909 - Roma, 2012"}, {"nome": "Elena Luzzatto Valentini", "label": "Giardino Elena Luzzatto", "tipologia": "Giardino", "quartiere": "", "anno": "2022", "professione": "Architetto", "dati": "Ancona, 1900 - Roma, 1983"}, {"nome": "Anita Serra", "label": "Giardino Maestre di Monte Sole", "tipologia": "Giardino", "quartiere": "", "anno": "2024", "professione": "Insegnante ed educatrice", "dati": "Monzuno (BO), 1913 - Marzabotto (BO), 1944"}, {"nome": "Odette Righi Boi", "label": "Giardino Odette Righi Boi", "tipologia": "Giardino", "quartiere": "", "anno": "2025", "professione": "Partigiana, maestra e scrittrice", "dati": "Bologna, 1925-2014"}, {"nome": "Alessandra Galante Garrone", "label": "Giardino Alessandra Galante Garrone", "tipologia": "Giardino", "quartiere": "", "anno": "2024", "professione": "Attrice e maestra di teatro", "dati": "Ivrea (TO), 1945 - Bologna, 2004"}, {"nome": "Ada Masotti", "label": "Pista ciclabile Ada Masotti", "tipologia": "Pista ciclabile", "quartiere": "", "anno": "2024", "professione": "Stilista e imprenditrice", "dati": "Bologna, 1914-1992"}, {"nome": "Gualberta Alaide Beccari", "label": "Giardino Gualberta Alaide Beccari", "tipologia": "Giardino", "quartiere": "", "anno": "2024", "professione": "Scrittrice emancipazionista", "dati": "Padova, 1842 - Bologna, 1906"}, {"nome": "Anna Magnani", "label": "Piazzetta Anna Magnani", "tipologia": "Piazzetta", "quartiere": "", "anno": "2015", "professione": "Attrice", "dati": "Roma, 1908-1973"}, {"nome": "Maria Adele Crocioni Michelini", "label": "Rotonda Maria Adele Crocioni Michelini", "tipologia": "Rotonda", "quartiere": "", "anno": "2008", "professione": "Attivista per i diritti delle donne", "dati": "Reggio Emilia, 1909 - Bologna, 1978"}, {"nome": "Mafalda Maria Elisabetta Anna Romana di Savoia-Assia", "label": "Rotonda Principessa Mafalda di Savoia", "tipologia": "Rotonda", "quartiere": "", "anno": "2002", "professione": "Principessa, vittima dei lager nazisti", "dati": "Roma, 1902 - Campo di Buchenwald (Germania), 1944"}, {"nome": "Cristina Tommasa Maria Guidicini", "label": "Rotonda Tommasina Guidi", "tipologia": "Rotonda", "quartiere": "", "anno": "2010", "professione": "Scrittrice", "dati": "San Lorenzo in Collina (BO) 1835 - Bologna, 1903"}, {"nome": "Claudia Testoni", "label": "Passaggio Claudia Testoni", "tipologia": "Passaggio", "quartiere": "", "anno": "2016", "professione": "Campionessa di atletica leggera", "dati": "Bologna, 1915 - Cagliari, 1998"}, {"nome": "Norma Cossetto", "label": "Giardino Norma Cossetto", "tipologia": "Giardino", "quartiere": "", "anno": "2013", "professione": "Studentessa, vittima delle foibe", "dati": "Visinada (Croazia), 1920 - Antignana (Croazia), 1943"}, {"nome": "Renata Vigano'", "label": "Giardino Renata Vigano'", "tipologia": "Giardino", "quartiere": "", "anno": "1978", "professione": "Scrittrice e partigiana", "dati": "Bologna, 1900-1976"}, {"nome": "Vittorina dal Monte", "label": "Giardino Vittorina dal Monte", "tipologia": "Giardino", "quartiere": "", "anno": "2005", "professione": "Funzionaria politica e sindacale", "dati": "Imola (BO), 1922 - Bologna, 1999"}, {"nome": "Natalia Agostini in Gallon", "label": "Giardino Natalia Agostini e Manuela Gallon", "tipologia": "Giardino", "quartiere": "", "anno": "1982", "professione": "Vittima della Strage del 2 agosto 1980", "dati": "Bologna, 1940-1980"}, {"nome": "Patria Mercedes, Maria Argentina Minerva, Antonia Maria Teresa", "label": "Giardino Sorelle Mirabal", "tipologia": "Giardino", "quartiere": "", "anno": "2012", "professione": "Attiviste contro la dittatura", "dati": "Tre sorelle nate a Ojo de Agua e morte a Salcedo nella Repubblica Dominicana: Patria Mercedes 1924-1960, Maria Argentina 1926-1960, Antonia Maria Teresa 1935-1960"}, {"nome": "Medea Zanardi", "label": "Giardino Medea Zanardi", "tipologia": "Giardino", "quartiere": "", "anno": "2012", "professione": "Ostetrica di guerra", "dati": "Bologna, 1894-1974"}, {"nome": "Lavinia Fontana", "label": "Giardino Lavinia Fontana", "tipologia": "Giardino", "quartiere": "", "anno": "2010", "professione": "Pittrice", "dati": "Bologna, 1552 - Roma, 1614"}, {"nome": "Angiola Sbaiz, detta Lula", "label": "Giardino Angiola Sbaiz", "tipologia": "Giardino", "quartiere": "", "anno": "2015", "professione": "Avvocato e Pubblico Amministratore", "dati": "Cordovado (PN), 1909 - Bologna, 1999"}, {"nome": "Anna Morandi Manzolini", "label": "Giardino Anna Morandi Manzolini", "tipologia": "Giardino", "quartiere": "", "anno": "2010", "professione": "Scultrice ceroplasta", "dati": "Bologna, 1714-1774"}, {"nome": "Sabina Santilli", "label": "Rotonda Sabina Santilli", "tipologia": "Rotonda", "quartiere": "", "anno": "2016", "professione": "Educatrice", "dati": "San Benedetto dei Marsi (AQ), 1917-1999"}, {"nome": "Alida Maria Altenburger von Markenstein und Frauenberg", "label": "Giardino Alida Valli", "tipologia": "Giardino", "quartiere": "", "anno": "2018", "professione": "Attrice", "dati": "Pola (Croazia), 1921 - Roma, 2006"}, {"nome": "Margherita Guidacci", "label": "Giardino Margherita Guidacci", "tipologia": "Giardino", "quartiere": "", "anno": "2018", "professione": "Poetessa e traduttrice", "dati": "Firenze, 1921 - Roma, 1992"}, {"nome": "Graziella Fava", "label": "Giardino Graziella Fava", "tipologia": "Giardino", "quartiere": "", "anno": "1979", "professione": "Vittima dei terroristi", "dati": "Pianoro (BO), 1929 - Bologna, 1979"}, {"nome": "Maria Tecla Artemisia Montessori", "label": "Giardino Maria Montessori", "tipologia": "Giardino", "quartiere": "", "anno": "2018", "professione": "Educatrice, pedagogista, filosofa, medico", "dati": "Chiaravalle (AN), 1870 - Noordwijk (Olanda), 1952"}, {"nome": "Annelies Marie Frank", "label": "Via Anne Frank", "tipologia": "Via", "quartiere": "", "anno": "1995", "professione": "Giovane scrittrice ebrea", "dati": "Francoforte sul Meno (Germania), 1929 - Bergen Belsen (Germania), 1945"}, {"nome": "Clotilde Tambroni", "label": "Via Clotilde Tambroni", "tipologia": "Via", "quartiere": "", "anno": "1925", "professione": "Grecista, letterata ed erudita", "dati": "Bologna, 1758-1817"}, {"nome": "Vittoria Guerrini, in arte Cristina Campo", "label": "Via Cristina Campo", "tipologia": "Via", "quartiere": "", "anno": "2013", "professione": "Poetessa", "dati": "Bologna, 1923 - Roma, 1977"}, {"nome": "Elisabetta Sirani", "label": "Via Elisabetta Sirani", "tipologia": "Via", "quartiere": "", "anno": "1915", "professione": "Pittrice", "dati": "Bologna, 1638-1665"}, {"nome": "Francesca Edera de Giovanni, detta Edera", "label": "Via Francesca Edera de Giovanni", "tipologia": "Via", "quartiere": "", "anno": "1956", "professione": "Partigiana, caduta per la liberazione", "dati": "Monterenzio (BO), 1923 - Bologna, 1944"}, {"nome": "Gilda Chiari Allegretti", "label": "Via Gilda Chiari Allegretti", "tipologia": "Via", "quartiere": "", "anno": "1974", "professione": "Pedagogista", "dati": "Parma, 1878 - Sestola (MO), 1943"}, {"nome": "Grazia Maria Cosima Damiana Deledda", "label": "Via Grazia Deledda", "tipologia": "Via", "quartiere": "", "anno": "1969", "professione": "Scrittrice, Premio Nobel per la Letteratura", "dati": "Nuoro, 1871 - Roma, 1936"}, {"nome": "Irma Bandiera detta Mimma", "label": "Via Irma Bandiera", "tipologia": "Via", "quartiere": "", "anno": "1947", "professione": "Partigiana", "dati": "Bologna, 1915-1944"}, {"nome": "Isabella Canali Andreini", "label": "Via Isabella Andreini", "tipologia": "Via", "quartiere": "", "anno": "1961", "professione": "Poetessa e attrice", "dati": "Padova, 1562 - Lione (Francia), 1604"}, {"nome": "Luigina Fasoli, detta Gina", "label": "Via Luigina Fasoli", "tipologia": "Via", "quartiere": "", "anno": "2009", "professione": "Storica", "dati": "Bassano del Grappa (VI), 1905 - Bologna, 1992"}, {"nome": "Anna Maria Cecilia Sophia Kalogeropoulos", "label": "Via Maria Callas", "tipologia": "Via", "quartiere": "", "anno": "2012", "professione": "Soprano, cantante lirica", "dati": "New York (USA), 1923 - Parigi (Francia), 1977"}, {"nome": "Virginia Marini", "label": "Via Virginia Marini", "tipologia": "Via", "quartiere": "", "anno": "1967", "professione": "Attrice", "dati": "Alessandria, 1842 - Roma, 1918"}, {"nome": "Margherita Maria Teresa Giovanna di Savoia", "label": "Giardini Margherita", "tipologia": "Parco", "quartiere": "", "anno": "1997", "professione": "Regina, moglie del Re d'Italia Umberto I", "dati": "Torino, 1851 - Bordighera (IM), 1926"}, {"nome": "Lucia Casalini Torelli", "label": "Giardino Lucia Casalini", "tipologia": "Giardino", "quartiere": "", "anno": "2019", "professione": "Pittrice", "dati": "Bologna, 1677-1762"}, {"nome": "Maria Salomea Sklodowska", "label": "Giardino Marie Curie", "tipologia": "Giardino", "quartiere": "", "anno": "2019", "professione": "Scienziata, Premio Nobel", "dati": "Varsavia (Polonia), 1867 - Passy (Francia), 1934"}, {"nome": "Angelina Merlin", "label": "Giardino Lina Merlin", "tipologia": "Giardino", "quartiere": "", "anno": "2021", "professione": "Senatrice della Repubblica e Professoressa", "dati": "Pozzonovo (PD), 1887 - Padova, 1979"}, {"nome": "Florence Nightingale", "label": "Giardino Florence Nightingale", "tipologia": "Giardino", "quartiere": "", "anno": "2019", "professione": "Fondatrice dell'assistenza infermieristica moderna", "dati": "Firenze, 1820 - Londra, 1910"}, {"nome": "Camelia Matathia", "label": "Giardino Camelia Matatia", "tipologia": "Giardino", "quartiere": "", "anno": "2020", "professione": "Vittima dell'Olocausto", "dati": "Forlì, 1926 - Auschwitz (Polonia), 1944"}, {"nome": "Marcella Di Folco", "label": "Piazzale Marcella Di Folco", "tipologia": "Piazzale", "quartiere": "", "anno": "2021", "professione": "Attivista trans – Consigliera comunale", "dati": "Roma, 1943 - Bentivoglio (BO), 2010"}, {"nome": "Silvia Chiara Lubich", "label": "Ponte Chiara Lubich", "tipologia": "Ponte", "quartiere": "", "anno": "2021", "professione": "Fondatrice del Movimento dei Focolari", "dati": "Trento, 1920 - Rocca di Papa (RM), 2008"}, {"nome": "Adeline Virginia Stephen Woolf", "label": "Giardino Virginia Woolf", "tipologia": "Giardino", "quartiere": "", "anno": "2022", "professione": "Scrittrice, saggista e attivista", "dati": "Londra (Regno Unito), 1882 - Rodmell (Regno Unito), 1941"}, {"nome": "Jolanda Cervellati", "label": "Passaggio Jolanda Cervellati", "tipologia": "Passaggio", "quartiere": "", "anno": "2024", "professione": "Insegnante ed educatrice", "dati": "Argenta (FE), 1897 - Bologna, 1965"}, {"nome": "Isabel Ángela Colbran Ortola", "label": "Via Isabella Colbran", "tipologia": "Via", "quartiere": "", "anno": "2023", "professione": "Cantante lirica", "dati": "Madrid (Spagna), 1785 - Castenaso (BO), 1845"}, {"nome": "Maria Gaspari", "label": "Passaggio Maestre pioniere delle scuole all'aperto", "tipologia": "Passaggio", "quartiere": "", "anno": "2024", "professione": "Insegnante ed educatrice", "dati": "Bologna, 1888 - Castel San Pietro (BO), 1974"}, {"nome": "Teresita Mattei, detta Teresa", "label": "Giardino Teresa Mattei", "tipologia": "Giardino", "quartiere": "", "anno": "2024", "professione": "Partigiana e attivista per i diritti dell’infanzia", "dati": "Genova, 1921 - Usigliano (PI), 2013"}];
+const CAT_LABELS = ["Arte visiva e architettura", "Musica, teatro e cinema", "Letteratura e giornalismo", "Scienze e medicina", "Filosofia, storia e accademia", "Politica e diritto", "Resistenza e antifascismo", "Istruzione ed educazione", "Sindacalismo e attivismo civile", "Patrioti, militari ed esploratori", "Religione", "Sport"];
+const M_DATA = [17.3, 10.2, 7.7, 13.7, 8.9, 13.4, 5.4, 1.7, 1.6, 4.6, 3.3, 1.3];
+const F_DATA = [11.9, 25.4, 11.9, 4.5, 4.5, 1.5, 6.0, 6.0, 10.4, 0.0, 6.0, 7.5];
+const P_DATA = [0.0, 2.9, 2.9, 8.8, 5.9, 8.8, 32.4, 14.7, 14.7, 0.0, 2.9, 2.9];
+
+// Donut chart
+new Chart(document.getElementById('donutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Uomini (1066)', 'Donne (66)', 'Toponimi (828)'],
+    datasets: [{ data: [1066, 66, 828],
+      backgroundColor: ['#1b3a6b','#8b1a4a','#9e9e9e'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: { plugins: { legend: { position: 'bottom' } }, cutout: '60%' }
+});
+
+// Bar chart
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: CAT_LABELS,
+    datasets: [
+      { label: 'Uomini storici %', data: M_DATA, backgroundColor: 'rgba(27,58,107,0.8)' },
+      { label: 'Donne storiche %', data: F_DATA, backgroundColor: 'rgba(139,26,74,0.8)' },
+      { label: 'Proposte %',       data: P_DATA, backgroundColor: 'rgba(26,107,58,0.8)' },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      x: { ticks: { maxRotation: 35, font: { size: 11 } } },
+      y: { beginAtZero: true, title: { display: true, text: '% sul totale del gruppo' } }
+    }
+  }
+});
+
+// Women table
+const tbody = document.getElementById('women-tbody');
+const countEl = document.getElementById('women-count');
+let activeFilter = '';
+let searchVal = '';
+
+function renderTable() {
+  const q = searchVal.toLowerCase();
+  const rows = WOMEN.filter(w => {
+    const matchSearch = !q || [w.nome,w.label,w.professione,w.quartiere,w.dati]
+      .some(s => s.toLowerCase().includes(q));
+    const matchFilter = !activeFilter || w.tipologia.includes(activeFilter);
+    return matchSearch && matchFilter;
+  });
+  tbody.innerHTML = rows.map(w => `<tr>
+    <td><strong>${w.label}</strong></td>
+    <td>${w.nome}</td>
+    <td>${w.professione}</td>
+    <td>${w.dati}</td>
+    <td>${w.anno}</td>
+    <td>${w.quartiere}</td>
+  </tr>`).join('');
+  countEl.textContent = `${rows.length} / ${WOMEN.length} intitolazioni visualizzate`;
+}
+
+document.getElementById('search-box').addEventListener('input', e => {
+  searchVal = e.target.value; renderTable();
+});
+document.querySelectorAll('#tfilters .filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#tfilters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.f; renderTable();
+  });
+});
+renderTable();
+</script>
+</body>
+</html>

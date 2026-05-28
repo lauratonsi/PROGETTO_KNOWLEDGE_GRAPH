@@ -1,0 +1,241 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix cpv: <https://w3id.org/italia/onto/CPV/> .
+@prefix ex:  <https://w3id.org/bologna/ontology#> .
+
+<https://w3id.org/bologna/resource/person/bcc550638a59267a2584f4195872ce54>
+    a cpv:Person ;
+    cpv:fullName "Rina Monti (Cesarina Monti Stella)" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/2759b8f3325633312f2f0217f01ad298>
+    a cpv:Person ;
+    cpv:fullName "Margherita Hack" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/b8646ec35fd93b509bf2d5b0e038108f>
+    a cpv:Person ;
+    cpv:fullName "Ada Buffulini" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/cb607b0bcb4c3269daa2a5291595a1e8>
+    a cpv:Person ;
+    cpv:fullName "Maria Dalle Donne" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/11b2a8c00b437dc116442598739462a4>
+    a cpv:Person ;
+    cpv:fullName "Alessandro Zijno (detta 'l'Ambigua')" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/5fd0a7b23771f8daca591638af0a2f71>
+    a cpv:Person ;
+    cpv:fullName "Dorotea Bocchi (detta Bucca)" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/20b5da87edf8722fc4714b3d4847019f>
+    a cpv:Person ;
+    cpv:fullName "Giuseppina Cattani" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/685f6cf4c21b6d35df2cf13b4c992b22>
+    a cpv:Person ;
+    cpv:fullName "Maria Bortolotti Casoni" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/365141709373830ab8b17cd7545070ac>
+    a cpv:Person ;
+    cpv:fullName "Gabriella Degli Esposti" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/9ddcd55269ae369ca758d769f4fea3f7>
+    a cpv:Person ;
+    cpv:fullName "Ines Bedeschi" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/e12b05a585ca4e647b12d1d32f6c29f8>
+    a cpv:Person ;
+    cpv:fullName "Enrichetta Cabassa" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/a27524989a04254ceb2b3fc1a987badc>
+    a cpv:Person ;
+    cpv:fullName "Anna Maria Enriques Agnoletti" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/1b9165d10eab795b5e112b462d486e0a>
+    a cpv:Person ;
+    cpv:fullName "Giovanna Zangrandi (Alma Bevilacqua)" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/685dd62a2689896b6ebe7eb8a56a7d24>
+    a cpv:Person ;
+    cpv:fullName "Ena Frazzoni" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/45fd8795206f5b13f9ee688d83138e1f>
+    a cpv:Person ;
+    cpv:fullName "Ester Capponi" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/0ebad483ae553c9bfe77fc25b8e6dbd9>
+    a cpv:Person ;
+    cpv:fullName "Lucrezia Orsina Vizzana" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/26295ed1ba8830632ab67450730548cb>
+    a cpv:Person ;
+    cpv:fullName "Maria Brizzi Giorgi" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/e687d3752b5f16ca8ad7ab41959c45b7>
+    a cpv:Person ;
+    cpv:fullName "Caterina de' Vigri (Santa Caterina da Bologna)" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/8ece16ac7f166b2bde5ddfc01dae40a9>
+    a cpv:Person ;
+    cpv:fullName "Cornelia Rossi Martinetti" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/778525e9dba0fcd49d2dcc9d30035bb9>
+    a cpv:Person ;
+    cpv:fullName "Teresa Carniani Malvezzi" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/01c6538449f5a3d83886be1b7f576afd>
+    a cpv:Person ;
+    cpv:fullName "Odette Righi Boi" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/e042d5a00dff45412317223da58007c5>
+    a cpv:Person ;
+    cpv:fullName "Flavia Madaschi" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/768d70a6938eb0ed85c13afc96634fbf>
+    a cpv:Person ;
+    cpv:fullName "Claudia Testoni" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/8776f2bdad5228d8f515b7a4ffbebbc1>
+    a cpv:Person ;
+    cpv:fullName "Nilde Iotti" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/8d1b697405651daa806db86a52024c9f>
+    a cpv:Person ;
+    cpv:fullName "Lidia Poët" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/b52bcab37435e976c8d1f510a2f7ac1f>
+    a cpv:Person ;
+    cpv:fullName "Lina Merlin" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/f7062b610de5fe13b9a21c82918beb1e>
+    a cpv:Person ;
+    cpv:fullName "Camilla Ravera" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/0e1b67cbbfadcf7d63f1ceb0f6e94934>
+    a cpv:Person ;
+    cpv:fullName "Carla Capponi" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/111daa366bd737251ae0160cffa2f77c>
+    a cpv:Person ;
+    cpv:fullName "Maria Montessori" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "attiva" .
+
+<https://w3id.org/bologna/resource/person/8167e7aa4e5b69e9acc5730a7d21ee02>
+    a cpv:Person ;
+    cpv:fullName "Lucy Salani" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "futura" .
+
+<https://w3id.org/bologna/resource/person/d5f4de5dd0441e0908b0b4390524205f>
+    a cpv:Person ;
+    cpv:fullName "Luki Massa" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "futura" .
+
+<https://w3id.org/bologna/resource/person/ee1fc092251dc3ecd9591f6ed3e44320>
+    a cpv:Person ;
+    cpv:fullName "Tina Anselmi" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "futura" .
+
+<https://w3id.org/bologna/resource/person/447f86aa52a54bf9a9ad6b0d4834f93f>
+    a cpv:Person ;
+    cpv:fullName "Franca Viola" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "futura" .
+
+<https://w3id.org/bologna/resource/person/aa0ce8705e2ee5071730d9d740205329>
+    a cpv:Person ;
+    cpv:fullName "Germana Boldrini" ;
+    cpv:sex "Female" ;
+    ex:proposta "true" ;
+    ex:statoProposta "futura" .

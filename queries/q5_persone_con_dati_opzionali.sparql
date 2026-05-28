@@ -1,0 +1,35 @@
+## Query 5 — Personaggi con nome via e dati biografici opzionali
+## Keywords: OPTIONAL, DISTINCT, FILTER, ORDER BY
+##
+## Domanda: quali persone sono onorate con più di una strada?
+## OPTIONAL viene usato per cercare una seconda intitolazione:
+## se esiste, viene mostrata; se non esiste, la riga appare ugualmente
+## (con ?nomeVia2 = non valorizzato).
+##
+## Questo pattern OPTIONAL è utile anche per query future quando
+## il KG verrà esteso con dati biografici (nascita, professione)
+## che non saranno disponibili per tutti i personaggi.
+
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+
+SELECT DISTINCT ?nomePersona ?genere ?nomeVia1 ?nomeVia2
+WHERE {
+  ?via1 a clv:Street ;
+        clv:hasStreetName ?nomeVia1 ;
+        clv:isDedicatedTo ?persona .
+  ?persona a cpv:Person ;
+           cpv:fullName ?nomePersona ;
+           cpv:sex ?genere .
+
+  OPTIONAL {
+    ?via2 a clv:Street ;
+          clv:hasStreetName ?nomeVia2 ;
+          clv:isDedicatedTo ?persona .
+    FILTER(?via2 != ?via1)
+  }
+
+  FILTER(?genere = "Female" || ?genere = "Male")
+}
+ORDER BY ?genere ?nomePersona
+LIMIT 200
