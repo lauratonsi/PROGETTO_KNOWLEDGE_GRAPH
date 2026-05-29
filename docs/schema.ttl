@@ -79,3 +79,43 @@ ex:statoProposta
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
     rdfs:comment "Stato temporale della proposta rispetto al vincolo normativo (Legge 1188/1927): 'attiva' = deceduta da oltre 10 anni, immediatamente candidabile; 'futura' = deceduta da meno di 10 anni, ancora in vita, o data di morte incerta."@it .
+
+ex:professione
+    a owl:DatatypeProperty ;
+    rdfs:label "professione"@it ;
+    rdfs:label "occupation"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Professione o ruolo della persona, ricavato da Wikidata (P106) o da fonti archivistiche locali."@it .
+
+ex:dataNascita
+    a owl:DatatypeProperty ;
+    rdfs:label "data di nascita"@it ;
+    rdfs:label "date of birth"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Data di nascita in formato testuale (es. '27 gennaio 1756'), ricavata da Wikidata P569."@it .
+
+ex:luogoNascita
+    a owl:DatatypeProperty ;
+    rdfs:label "luogo di nascita"@it ;
+    rdfs:label "place of birth"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Luogo di nascita in formato testuale, ricavato da Wikidata P19."@it .
+
+ex:dataMorte
+    a owl:DatatypeProperty ;
+    rdfs:label "data di morte"@it ;
+    rdfs:label "date of death"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Data di morte in formato testuale (es. '5 dicembre 1791'), ricavata da Wikidata P570."@it .
+
+ex:luogoMorte
+    a owl:DatatypeProperty ;
+    rdfs:label "luogo di morte"@it ;
+    rdfs:label "place of death"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Luogo di morte in formato testuale, ricavato da Wikidata P20."@it .

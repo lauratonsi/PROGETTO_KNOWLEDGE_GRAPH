@@ -380,6 +380,29 @@ footer p { margin-bottom: 0.4rem; }
   #navbar.open .nav-links { display: flex; }
   .hero { padding: 3rem 1rem 2.5rem; }
 }
+.grafici-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.grafici-grid figure {
+  margin: 0;
+  background: #f8f8f8;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+.grafici-grid img {
+  width: 100%;
+  display: block;
+}
+.grafici-grid figcaption {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.83rem;
+  color: #555;
+  text-align: center;
+}
 .btn-webvowl {
   display: inline-block;
   background: var(--primary);
@@ -1099,6 +1122,46 @@ RESULTS = page('Risultati', f'''
     </table>
   </div>
   <p id="women-count" style="font-size:0.85rem;color:var(--text-muted);margin-top:0.5rem"></p>
+</div>
+
+<div class="section">
+  <h2>Grafici — Gender Gap</h2>
+  <p>Visualizzazioni statiche del divario di genere nella toponomastica bolognese.</p>
+  <div class="grafici-grid">
+    <figure>
+      <img src="grafici_gender_gap/01_gender_gap_globale.png" alt="Gender gap globale" loading="lazy">
+      <figcaption>Distribuzione globale Male / Female / Toponimo</figcaption>
+    </figure>
+    <figure>
+      <img src="grafici_gender_gap/02_distribuzione_quartieri.png" alt="Distribuzione per quartiere" loading="lazy">
+      <figcaption>Distribuzione del gender gap per quartiere</figcaption>
+    </figure>
+    <figure>
+      <img src="grafici_gender_gap/03_evoluzione_storica.png" alt="Evoluzione storica" loading="lazy">
+      <figcaption>Evoluzione storica delle intitolazioni femminili</figcaption>
+    </figure>
+    <figure>
+      <img src="grafici_gender_gap/04_lunghezza_strade.png" alt="Lunghezza strade" loading="lazy">
+      <figcaption>Lunghezza media delle strade per genere dell'intitolazione</figcaption>
+    </figure>
+  </div>
+
+  <h2>Grafici — Classificazione Professionale</h2>
+  <p>Confronto tra le macro-categorie professionali degli uomini, delle donne storiche e delle candidature proposte.</p>
+  <div class="grafici-grid">
+    <figure>
+      <img src="grafici_professioni_rivisti/01_divario_storico_categorie.png" alt="Divario storico per categorie" loading="lazy">
+      <figcaption>Divario di genere per categoria professionale (persone storiche)</figcaption>
+    </figure>
+    <figure>
+      <img src="grafici_professioni_rivisti/02_focus_nuove_proposte.png" alt="Focus nuove proposte" loading="lazy">
+      <figcaption>Distribuzione professionale delle 34 proposte di intitolazione</figcaption>
+    </figure>
+    <figure>
+      <img src="grafici_professioni_rivisti/03_top_professioni_femminili.png" alt="Top professioni femminili" loading="lazy">
+      <figcaption>Principali categorie nelle strade già dedicate a donne</figcaption>
+    </figure>
+  </div>
 </div>
 ''', active='results.html',
 extra_head='<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>',

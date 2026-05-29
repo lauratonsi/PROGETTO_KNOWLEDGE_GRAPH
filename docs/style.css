@@ -209,6 +209,29 @@ footer p { margin-bottom: 0.4rem; }
   #navbar.open .nav-links { display: flex; }
   .hero { padding: 3rem 1rem 2.5rem; }
 }
+.grafici-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.grafici-grid figure {
+  margin: 0;
+  background: #f8f8f8;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+.grafici-grid img {
+  width: 100%;
+  display: block;
+}
+.grafici-grid figcaption {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.83rem;
+  color: #555;
+  text-align: center;
+}
 .btn-webvowl {
   display: inline-block;
   background: var(--primary);
