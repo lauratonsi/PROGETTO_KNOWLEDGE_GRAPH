@@ -232,6 +232,9 @@ footer p { margin-bottom: 0.4rem; }
   color: #555;
   text-align: center;
 }
+.grafici-grid a { display: block; }
+.grafici-grid a:hover img { opacity: 0.88; }
+.grafici-grid img { cursor: zoom-in; transition: opacity 0.15s; }
 .btn-webvowl {
   display: inline-block;
   background: var(--primary);

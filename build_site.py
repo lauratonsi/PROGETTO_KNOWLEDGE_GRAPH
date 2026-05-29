@@ -403,6 +403,9 @@ footer p { margin-bottom: 0.4rem; }
   color: #555;
   text-align: center;
 }
+.grafici-grid a { display: block; }
+.grafici-grid a:hover img { opacity: 0.88; }
+.grafici-grid img { cursor: zoom-in; transition: opacity 0.15s; }
 .btn-webvowl {
   display: inline-block;
   background: var(--primary);
@@ -1129,19 +1132,19 @@ RESULTS = page('Risultati', f'''
   <p>Visualizzazioni statiche del divario di genere nella toponomastica bolognese.</p>
   <div class="grafici-grid">
     <figure>
-      <img src="grafici_gender_gap/01_gender_gap_globale.png" alt="Gender gap globale" loading="lazy">
+      <a href="grafici_gender_gap/01_gender_gap_globale.png" target="_blank"><img src="grafici_gender_gap/01_gender_gap_globale.png" alt="Gender gap globale" loading="lazy"></a>
       <figcaption>Distribuzione globale Male / Female / Toponimo</figcaption>
     </figure>
     <figure>
-      <img src="grafici_gender_gap/02_distribuzione_quartieri.png" alt="Distribuzione per quartiere" loading="lazy">
+      <a href="grafici_gender_gap/02_distribuzione_quartieri.png" target="_blank"><img src="grafici_gender_gap/02_distribuzione_quartieri.png" alt="Distribuzione per quartiere" loading="lazy"></a>
       <figcaption>Distribuzione del gender gap per quartiere</figcaption>
     </figure>
     <figure>
-      <img src="grafici_gender_gap/03_evoluzione_storica.png" alt="Evoluzione storica" loading="lazy">
+      <a href="grafici_gender_gap/03_evoluzione_storica.png" target="_blank"><img src="grafici_gender_gap/03_evoluzione_storica.png" alt="Evoluzione storica" loading="lazy"></a>
       <figcaption>Evoluzione storica delle intitolazioni femminili</figcaption>
     </figure>
     <figure>
-      <img src="grafici_gender_gap/04_lunghezza_strade.png" alt="Lunghezza strade" loading="lazy">
+      <a href="grafici_gender_gap/04_lunghezza_strade.png" target="_blank"><img src="grafici_gender_gap/04_lunghezza_strade.png" alt="Lunghezza strade" loading="lazy"></a>
       <figcaption>Lunghezza media delle strade per genere dell'intitolazione</figcaption>
     </figure>
   </div>
@@ -1150,15 +1153,15 @@ RESULTS = page('Risultati', f'''
   <p>Confronto tra le macro-categorie professionali degli uomini, delle donne storiche e delle candidature proposte.</p>
   <div class="grafici-grid">
     <figure>
-      <img src="grafici_professioni_rivisti/01_divario_storico_categorie.png" alt="Divario storico per categorie" loading="lazy">
+      <a href="grafici_professioni_rivisti/01_divario_storico_categorie.png" target="_blank"><img src="grafici_professioni_rivisti/01_divario_storico_categorie.png" alt="Divario storico per categorie" loading="lazy"></a>
       <figcaption>Divario di genere per categoria professionale (persone storiche)</figcaption>
     </figure>
     <figure>
-      <img src="grafici_professioni_rivisti/02_focus_nuove_proposte.png" alt="Focus nuove proposte" loading="lazy">
+      <a href="grafici_professioni_rivisti/02_focus_nuove_proposte.png" target="_blank"><img src="grafici_professioni_rivisti/02_focus_nuove_proposte.png" alt="Focus nuove proposte" loading="lazy"></a>
       <figcaption>Distribuzione professionale delle 34 proposte di intitolazione</figcaption>
     </figure>
     <figure>
-      <img src="grafici_professioni_rivisti/03_top_professioni_femminili.png" alt="Top professioni femminili" loading="lazy">
+      <a href="grafici_professioni_rivisti/03_top_professioni_femminili.png" target="_blank"><img src="grafici_professioni_rivisti/03_top_professioni_femminili.png" alt="Top professioni femminili" loading="lazy"></a>
       <figcaption>Principali categorie nelle strade già dedicate a donne</figcaption>
     </figure>
   </div>
@@ -1284,9 +1287,10 @@ PROPOSALS_PAGE = page('Proposte', f'''
     <button class="filter-btn" data-cat="Resistenza e antifascismo">Resistenza</button>
     <button class="filter-btn" data-cat="Sindacalismo e attivismo civile">Attivismo</button>
     <button class="filter-btn" data-cat="Scienze e medicina">Scienze</button>
-    <button class="filter-btn" data-cat="Arte visiva e architettura">Arte</button>
     <button class="filter-btn" data-cat="Politica e diritto">Politica</button>
     <button class="filter-btn" data-cat="Istruzione ed educazione">Istruzione</button>
+    <button class="filter-btn" data-cat="Musica, teatro e cinema">Musica</button>
+    <button class="filter-btn" data-cat="Letteratura e giornalismo">Letteratura</button>
   </div>
 
   <p id="prop-count" style="font-size:0.85rem;color:var(--text-muted);margin:0.5rem 0 1rem"></p>
