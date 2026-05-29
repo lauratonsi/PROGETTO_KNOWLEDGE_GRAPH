@@ -479,7 +479,7 @@ INDEX = page('Home', f'''
 <div class="section">
   <h2>Il Team</h2>
   <p>Progetto sviluppato da due studentesse del corso di Laurea Magistrale
-  in Geography and Environmental Processes in the Digital Age (GEPID).</p>
+  in Governance e Politiche dell'Innovazione Digitale (GEPID).</p>
   <div class="team-grid">
     <div class="team-card">
       <div class="team-avatar">S</div>
