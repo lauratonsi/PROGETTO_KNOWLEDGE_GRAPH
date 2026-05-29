@@ -79,7 +79,7 @@ ex:statoProposta
     rdfs:range  xsd:string ;
     rdfs:comment "Valori: 'attiva' (decesso >10 anni) o 'futura' (decesso <10 anni o persona in vita)."@it .
 
-# ── Annotation Properties (metadati biografici) ───────────────────────────────
+# ── Annotation Properties (identificatori) ────────────────────────────────────
 
 cpv:fullName
     a owl:AnnotationProperty ;
@@ -87,26 +87,36 @@ cpv:fullName
     rdfs:label "full name"@en ;
     rdfs:domain cpv:Person .
 
+# ── Datatype Properties — metadati biografici ─────────────────────────────────
+
 ex:dataNascita
-    a owl:AnnotationProperty ;
+    a owl:DatatypeProperty ;
     rdfs:label "data di nascita"@it ;
     rdfs:label "date of birth"@en ;
-    rdfs:comment "Wikidata P569."@it .
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Wikidata P569. Formato testuale (es. '27 gennaio 1756')."@it .
 
 ex:luogoNascita
-    a owl:AnnotationProperty ;
+    a owl:DatatypeProperty ;
     rdfs:label "luogo di nascita"@it ;
     rdfs:label "place of birth"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
     rdfs:comment "Wikidata P19."@it .
 
 ex:dataMorte
-    a owl:AnnotationProperty ;
+    a owl:DatatypeProperty ;
     rdfs:label "data di morte"@it ;
     rdfs:label "date of death"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
     rdfs:comment "Wikidata P570."@it .
 
 ex:luogoMorte
-    a owl:AnnotationProperty ;
+    a owl:DatatypeProperty ;
     rdfs:label "luogo di morte"@it ;
     rdfs:label "place of death"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
     rdfs:comment "Wikidata P20."@it .
