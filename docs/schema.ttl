@@ -6,13 +6,13 @@
 @prefix cpv:  <https://w3id.org/italia/onto/CPV/> .
 @prefix ex:   <https://w3id.org/bologna/ontology#> .
 
-# ── Ontology declaration ──────────────────────────────────────────────────────
+# ── Ontology ──────────────────────────────────────────────────────────────────
 
 <https://w3id.org/bologna/ontology>
     a owl:Ontology ;
     rdfs:label "Ontologia Toponomastica di Bologna"@it ;
     rdfs:label "Bologna Street Toponymy Ontology"@en ;
-    rdfs:comment "Ontologia per la classificazione di genere della toponomastica del Comune di Bologna. Riutilizza vocabolari controllati italiani (CLV, CPV) ed estende con proprietà custom per la gestione delle proposte di intitolazione."@it .
+    rdfs:comment "Ontologia per la classificazione di genere della toponomastica del Comune di Bologna. Riutilizza CLV e CPV (vocabolari controllati italiani) ed estende con proprietà custom per la gestione delle proposte di intitolazione."@it .
 
 # ── Classes ───────────────────────────────────────────────────────────────────
 
@@ -20,15 +20,15 @@ clv:Street
     a owl:Class ;
     rdfs:label "Strada"@it ;
     rdfs:label "Street"@en ;
-    rdfs:comment "Arco stradale del grafo viario del Comune di Bologna (viale, via, piazza, passaggio, largo, ecc.)."@it .
+    rdfs:comment "Arco stradale del grafo viario del Comune di Bologna (via, piazza, viale, passaggio, largo, ecc.)."@it .
 
 cpv:Person
     a owl:Class ;
     rdfs:label "Persona"@it ;
     rdfs:label "Person"@en ;
-    rdfs:comment "Persona storica a cui è intitolata una strada, oppure candidatura proposta dal gruppo di ricerca per una futura intitolazione."@it .
+    rdfs:comment "Persona storica a cui è intitolata una strada, oppure candidatura proposta per una futura intitolazione."@it .
 
-# ── Object Properties ─────────────────────────────────────────────────────────
+# ── Object Property ───────────────────────────────────────────────────────────
 
 clv:isDedicatedTo
     a owl:ObjectProperty ;
@@ -36,25 +36,16 @@ clv:isDedicatedTo
     rdfs:label "is dedicated to"@en ;
     rdfs:domain clv:Street ;
     rdfs:range  cpv:Person ;
-    rdfs:comment "Collega una strada alla persona a cui è intitolata. Presente solo per le strade con classificazione di genere Male o Female."@it .
+    rdfs:comment "Collega una strada alla persona a cui è intitolata (solo strade Male o Female)."@it .
 
-# ── Datatype Properties ───────────────────────────────────────────────────────
+# ── Datatype Properties (rilevanti per l'analisi) ─────────────────────────────
 
 clv:hasStreetName
     a owl:DatatypeProperty ;
     rdfs:label "nome della strada"@it ;
     rdfs:label "street name"@en ;
     rdfs:domain clv:Street ;
-    rdfs:range  xsd:string ;
-    rdfs:comment "Denominazione ufficiale della strada come da stradario comunale di Bologna."@it .
-
-cpv:fullName
-    a owl:DatatypeProperty ;
-    rdfs:label "nome completo"@it ;
-    rdfs:label "full name"@en ;
-    rdfs:domain cpv:Person ;
-    rdfs:range  xsd:string ;
-    rdfs:comment "Nome e cognome completi della persona."@it .
+    rdfs:range  xsd:string .
 
 cpv:sex
     a owl:DatatypeProperty ;
@@ -62,23 +53,7 @@ cpv:sex
     rdfs:label "gender classification"@en ;
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
-    rdfs:comment "Classificazione di genere assegnata dal gruppo di ricerca: 'Male' (persona maschile o collettivo maschile), 'Female' (persona femminile), 'Toponimo' (luogo, concetto, istituzione o famiglia senza individuo identificabile)."@it .
-
-ex:proposta
-    a owl:DatatypeProperty ;
-    rdfs:label "proposta di intitolazione"@it ;
-    rdfs:label "naming proposal"@en ;
-    rdfs:domain cpv:Person ;
-    rdfs:range  xsd:boolean ;
-    rdfs:comment "Vale 'true' se la persona è una candidatura proposta dal gruppo di ricerca per una futura intitolazione stradale, non una persona già onorata nello stradario attuale."@it .
-
-ex:statoProposta
-    a owl:DatatypeProperty ;
-    rdfs:label "stato della proposta"@it ;
-    rdfs:label "proposal status"@en ;
-    rdfs:domain cpv:Person ;
-    rdfs:range  xsd:string ;
-    rdfs:comment "Stato temporale della proposta rispetto al vincolo normativo (Legge 1188/1927): 'attiva' = deceduta da oltre 10 anni, immediatamente candidabile; 'futura' = deceduta da meno di 10 anni, ancora in vita, o data di morte incerta."@it .
+    rdfs:comment "Valori: 'Male', 'Female', 'Toponimo'."@it .
 
 ex:professione
     a owl:DatatypeProperty ;
@@ -86,36 +61,52 @@ ex:professione
     rdfs:label "occupation"@en ;
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
-    rdfs:comment "Professione o ruolo della persona, ricavato da Wikidata (P106) o da fonti archivistiche locali."@it .
+    rdfs:comment "Ricavata da Wikidata P106 o fonti archivistiche locali."@it .
+
+ex:proposta
+    a owl:DatatypeProperty ;
+    rdfs:label "proposta di intitolazione"@it ;
+    rdfs:label "naming proposal"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Valore 'true' per le candidature proposte dal gruppo di ricerca."@it .
+
+ex:statoProposta
+    a owl:DatatypeProperty ;
+    rdfs:label "stato della proposta"@it ;
+    rdfs:label "proposal status"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Valori: 'attiva' (decesso >10 anni) o 'futura' (decesso <10 anni o persona in vita)."@it .
+
+# ── Annotation Properties (metadati biografici) ───────────────────────────────
+
+cpv:fullName
+    a owl:AnnotationProperty ;
+    rdfs:label "nome completo"@it ;
+    rdfs:label "full name"@en ;
+    rdfs:domain cpv:Person .
 
 ex:dataNascita
-    a owl:DatatypeProperty ;
+    a owl:AnnotationProperty ;
     rdfs:label "data di nascita"@it ;
     rdfs:label "date of birth"@en ;
-    rdfs:domain cpv:Person ;
-    rdfs:range  xsd:string ;
-    rdfs:comment "Data di nascita in formato testuale (es. '27 gennaio 1756'), ricavata da Wikidata P569."@it .
+    rdfs:comment "Wikidata P569."@it .
 
 ex:luogoNascita
-    a owl:DatatypeProperty ;
+    a owl:AnnotationProperty ;
     rdfs:label "luogo di nascita"@it ;
     rdfs:label "place of birth"@en ;
-    rdfs:domain cpv:Person ;
-    rdfs:range  xsd:string ;
-    rdfs:comment "Luogo di nascita in formato testuale, ricavato da Wikidata P19."@it .
+    rdfs:comment "Wikidata P19."@it .
 
 ex:dataMorte
-    a owl:DatatypeProperty ;
+    a owl:AnnotationProperty ;
     rdfs:label "data di morte"@it ;
     rdfs:label "date of death"@en ;
-    rdfs:domain cpv:Person ;
-    rdfs:range  xsd:string ;
-    rdfs:comment "Data di morte in formato testuale (es. '5 dicembre 1791'), ricavata da Wikidata P570."@it .
+    rdfs:comment "Wikidata P570."@it .
 
 ex:luogoMorte
-    a owl:DatatypeProperty ;
+    a owl:AnnotationProperty ;
     rdfs:label "luogo di morte"@it ;
     rdfs:label "place of death"@en ;
-    rdfs:domain cpv:Person ;
-    rdfs:range  xsd:string ;
-    rdfs:comment "Luogo di morte in formato testuale, ricavato da Wikidata P20."@it .
+    rdfs:comment "Wikidata P20."@it .
