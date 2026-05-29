@@ -1165,7 +1165,7 @@ RESULTS = page('Risultati', f'''
   Escluse le intitolazioni a sante, nomi generici e nominativi non individuali (157 totali nel dataset del Comune).</p>
 
   <div style="display:flex;flex-wrap:wrap;gap:0.8rem;align-items:center;margin-bottom:1rem">
-    <input type="text" id="search-box" placeholder="Cerca nome, professione, quartiere…">
+    <input type="text" id="search-box" placeholder="Cerca nome o professione…">
     <div class="filters" id="tfilters">
       <button class="filter-btn active" data-f="">Tutte</button>
       <button class="filter-btn" data-f="Via">Solo Vie</button>
