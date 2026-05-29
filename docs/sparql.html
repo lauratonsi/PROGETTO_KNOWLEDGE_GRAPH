@@ -260,25 +260,25 @@
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">Laura Bassi è l'unica donna con sia una via che una piazza a lei dedicata a Bologna.</p>
 
-  <h2>Query 6 — Dati biografici delle donne onorate</h2>
-  <p><strong>Domanda:</strong> quali sono la professione, la data di nascita e la data di morte delle donne a cui Bologna ha dedicato una strada?
-  I dati provengono dall'arricchimento biografico via Wikidata (copertura 88,7%).<br>
+  <h2>Query 6 — Dati biografici di tutte le persone onorate</h2>
+  <p><strong>Domanda:</strong> quali sono la professione, la data di nascita e la data di morte delle persone a cui Bologna ha dedicato una strada?
+  I dati provengono dall'arricchimento biografico via Wikidata (copertura 88,7% su 1.129 persone).<br>
   <strong>Keyword:</strong> <code>OPTIONAL</code>, <code>SELECT DISTINCT</code>, <code>FILTER</code>, <code>BOUND</code>, <code>ORDER BY</code>, <code>LIMIT</code></p>
-  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 6 — Dati biografici: professione, data di nascita e morte delle donne onorate<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Mostra le proprietà <span class="sp">ex</span>: aggiunte tramite arricchimento Wikidata.<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## <span class="sk">OPTIONAL</span> perché non tutte le 66 persone hanno dati completi (88,7% copertura).<span class=<span class="ss">"su"</span>></span></span>
+  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 6 — Dati biografici: professione, data di nascita e morte per tutte le persone<span class=<span class="ss">"su"</span>></span></span>
+<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Mostra le proprietà <span class="sp">ex</span>: aggiunte tramite arricchimento Wikidata (88,7% copertura).<span class=<span class="ss">"su"</span>></span></span>
+<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## <span class="sk">OPTIONAL</span> perché non tutte le persone hanno dati completi.<span class=<span class="ss">"su"</span>></span></span>
 <span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Keyword: <span class="sk">OPTIONAL</span>, <span class="sk">SELECT</span> <span class="sk">DISTINCT</span>, <span class="sk">WHERE</span>, <span class="sk">FILTER</span>, <span class="sk">ORDER BY</span>, <span class="sk">LIMIT</span><span class=<span class="ss">"su"</span>></span></span>
 <span class="sk">PREFIX</span> <span class="sp">clv</span>:  &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>:  &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:   &lt;https://w3id.org/bologna/ontology#&gt;
 
-<span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span> <span class="sv">?professione</span> <span class="sv">?dataNascita</span> <span class="sv">?dataMorte</span> <span class="sv">?luogoNascita</span>
+<span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span> <span class="sv">?genere</span> <span class="sv">?professione</span> <span class="sv">?dataNascita</span> <span class="sv">?dataMorte</span> <span class="sv">?luogoNascita</span>
 <span class="sk">WHERE</span> {
   <span class="sv">?strada</span>  <span class="sk">a</span> <span class="sp">clv</span>:Street ;
            <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
            <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
-  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex &quot;Female&quot; ;
-           <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> .
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
+           <span class="sp">cpv</span>:sex      <span class="sv">?genere</span> .
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:professione   <span class="sv">?professione</span>  }
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:dataNascita   <span class="sv">?dataNascita</span>  }
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:dataMorte     <span class="sv">?dataMorte</span>    }
@@ -287,16 +287,16 @@
 }
 <span class="sk">ORDER BY</span> <span class="sv">?nomePersona</span>
 <span class="sk">LIMIT</span> 20</code></pre>
-  <h4>Primi risultati (su 66 totali):</h4>
+  <h4>Primi 5 risultati (su 1.001 persone con dati biografici):</h4>
   <div class="table-wrap"><table>
-    <tr><th>?nomeVia</th><th>?nomePersona</th><th>?professione</th><th>?dataNascita</th><th>?dataMorte</th></tr>
-    <tr><td>VIA ADA NEGRI</td><td>Ada Negri</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
-    <tr><td>VIA ADELAIDE RISTORI</td><td>Adelaide Ristori</td><td>Attrice</td><td>29 gennaio 1822</td><td>9 ottobre 1906</td></tr>
-    <tr><td>VIA LAURA BASSI</td><td>Laura Bassi Veratti</td><td>Fisica e filosofa naturale</td><td>31 ottobre 1711</td><td>20 febbraio 1778</td></tr>
-    <tr><td>VIA ONDINA VALLA</td><td>Trebisonda Valla</td><td>Atleta</td><td>20 maggio 1916</td><td>16 ottobre 2006</td></tr>
-    <tr><td>PIAZZA NILDE IOTTI</td><td>Nilde Iotti</td><td>Politica</td><td>26 aprile 1920</td><td>4 dicembre 1999</td></tr>
+    <tr><th>?nomeVia</th><th>?nomePersona</th><th>?genere</th><th>?professione</th><th>?dataNascita</th><th>?dataMorte</th></tr>
+    <tr><td>VIA ADA NEGRI</td><td>Ada Negri</td><td>Female</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
+    <tr><td>VIA ADELCHI SERENA</td><td>Adelchi Serena</td><td>Male</td><td>Politico</td><td>20 novembre 1895</td><td>19 dicembre 1970</td></tr>
+    <tr><td>VIA ADELFO BERGONZONI</td><td>Adelfo Bergonzoni</td><td>Male</td><td>Partigiano</td><td>—</td><td>1944</td></tr>
+    <tr><td>VIA LAURA BASSI</td><td>Laura Bassi Veratti</td><td>Female</td><td>Fisica e filosofa naturale</td><td>31 ottobre 1711</td><td>20 febbraio 1778</td></tr>
+    <tr><td>PIAZZA NILDE IOTTI</td><td>Nilde Iotti</td><td>Female</td><td>Politica</td><td>26 aprile 1920</td><td>4 dicembre 1999</td></tr>
   </table></div>
-  <p style="font-size:0.88rem;color:var(--text-muted)">OPTIONAL consente di restituire anche le persone con soli dati parziali. FILTER(BOUND(?professione)||BOUND(?dataNascita)) esclude solo i record completamente privi di dati.</p>
+  <p style="font-size:0.88rem;color:var(--text-muted)">OPTIONAL consente di restituire anche le persone con dati parziali. FILTER(BOUND(?professione)||BOUND(?dataNascita)) esclude solo i record completamente privi di dati (128 persone, 11,3%).</p>
 </div>
 
 </main>

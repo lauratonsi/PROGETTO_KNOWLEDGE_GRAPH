@@ -762,21 +762,21 @@ with open(BASE / 'queries/q3_tipologia_via_per_genere.sparql', encoding='utf-8')
 with open(BASE / 'queries/q4_regex_nomi_composti.sparql', encoding='utf-8') as f: Q4 = f.read()
 with open(BASE / 'queries/q5_persone_con_dati_opzionali.sparql', encoding='utf-8') as f: Q5 = f.read()
 
-Q6 = '''## Query 6 — Dati biografici: professione, data di nascita e morte delle donne onorate
-## Mostra le proprietà ex: aggiunte tramite arricchimento Wikidata.
-## OPTIONAL perché non tutte le 66 persone hanno dati completi (88,7% copertura).
+Q6 = '''## Query 6 — Dati biografici: professione, data di nascita e morte per tutte le persone
+## Mostra le proprietà ex: aggiunte tramite arricchimento Wikidata (88,7% copertura).
+## OPTIONAL perché non tutte le persone hanno dati completi.
 ## Keyword: OPTIONAL, SELECT DISTINCT, WHERE, FILTER, ORDER BY, LIMIT
 PREFIX clv:  <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv:  <https://w3id.org/italia/onto/CPV/>
 PREFIX ex:   <https://w3id.org/bologna/ontology#>
 
-SELECT DISTINCT ?nomeVia ?nomePersona ?professione ?dataNascita ?dataMorte ?luogoNascita
+SELECT DISTINCT ?nomeVia ?nomePersona ?genere ?professione ?dataNascita ?dataMorte ?luogoNascita
 WHERE {
   ?strada  a clv:Street ;
            clv:hasStreetName ?nomeVia ;
            clv:isDedicatedTo ?persona .
-  ?persona cpv:sex "Female" ;
-           cpv:fullName ?nomePersona .
+  ?persona cpv:fullName ?nomePersona ;
+           cpv:sex      ?genere .
   OPTIONAL { ?persona ex:professione   ?professione  }
   OPTIONAL { ?persona ex:dataNascita   ?dataNascita  }
   OPTIONAL { ?persona ex:dataMorte     ?dataMorte    }
@@ -874,21 +874,21 @@ SPARQL = page('Query SPARQL', f'''
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">Laura Bassi è l'unica donna con sia una via che una piazza a lei dedicata a Bologna.</p>
 
-  <h2>Query 6 — Dati biografici delle donne onorate</h2>
-  <p><strong>Domanda:</strong> quali sono la professione, la data di nascita e la data di morte delle donne a cui Bologna ha dedicato una strada?
-  I dati provengono dall'arricchimento biografico via Wikidata (copertura 88,7%).<br>
+  <h2>Query 6 — Dati biografici di tutte le persone onorate</h2>
+  <p><strong>Domanda:</strong> quali sono la professione, la data di nascita e la data di morte delle persone a cui Bologna ha dedicato una strada?
+  I dati provengono dall'arricchimento biografico via Wikidata (copertura 88,7% su 1.129 persone).<br>
   <strong>Keyword:</strong> <code>OPTIONAL</code>, <code>SELECT DISTINCT</code>, <code>FILTER</code>, <code>BOUND</code>, <code>ORDER BY</code>, <code>LIMIT</code></p>
   <pre class="code-block"><code>{sparql_highlight(Q6)}</code></pre>
-  <h4>Primi risultati (su 66 totali):</h4>
+  <h4>Primi 5 risultati (su 1.001 persone con dati biografici):</h4>
   <div class="table-wrap"><table>
-    <tr><th>?nomeVia</th><th>?nomePersona</th><th>?professione</th><th>?dataNascita</th><th>?dataMorte</th></tr>
-    <tr><td>VIA ADA NEGRI</td><td>Ada Negri</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
-    <tr><td>VIA ADELAIDE RISTORI</td><td>Adelaide Ristori</td><td>Attrice</td><td>29 gennaio 1822</td><td>9 ottobre 1906</td></tr>
-    <tr><td>VIA LAURA BASSI</td><td>Laura Bassi Veratti</td><td>Fisica e filosofa naturale</td><td>31 ottobre 1711</td><td>20 febbraio 1778</td></tr>
-    <tr><td>VIA ONDINA VALLA</td><td>Trebisonda Valla</td><td>Atleta</td><td>20 maggio 1916</td><td>16 ottobre 2006</td></tr>
-    <tr><td>PIAZZA NILDE IOTTI</td><td>Nilde Iotti</td><td>Politica</td><td>26 aprile 1920</td><td>4 dicembre 1999</td></tr>
+    <tr><th>?nomeVia</th><th>?nomePersona</th><th>?genere</th><th>?professione</th><th>?dataNascita</th><th>?dataMorte</th></tr>
+    <tr><td>VIA ADA NEGRI</td><td>Ada Negri</td><td>Female</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
+    <tr><td>VIA ADELCHI SERENA</td><td>Adelchi Serena</td><td>Male</td><td>Politico</td><td>20 novembre 1895</td><td>19 dicembre 1970</td></tr>
+    <tr><td>VIA ADELFO BERGONZONI</td><td>Adelfo Bergonzoni</td><td>Male</td><td>Partigiano</td><td>—</td><td>1944</td></tr>
+    <tr><td>VIA LAURA BASSI</td><td>Laura Bassi Veratti</td><td>Female</td><td>Fisica e filosofa naturale</td><td>31 ottobre 1711</td><td>20 febbraio 1778</td></tr>
+    <tr><td>PIAZZA NILDE IOTTI</td><td>Nilde Iotti</td><td>Female</td><td>Politica</td><td>26 aprile 1920</td><td>4 dicembre 1999</td></tr>
   </table></div>
-  <p style="font-size:0.88rem;color:var(--text-muted)">OPTIONAL consente di restituire anche le persone con soli dati parziali. FILTER(BOUND(?professione)||BOUND(?dataNascita)) esclude solo i record completamente privi di dati.</p>
+  <p style="font-size:0.88rem;color:var(--text-muted)">OPTIONAL consente di restituire anche le persone con dati parziali. FILTER(BOUND(?professione)||BOUND(?dataNascita)) esclude solo i record completamente privi di dati (128 persone, 11,3%).</p>
 </div>
 ''', active='sparql.html')
 
