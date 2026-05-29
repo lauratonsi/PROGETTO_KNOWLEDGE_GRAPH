@@ -192,20 +192,26 @@
 }
 <span class="sk">ORDER BY</span> <span class="sv">?tipo</span> <span class="sv">?nomeVia</span>
 </code></pre>
-  <h4>Risultati (ordinati per ?tipo, poi ?nomeVia):</h4>
+  <h4>Risultati completi (13 righe totali):</h4>
   <div class="table-wrap"><table>
     <tr><th>?tipo</th><th>?nomeVia</th><th>?nomePersona</th></tr>
-    <tr><td>Fratelli</td><td>PASSAGGIO FRATELLI MARINCOLA</td><td>Fratelli Marincola (Giorgio e Isabella)</td></tr>
-    <tr><td>Fratelli</td><td>VIA FRATELLI CERVI</td><td>Fratelli Cervi</td></tr>
-    <tr><td>Fratelli</td><td>VIA FRATELLI DANDOLO</td><td>Fratelli Dandolo</td></tr>
-    <tr><td>Fratelli</td><td>VIA FRATELLI ROSSELLI</td><td>Fratelli Rosselli</td></tr>
-    <tr><td>Maria</td><td>LARGO MARIELE VENTRE</td><td>Maria Rachele Ventre</td></tr>
-    <tr><td>Maria</td><td>VIA MARIA MONTESSORI</td><td>Maria Montessori</td></tr>
-    <tr><td>Maria</td><td>VIA SANTA MARIA MAGGIORE</td><td>—</td></tr>
+    <tr><td>Fratelli</td><td>PASSAGGIO FRATELLI MARINCOLA</td><td>FRATELLI MARINCOLA</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI BORDONI</td><td>FRATELLI BORDONI</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI CARPIGIANI</td><td>FRATELLI CARPIGIANI</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI CERVI</td><td>FRATELLI CERVI</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI DANDOLO</td><td>FRATELLI DANDOLO</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI GRUPPI</td><td>FRATELLI GRUPPI</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI MUSI</td><td>FRATELLI MUSI</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI PINARDI</td><td>FRATELLI PINARDI</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI ROSSELLI</td><td>FRATELLI ROSSELLI</td></tr>
+    <tr><td>Maria</td><td>ROTONDA MARIA ADELE CROCIONI MICHELINI</td><td>MARIA ADELE CROCIONI MICHELINI</td></tr>
+    <tr><td>Maria</td><td>VIA MARIA CALLAS</td><td>MARIA CALLAS</td></tr>
+    <tr><td>Maria</td><td>VIA MARIA GAETANA AGNESI</td><td>MARIA GAETANA AGNESI</td></tr>
+    <tr><td>Maria</td><td>VIA MARIA MELATO</td><td>MARIA MELATO</td></tr>
   </table></div>
-  <p style="font-size:0.88rem;color:var(--text-muted)">Il caso di Isabella Marincola è emblematico:
-  una staffetta partigiana afrodiscendente resa invisibile dal sostantivo maschile "fratelli".
-  BIND assegna l'etichetta <em>?tipo</em> a ciascun ramo dell'UNION, rendendo leggibili i risultati combinati.</p>
+  <p style="font-size:0.88rem;color:var(--text-muted)">9 strade con "Fratelli" (tutte classificate Male) e 4 donne con "Maria" nel nome.
+  Il caso del Passaggio Fratelli Marincola è emblematico: Isabella Marincola, staffetta partigiana afrodiscendente, è resa invisibile dal sostantivo maschile plurale.
+  BIND assegna l'etichetta <em>?tipo</em> a ciascun ramo dell'UNION, rendendo i risultati combinati immediatamente leggibili.</p>
 
   <h2>Query 5 — OPTIONAL: persone con più strade dedicate</h2>
   <p><strong>Domanda:</strong> ci sono personaggi a cui sono dedicate più strade?
