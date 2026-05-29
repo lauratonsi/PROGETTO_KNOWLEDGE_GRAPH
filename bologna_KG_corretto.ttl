@@ -17939,3 +17939,425 @@
     ex:luogoNascita    "Milano" ;
     ex:dataMorte       "16 maggio 1894" ;
     ex:luogoMorte      "Roma" .
+
+
+<https://w3id.org/bologna/resource/person/e5fe066a885547d8166908e80b646aea>
+    ex:professione     "Filosofo" ;
+    ex:dataNascita     "28 gennaio 1828" ;
+    ex:luogoNascita    "Casteldidone" ;
+    ex:dataMorte       "15 settembre 1920" ;
+    ex:luogoMorte      "Mantova" .
+
+<https://w3id.org/bologna/resource/person/75c818892a0c17842371a693b49afc48>
+    ex:professione     "Fisico, astronomo" ;
+    ex:dataNascita     "2 aprile 1618" ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "28 dicembre 1663" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/54cce80135c56d350de41b80c637d323>
+    ex:professione     "Scultore" ;
+    ex:dataNascita     "1220 ca." ;
+    ex:luogoNascita    "Puglia" ;
+    ex:dataMorte       "1284 ca." ;
+    ex:luogoMorte      "Pisa" .
+
+<https://w3id.org/bologna/resource/person/8b8aeca561ea2de4c7d60c30e75946ce>
+    ex:professione     "Pittore" ;
+    ex:dataNascita     "1509/1512" ;
+    ex:luogoNascita    "Modena" ;
+    ex:dataMorte       "1571" ;
+    ex:luogoMorte      "Fontainebleau" .
+
+<https://w3id.org/bologna/resource/person/71df8113fc2965b6273c61e4048b6f04>
+    ex:professione     "Scultore" ;
+    ex:dataNascita     "c. 1435" ;
+    ex:luogoNascita    "Bari" ;
+    ex:dataMorte       "1494" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/a1eb6c3b47e1c5c5fbd8962ae0358580>
+    ex:professione     "Scrittore" ;
+    ex:dataNascita     "9 ottobre 1802" ;
+    ex:luogoNascita    "Sebenico" ;
+    ex:dataMorte       "1 maggio 1874" ;
+    ex:luogoMorte      "Firenze" .
+
+<https://w3id.org/bologna/resource/person/69f19f856b4b9b497426cb4d6dc8343a>
+    ex:professione     "Violinista, compositore" ;
+    ex:dataNascita     "27 ottobre 1782" ;
+    ex:luogoNascita    "Genova" ;
+    ex:dataMorte       "27 maggio 1840" ;
+    ex:luogoMorte      "Nizza" .
+
+<https://w3id.org/bologna/resource/person/71142c528b8f693aa8acc84b81df4b91>
+    ex:professione     "Filosofo, politico" ;
+    ex:dataNascita     "3 maggio 1469" ;
+    ex:luogoNascita    "Firenze" ;
+    ex:dataMorte       "21 giugno 1527" ;
+    ex:luogoMorte      "Firenze" .
+
+<https://w3id.org/bologna/resource/person/3257b7d774e5b8a43171d196b9d0f368>
+    ex:professione     "Astronomo" ;
+    ex:dataNascita     "19 febbraio 1473" ;
+    ex:luogoNascita    "Toruń" ;
+    ex:dataMorte       "24 maggio 1543" ;
+    ex:luogoMorte      "Frombork" .
+
+<https://w3id.org/bologna/resource/person/84fe1c7760618ff0eddea6f1783b352c>
+    ex:professione     "Medico, anatomista" ;
+    ex:dataNascita     "c. 1270" ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "1326" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/0be9eb8d7c791d48fc8198080523dfef>
+    ex:professione     "Pittore" ;
+    ex:dataNascita     "1438" ;
+    ex:luogoNascita    "Forlì" ;
+    ex:dataMorte       "8 novembre 1494" ;
+    ex:luogoMorte      "Forlì" .
+
+<https://w3id.org/bologna/resource/person/715362be39a30e1fbb9ed8b9e22888cd>
+    ex:professione     "Glottoteta (Esperanto)" ;
+    ex:dataNascita     "15 dicembre 1859" ;
+    ex:luogoNascita    "Białystok" ;
+    ex:dataMorte       "14 aprile 1917" ;
+    ex:luogoMorte      "Varsavia" .
+
+<https://w3id.org/bologna/resource/person/5be61ca5902ed30fa1f1708b5ecfbed1>
+    ex:professione     "Religioso (Frati Gaudenti)" ;
+    ex:dataNascita     "1210 ca." ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "1293" ;
+    ex:luogoMorte      "Ronzano" .
+
+<https://w3id.org/bologna/resource/person/a154bc6cd1e36428c69d6a32565d90ab>
+    ex:professione     "Cosmonauta" ;
+    ex:dataNascita     "9 marzo 1934" ;
+    ex:luogoNascita    "Klušino" ;
+    ex:dataMorte       "27 marzo 1968" ;
+    ex:luogoMorte      "Kiržač" .
+
+<https://w3id.org/bologna/resource/person/cea44e2709de0893b1ec52140d79158f>
+    ex:professione     "Scrittore" ;
+    ex:dataNascita     "20 maggio 1799" ;
+    ex:luogoNascita    "Tours" ;
+    ex:dataMorte       "18 agosto 1850" ;
+    ex:luogoMorte      "Parigi" .
+
+<https://w3id.org/bologna/resource/person/7ece7ed0eff553e38d2d4267990d1a41>
+    ex:professione     "Erudito, storico" ;
+    ex:dataNascita     "1570" ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "1645" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/90b492fdef6d2f5cc4f6a7a64dcda9c4>
+    ex:professione     "Scultore" ;
+    ex:dataNascita     "1 marzo 1817" ;
+    ex:luogoNascita    "Siena" ;
+    ex:dataMorte       "10 gennaio 1882" ;
+    ex:luogoMorte      "Firenze" .
+
+<https://w3id.org/bologna/resource/person/83581ba7de28a81693c214c5dbf492ab>
+    ex:professione     "Cardinale (Collegio di Spagna)" ;
+    ex:dataNascita     "1310" ;
+    ex:luogoNascita    "Carrascosa del Campo" ;
+    ex:dataMorte       "23 agosto 1367" ;
+    ex:luogoMorte      "Viterbo" .
+
+<https://w3id.org/bologna/resource/person/a416eb91fa5096e948feda4e55b75245>
+    ex:professione     "Poeta" ;
+    ex:dataNascita     "22 gennaio 1788" ;
+    ex:luogoNascita    "Londra" ;
+    ex:dataMorte       "19 aprile 1824" ;
+    ex:luogoMorte      "Missolungi" .
+
+<https://w3id.org/bologna/resource/person/fcd498a3ae550ad674455ee423f05f58>
+    ex:professione     "Commediografo" ;
+    ex:dataNascita     "19 aprile 1728" ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "16 marzo 1804" ;
+    ex:luogoMorte      "Zola Predosa" .
+
+<https://w3id.org/bologna/resource/person/f5fc4547090fd7215051f43db01404f6>
+    ex:professione     "Presbitero, patriota" ;
+    ex:dataNascita     "18 febbraio 1807" ;
+    ex:luogoNascita    "Modigliana" ;
+    ex:dataMorte       "26 novembre 1885" ;
+    ex:luogoMorte      "Modigliana" .
+
+<https://w3id.org/bologna/resource/person/9d3bf3efdf50a8c0f9b98055f71b6962>
+    ex:professione     "Scultore" ;
+    ex:dataNascita     "1690" ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "1769" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/071f8905e266138e78894b6de9ece9c9>
+    ex:professione     "Sociologo, accademico" ;
+    ex:dataNascita     "1 marzo 1921" ;
+    ex:luogoNascita    "San Pietro in Casale (BO)" ;
+    ex:dataMorte       "10 settembre 2008" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/54c1e0e96a4a7f8d29b562aa830b567a>
+    ex:professione     "linguista, bibliotecario" ;
+    ex:dataNascita     "19 settembre 1774" ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "15 marzo 1849" ;
+    ex:luogoMorte      "Napoli" .
+
+<https://w3id.org/bologna/resource/person/06a8f4abd3a20404bb6cd894c83695f5>
+    ex:professione     "pittore" ;
+    ex:dataNascita     "28 luglio 1868" ;
+    ex:luogoNascita    "Volpedo" ;
+    ex:dataMorte       "14 giugno 1907" ;
+    ex:luogoMorte      "Volpedo" .
+
+<https://w3id.org/bologna/resource/person/94f82994f7905782b04d72a26e7b6d18>
+    ex:professione     "vescovo cattolico" ;
+    ex:dataNascita     "28 ottobre 1891" ;
+    ex:luogoNascita    "Italia" ;
+    ex:dataMorte       "18 ottobre 1976" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/7dffe6a93fb50eca88a0fe3fe9a73f01>
+    ex:dataMorte       "1425" .
+
+<https://w3id.org/bologna/resource/person/610fd2466b0d4fe6e7d9cf7f6c5b5e7c>
+    ex:professione     "patriota, matematico" ;
+    ex:dataNascita     "16 ottobre 1806" ;
+    ex:dataMorte       "13 agosto 1861" .
+
+<https://w3id.org/bologna/resource/person/d4e0723474a146049f90cd1f433f652f>
+    ex:professione     "scrittore, poeta" ;
+    ex:dataNascita     "27 luglio 1835" ;
+    ex:luogoNascita    "Valdicastello Carducci" ;
+    ex:dataMorte       "8 febbraio 1907" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/53557264effeb2d2ba17cda0790bc34e>
+    ex:dataNascita     "1821" ;
+    ex:dataMorte       "1891" .
+
+<https://w3id.org/bologna/resource/person/a5f682bb604eb0c3e67b0313ba86e38b>
+    ex:professione     "creatore di caratteri tipografici, editore" ;
+    ex:dataNascita     "1449" ;
+    ex:luogoNascita    "Bassiano" ;
+    ex:dataMorte       "6 febbraio 1515" ;
+    ex:luogoMorte      "Venezia" .
+
+<https://w3id.org/bologna/resource/person/a5f8783ae8bfd65520dc079cd4da53e5>
+    ex:professione     "pittore" .
+
+<https://w3id.org/bologna/resource/person/04537c7bbe18f59cd5cac37e3d9d2097>
+    ex:professione     "esploratore, militare" ;
+    ex:dataNascita     "29 gennaio 1873" ;
+    ex:luogoNascita    "Madrid" ;
+    ex:dataMorte       "18 marzo 1933" ;
+    ex:luogoMorte      "Giohar" .
+
+<https://w3id.org/bologna/resource/person/33412e970a7c4d1440043f93f467c5a8>
+    ex:dataNascita     "14 luglio 1903" ;
+    ex:luogoNascita    "Mercato Saraceno" ;
+    ex:dataMorte       "5 febbraio 1945" ;
+    ex:luogoMorte      "campo di concentramento di Gusen" .
+
+<https://w3id.org/bologna/resource/person/d79135c33f0c49cb0f77ef3152742cb2>
+    ex:professione     "professore universitario, storico locale" ;
+    ex:dataNascita     "16 ottobre 1735" ;
+    ex:dataMorte       "18 febbraio 1812" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/9b4cfe9af2f729d6c9ac4c49440b0bb7>
+    ex:professione     "chirurgo, politico" ;
+    ex:dataNascita     "1 maggio 1843" ;
+    ex:luogoNascita    "Diano Marina" ;
+    ex:dataMorte       "5 settembre 1934" ;
+    ex:luogoMorte      "Diano Marina" .
+
+<https://w3id.org/bologna/resource/person/7bf836f0872fb77432bc7750fd568163>
+    ex:professione     "studioso della patristica" ;
+    ex:dataNascita     "16 luglio 1932" ;
+    ex:luogoNascita    "Zola Predosa" ;
+    ex:dataMorte       "15 marzo 2004" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/191469c236540405225037dee166e6cd>
+    ex:dataNascita     "1842" ;
+    ex:dataMorte       "1907" .
+
+<https://w3id.org/bologna/resource/person/7cb10f1dea5cd46d1f0032e31f7b7586>
+    ex:professione     "poeta, scrittore" ;
+    ex:dataNascita     "30 maggio 1265" ;
+    ex:luogoNascita    "Firenze" ;
+    ex:dataMorte       "13 settembre 1321" ;
+    ex:luogoMorte      "Ravenna" .
+
+<https://w3id.org/bologna/resource/person/b265632481172df8a99da95e714d88f4>
+    ex:professione     "pittore" ;
+    ex:dataNascita     "1692" ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "1776" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/bd3302d6efc5b2af51ad0a49d55ed61e>
+    ex:professione     "pittore, disegnatore architettonico" ;
+    ex:dataNascita     "29 settembre 1518" ;
+    ex:luogoNascita    "Venezia" ;
+    ex:dataMorte       "31 maggio 1594" ;
+    ex:luogoMorte      "Venezia" .
+
+<https://w3id.org/bologna/resource/person/e275f9ed6d1f8e76ac79053fb87c6eb9>
+    ex:dataNascita     "1870" ;
+    ex:dataMorte       "1943" .
+
+<https://w3id.org/bologna/resource/person/5723283513b1ee9baa903f603d59d917>
+    ex:dataNascita     "28 agosto 1897" ;
+    ex:luogoNascita    "Montebello Vicentino" ;
+    ex:dataMorte       "27 gennaio 1944" ;
+    ex:luogoMorte      "Borgo Panigale" .
+
+<https://w3id.org/bologna/resource/person/a61732b7b53926358a905da7c949d3eb>
+    ex:dataNascita     "1890" ;
+    ex:luogoNascita    "Castel Maggiore" ;
+    ex:dataMorte       "1955" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/ace4b7571ec7c736cffef8cbf7ff0937>
+    ex:professione     "partigiano" ;
+    ex:dataNascita     "16 ottobre 1916" ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "15 dicembre 1944" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/c32888c4c7929710e9c30c60c9a79f55>
+    ex:professione     "matematico, ingegnere" ;
+    ex:dataNascita     "17 novembre 1702" ;
+    ex:luogoNascita    "Milano" ;
+    ex:dataMorte       "24 luglio 1776" ;
+    ex:luogoMorte      "Milano" .
+
+<https://w3id.org/bologna/resource/person/856c9e2b9fd33c230d79c8067f1f8bdb>
+    ex:dataNascita     "1922" ;
+    ex:dataMorte       "29 settembre 1944" .
+
+<https://w3id.org/bologna/resource/person/eb1091f072eec57203955c20ca1750f2>
+    ex:professione     "pittore, acquafortista" ;
+    ex:dataNascita     "7 ottobre 1697" ;
+    ex:luogoNascita    "Venezia" ;
+    ex:dataMorte       "19 aprile 1758" ;
+    ex:luogoMorte      "Venezia" .
+
+<https://w3id.org/bologna/resource/person/a9aecbd5f5a289d70fa1a60b72f7c428>
+    ex:professione     "matematico" ;
+    ex:dataNascita     "1565" ;
+    ex:luogoNascita    "Firenze" ;
+    ex:dataMorte       "1613" ;
+    ex:luogoMorte      "Firenze" .
+
+<https://w3id.org/bologna/resource/person/d02f3cd6cec73585838accfc08e29f2b>
+    ex:dataNascita     "1235" ;
+    ex:dataMorte       "1306" .
+
+<https://w3id.org/bologna/resource/person/23671c9c71689e65613189749e177f24>
+    ex:dataNascita     "1819" ;
+    ex:luogoNascita    "Milano" ;
+    ex:dataMorte       "8 agosto 1849" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/e4ff25e2513e7b41eff256b2abec9c43>
+    ex:professione     "chimico, politico" ;
+    ex:dataNascita     "25 agosto 1857" ;
+    ex:luogoNascita    "Trieste" ;
+    ex:dataMorte       "1 gennaio 1922" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/cf260d0dc92079727c11f5108fd94f6b>
+    ex:dataNascita     "23 marzo 1924" ;
+    ex:dataMorte       "27 aprile 1945" ;
+    ex:luogoMorte      "campo di concentramento di Flossenbürg" .
+
+<https://w3id.org/bologna/resource/person/7221c31c9a5473f60137597cde0316c7>
+    ex:professione     "drammaturgo, attore teatrale" ;
+    ex:dataNascita     "15 gennaio 1622" ;
+    ex:luogoNascita    "Parigi" ;
+    ex:dataMorte       "17 febbraio 1673" ;
+    ex:luogoMorte      "Parigi" .
+
+<https://w3id.org/bologna/resource/person/13d6bdf3fbc7ae0e0ea7c7424cff75ac>
+    ex:professione     "politico" ;
+    ex:dataNascita     "30 giugno 1923" ;
+    ex:luogoNascita    "São Bernardo do Campo" ;
+    ex:dataMorte       "10 marzo 1999" .
+
+<https://w3id.org/bologna/resource/person/837d02aef535315752f28a027aa1fe6d>
+    ex:professione     "sacerdote cattolico di rito latino, scrittore" ;
+    ex:dataNascita     "9 gennaio 1902" ;
+    ex:luogoNascita    "Barbastro" ;
+    ex:dataMorte       "26 giugno 1975" ;
+    ex:luogoMorte      "Roma" .
+
+<https://w3id.org/bologna/resource/person/bd890a2b9939ce0e54c155444bc8c688>
+    ex:professione     "giornalista, sociologo" ;
+    ex:dataNascita     "1958" ;
+    ex:luogoNascita    "San Paolo" .
+
+<https://w3id.org/bologna/resource/person/588321bc8448bbbdb84900777cff96b8>
+    ex:professione     "pittore" ;
+    ex:dataNascita     "1301" ;
+    ex:dataMorte       "1460" .
+
+<https://w3id.org/bologna/resource/person/52593242a127259b60786cc89e898bb2>
+    ex:dataNascita     "24 giugno 1774" ;
+    ex:luogoNascita    "Castell'Alfero" ;
+    ex:dataMorte       "23 aprile 1796" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/12bfc1569637d7a079ee68bb18158a27>
+    ex:professione     "Scultrice" ;
+    ex:dataNascita     "1490 ca." ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "1530" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/7a6063676ac3d1a7ed2c5e5bf6227630>
+    ex:professione     "filantropa" ;
+    ex:dataNascita     "1872" ;
+    ex:luogoNascita    "Bologna" ;
+    ex:dataMorte       "18 dicembre 1916" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/b22519af85dfd69f714835944ef6f2bb>
+    ex:professione     "aristocratico" ;
+    ex:dataNascita     "2 novembre 1902" ;
+    ex:luogoNascita    "Roma" ;
+    ex:dataMorte       "27 agosto 1944" ;
+    ex:luogoMorte      "campo di concentramento di Buchenwald" .
+
+<https://w3id.org/bologna/resource/person/5d659e4c0ef8eb321c4cbfaa59138621>
+    ex:dataNascita     "8 marzo 1835" ;
+    ex:dataMorte       "19 novembre 1903" ;
+    ex:luogoMorte      "Bologna" .
+
+<https://w3id.org/bologna/resource/person/12ad2526a2b21286778c4ac50b710045>
+    ex:professione     "matematico, filosofo" ;
+    ex:dataNascita     "5 giugno 1646" ;
+    ex:luogoNascita    "Venezia" ;
+    ex:dataMorte       "26 luglio 1684" ;
+    ex:luogoMorte      "Padova" .
+
+<https://w3id.org/bologna/resource/person/d998f1fbebcb3373a568d08af8f072ab>
+    ex:dataNascita     "24 aprile 1974" ;
+    ex:luogoNascita    "Petilia Policastro" ;
+    ex:dataMorte       "24 novembre 2009" ;
+    ex:luogoMorte      "Milano" .
+
+<https://w3id.org/bologna/resource/person/e643a92032e1492d10c1cbf07aa611d2>
+    ex:professione     "medievista, professore universitario" ;
+    ex:dataNascita     "5 giugno 1905" ;
+    ex:luogoNascita    "Bassano del Grappa" ;
+    ex:dataMorte       "1992" ;
+    ex:luogoMorte      "Bologna" .
