@@ -102,12 +102,17 @@ for p in proposals:
     p['categoria'] = prop_cats.get(p['nome'], 'Altro')
 PROPOSALS_JS = json.dumps(proposals, ensure_ascii=False)
 
+# codvia→genere lookup for map
+kg_ready = read_csv('bologna_KG_ready.csv')
+CODVIA_GENERE = {r['CODVIA'].strip(): r['GENERE'].strip() for r in kg_ready if r.get('CODVIA') and r.get('GENERE')}
+CODVIA_GENERE_JS = json.dumps(CODVIA_GENERE, ensure_ascii=False)
+
 # ── Shared components ─────────────────────────────────────────────────────────
 
 def sparql_highlight(code):
     """Minimal SPARQL syntax highlighting."""
     keywords = r'\b(PREFIX|SELECT|WHERE|FILTER|OPTIONAL|UNION|DISTINCT|GROUP BY|ORDER BY|LIMIT|REGEX|STRSTARTS|BIND|COUNT|AS|DESC|ASC|a)\b'
-    prefixes = r'\b(clv|cpv|rdf|rdfs|owl|xsd)\b(?=:)'
+    prefixes = r'\b(clv|cpv|ex|rdf|rdfs|owl|xsd)\b(?=:)'
     strings = r'"[^"]*"'
     comments = r'##[^\n]*'
     uris = r'<[^>]+>'
@@ -757,6 +762,30 @@ with open(BASE / 'queries/q3_tipologia_via_per_genere.sparql', encoding='utf-8')
 with open(BASE / 'queries/q4_regex_nomi_composti.sparql', encoding='utf-8') as f: Q4 = f.read()
 with open(BASE / 'queries/q5_persone_con_dati_opzionali.sparql', encoding='utf-8') as f: Q5 = f.read()
 
+Q6 = '''## Query 6 — Dati biografici: professione, data di nascita e morte delle donne onorate
+## Mostra le proprietà ex: aggiunte tramite arricchimento Wikidata.
+## OPTIONAL perché non tutte le 66 persone hanno dati completi (88,7% copertura).
+## Keyword: OPTIONAL, SELECT DISTINCT, WHERE, FILTER, ORDER BY, LIMIT
+PREFIX clv:  <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv:  <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:   <https://w3id.org/bologna/ontology#>
+
+SELECT DISTINCT ?nomeVia ?nomePersona ?professione ?dataNascita ?dataMorte ?luogoNascita
+WHERE {
+  ?strada  a clv:Street ;
+           clv:hasStreetName ?nomeVia ;
+           clv:isDedicatedTo ?persona .
+  ?persona cpv:sex "Female" ;
+           cpv:fullName ?nomePersona .
+  OPTIONAL { ?persona ex:professione   ?professione  }
+  OPTIONAL { ?persona ex:dataNascita   ?dataNascita  }
+  OPTIONAL { ?persona ex:dataMorte     ?dataMorte    }
+  OPTIONAL { ?persona ex:luogoNascita  ?luogoNascita }
+  FILTER ( BOUND(?professione) || BOUND(?dataNascita) )
+}
+ORDER BY ?nomePersona
+LIMIT 20'''
+
 SPARQL = page('Query SPARQL', f'''
 <div class="hero" style="padding:3.5rem 1.5rem 3rem">
   <h1>Query SPARQL sul Knowledge Graph</h1>
@@ -844,6 +873,22 @@ SPARQL = page('Query SPARQL', f'''
     <tr><td>Giuseppe Garibaldi</td><td>Male</td><td>VIA GARIBALDI</td><td>PIAZZA GARIBALDI</td></tr>
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">Laura Bassi è l'unica donna con sia una via che una piazza a lei dedicata a Bologna.</p>
+
+  <h2>Query 6 — Dati biografici delle donne onorate</h2>
+  <p><strong>Domanda:</strong> quali sono la professione, la data di nascita e la data di morte delle donne a cui Bologna ha dedicato una strada?
+  I dati provengono dall'arricchimento biografico via Wikidata (copertura 88,7%).<br>
+  <strong>Keyword:</strong> <code>OPTIONAL</code>, <code>SELECT DISTINCT</code>, <code>FILTER</code>, <code>BOUND</code>, <code>ORDER BY</code>, <code>LIMIT</code></p>
+  <pre class="code-block"><code>{sparql_highlight(Q6)}</code></pre>
+  <h4>Primi risultati (su 66 totali):</h4>
+  <div class="table-wrap"><table>
+    <tr><th>?nomeVia</th><th>?nomePersona</th><th>?professione</th><th>?dataNascita</th><th>?dataMorte</th></tr>
+    <tr><td>VIA ADA NEGRI</td><td>Ada Negri</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
+    <tr><td>VIA ADELAIDE RISTORI</td><td>Adelaide Ristori</td><td>Attrice</td><td>29 gennaio 1822</td><td>9 ottobre 1906</td></tr>
+    <tr><td>VIA LAURA BASSI</td><td>Laura Bassi Veratti</td><td>Fisica e filosofa naturale</td><td>31 ottobre 1711</td><td>20 febbraio 1778</td></tr>
+    <tr><td>VIA ONDINA VALLA</td><td>Trebisonda Valla</td><td>Atleta</td><td>20 maggio 1916</td><td>16 ottobre 2006</td></tr>
+    <tr><td>PIAZZA NILDE IOTTI</td><td>Nilde Iotti</td><td>Politica</td><td>26 aprile 1920</td><td>4 dicembre 1999</td></tr>
+  </table></div>
+  <p style="font-size:0.88rem;color:var(--text-muted)">OPTIONAL consente di restituire anche le persone con soli dati parziali. FILTER(BOUND(?professione)||BOUND(?dataNascita)) esclude solo i record completamente privi di dati.</p>
 </div>
 ''', active='sparql.html')
 
@@ -1135,8 +1180,6 @@ RESULTS = page('Risultati', f'''
         <th>Nome completo</th>
         <th>Professione</th>
         <th>Dati anagrafici</th>
-        <th>Anno</th>
-        <th>Quartiere</th>
       </tr></thead>
       <tbody id="women-tbody"></tbody>
     </table>
@@ -1183,14 +1226,25 @@ RESULTS = page('Risultati', f'''
     </figure>
   </div>
 </div>
+
+<div class="section-alt"><div class="section">
+  <h2>Mappa interattiva delle strade di Bologna</h2>
+  <p>Visualizzazione geografica degli 8.029 archi stradali, colorati in base alla classificazione di genere.<br>
+  <span style="display:inline-block;width:12px;height:12px;background:#c45c82;border-radius:2px;margin-right:4px"></span><strong>Femminile</strong> &nbsp;
+  <span style="display:inline-block;width:12px;height:12px;background:#1b3a6b;border-radius:2px;margin-right:4px"></span><strong>Maschile</strong> &nbsp;
+  <span style="display:inline-block;width:12px;height:12px;background:#aaaaaa;border-radius:2px;margin-right:4px"></span><strong>Toponimo</strong></p>
+  <div id="bologna-map" style="height:540px;border-radius:8px;overflow:hidden;margin:1rem 0;border:1px solid var(--border)"></div>
+  <p style="font-size:0.82rem;color:var(--text-muted)">Dati: Open Data Comune di Bologna — Archi stradali. Le strade femminili (rosa) sono le 66 intitolazioni a donne identificate. Clicca su una strada per vedere il nome e la classificazione.</p>
+</div></div>
 ''', active='results.html',
-extra_head='<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>',
+extra_head='<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>\n  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">\n  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>',
 extra_js=f'''<script>
 const WOMEN = {WOMEN_JS};
 const CAT_LABELS = {CAT_LABELS_JS};
 const M_DATA = {M_DATA_JS};
 const F_DATA = {F_DATA_JS};
 const P_DATA = {P_DATA_JS};
+const CODVIA_GENERE = {CODVIA_GENERE_JS};
 
 // Donut chart
 new Chart(document.getElementById('donutChart'), {{
@@ -1245,8 +1299,6 @@ function renderTable() {{
     <td>${{w.nome}}</td>
     <td>${{w.professione}}</td>
     <td>${{w.dati}}</td>
-    <td>${{w.anno}}</td>
-    <td>${{w.quartiere}}</td>
   </tr>`).join('');
   countEl.textContent = `${{rows.length}} / ${{WOMEN.length}} intitolazioni visualizzate`;
 }}
@@ -1262,6 +1314,43 @@ document.querySelectorAll('#tfilters .filter-btn').forEach(btn => {{
   }});
 }});
 renderTable();
+
+// Leaflet map
+const MAP_COLOR = {{ Female: '#c45c82', Male: '#1b3a6b', Toponimo: '#aaaaaa' }};
+const MAP_WEIGHT = {{ Female: 3, Male: 1.5, Toponimo: 1.5 }};
+const MAP_OPACITY = {{ Female: 0.95, Male: 0.5, Toponimo: 0.4 }};
+
+const bMap = L.map('bologna-map').setView([44.494, 11.342], 13);
+L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  maxZoom: 19
+}}).addTo(bMap);
+
+fetch('rifter_arcstra_li.geojson')
+  .then(r => r.json())
+  .then(data => {{
+    L.geoJSON(data, {{
+      style: feature => {{
+        const codvia = String(feature.properties.codvia ?? '');
+        const genere = CODVIA_GENERE[codvia] || 'Toponimo';
+        return {{
+          color: MAP_COLOR[genere] || '#aaa',
+          weight: MAP_WEIGHT[genere] || 1.5,
+          opacity: MAP_OPACITY[genere] || 0.4
+        }};
+      }},
+      onEachFeature: (feature, layer) => {{
+        const codvia = String(feature.properties.codvia ?? '');
+        const genere = CODVIA_GENERE[codvia] || 'Toponimo';
+        const nome = feature.properties.nomevia || '';
+        layer.bindPopup(`<strong>${{nome}}</strong><br>Classificazione: ${{genere}}`);
+      }}
+    }}).addTo(bMap);
+  }})
+  .catch(() => {{
+    document.getElementById('bologna-map').innerHTML =
+      '<p style="padding:2rem;text-align:center;color:#888">Mappa non disponibile. Il file GeoJSON deve essere nella stessa cartella della pagina.</p>';
+  }});
 </script>''')
 
 (DOCS / 'results.html').write_text(RESULTS, encoding='utf-8')
