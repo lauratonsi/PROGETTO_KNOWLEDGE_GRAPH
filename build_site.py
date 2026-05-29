@@ -844,21 +844,26 @@ SPARQL = page('Query SPARQL', f'''
   <p style="font-size:0.88rem;color:var(--text-muted)">Le restanti intitolazioni femminili sono Largo, Passaggio, Rotonda, Vicolo.
   Solo 8 donne hanno una piazza o un piazzale a loro nome.</p>
 
-  <h2>Query 4 — REGEX: strade "Fratelli" e donne di nome "Maria"</h2>
-  <p><strong>Domanda:</strong> quante strade usano il termine "FRATELLI" (cancellando la presenza femminile)?
-  E quante donne onorate hanno "MARIA" nel nome?<br>
-  <strong>Keyword:</strong> <code>REGEX</code>, <code>FILTER</code>, <code>DISTINCT</code>, <code>ORDER BY</code></p>
+  <h2>Query 4 — REGEX + UNION: strade "Fratelli" e donne con "Maria" nel nome</h2>
+  <p><strong>Domanda:</strong> quante strade usano "FRATELLI" nel nome (cancellando grammaticalmente la presenza femminile)?
+  E quante donne onorate hanno "MARIA" nel nome? Le due ricerche sono combinate in un'unica query con <code>UNION</code>;
+  la variabile <code>?tipo</code> (ottenuta con <code>BIND</code>) distingue a quale dei due gruppi appartiene ogni riga.<br>
+  <strong>Keyword:</strong> <code>REGEX</code>, <code>UNION</code>, <code>FILTER</code>, <code>BIND</code>, <code>DISTINCT</code>, <code>ORDER BY</code></p>
   <pre class="code-block"><code>{sparql_highlight(Q4)}</code></pre>
-  <h4>Risultati 4a (strade "Fratelli"):</h4>
+  <h4>Risultati (ordinati per ?tipo, poi ?nomeVia):</h4>
   <div class="table-wrap"><table>
-    <tr><th>?nomeVia</th><th>?nomePersona</th></tr>
-    <tr><td>PASSAGGIO FRATELLI MARINCOLA</td><td>Fratelli Marincola (Giorgio e Isabella)</td></tr>
-    <tr><td>VIA FRATELLI CERVI</td><td>Fratelli Cervi</td></tr>
-    <tr><td>VIA FRATELLI ROSSELLI</td><td>Fratelli Rosselli</td></tr>
-    <tr><td>VIA FRATELLI DANDOLO</td><td>Fratelli Dandolo</td></tr>
+    <tr><th>?tipo</th><th>?nomeVia</th><th>?nomePersona</th></tr>
+    <tr><td>Fratelli</td><td>PASSAGGIO FRATELLI MARINCOLA</td><td>Fratelli Marincola (Giorgio e Isabella)</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI CERVI</td><td>Fratelli Cervi</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI DANDOLO</td><td>Fratelli Dandolo</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI ROSSELLI</td><td>Fratelli Rosselli</td></tr>
+    <tr><td>Maria</td><td>LARGO MARIELE VENTRE</td><td>Maria Rachele Ventre</td></tr>
+    <tr><td>Maria</td><td>VIA MARIA MONTESSORI</td><td>Maria Montessori</td></tr>
+    <tr><td>Maria</td><td>VIA SANTA MARIA MAGGIORE</td><td>—</td></tr>
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">Il caso di Isabella Marincola è emblematico:
-  una staffetta partigiana afrodiscendente resa invisibile dal sostantivo maschile "fratelli".</p>
+  una staffetta partigiana afrodiscendente resa invisibile dal sostantivo maschile "fratelli".
+  BIND assegna l'etichetta <em>?tipo</em> a ciascun ramo dell'UNION, rendendo leggibili i risultati combinati.</p>
 
   <h2>Query 5 — OPTIONAL: persone con più strade dedicate</h2>
   <p><strong>Domanda:</strong> ci sono personaggi a cui sono dedicate più strade?

@@ -155,61 +155,57 @@
   <p style="font-size:0.88rem;color:var(--text-muted)">Le restanti intitolazioni femminili sono Largo, Passaggio, Rotonda, Vicolo.
   Solo 8 donne hanno una piazza o un piazzale a loro nome.</p>
 
-  <h2>Query 4 — REGEX: strade "Fratelli" e donne di nome "Maria"</h2>
-  <p><strong>Domanda:</strong> quante strade usano il termine "FRATELLI" (cancellando la presenza femminile)?
-  E quante donne onorate hanno "MARIA" nel nome?<br>
-  <strong>Keyword:</strong> <code>REGEX</code>, <code>FILTER</code>, <code>DISTINCT</code>, <code>ORDER BY</code></p>
-  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 4 — Strade intitolate <span class="sk">a</span> &quot;Fratelli&quot; o <span class="sk">a</span> nomi con particella nobiliare<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Keywords: <span class="sk">REGEX</span>, <span class="sk">FILTER</span>, <span class="sk">DISTINCT</span>, <span class="sk">ORDER BY</span><span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Due sotto-query collegate dalla stessa logica <span class="sk">REGEX</span>:<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## 4a) Strade con &quot;FRATELLI&quot; nel nome (tutti classificati Male):<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##     evidenzia quanto il maschile grammaticale oscuri la presenza femminile<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##     (caso emblematico: Passaggio Fratelli Marincola, che include Isabella Marincola).<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## 4b) Strade dedicate <span class="sk">a</span> donne il cui nome contiene &quot;MARIA&quot;:<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##     mostra la presenza (o assenza) di figure femminili con nome comune.<span class=<span class="ss">"su"</span>></span></span>
+  <h2>Query 4 — REGEX + UNION: strade "Fratelli" e donne con "Maria" nel nome</h2>
+  <p><strong>Domanda:</strong> quante strade usano "FRATELLI" nel nome (cancellando grammaticalmente la presenza femminile)?
+  E quante donne onorate hanno "MARIA" nel nome? Le due ricerche sono combinate in un'unica query con <code>UNION</code>;
+  la variabile <code>?tipo</code> (ottenuta con <code>BIND</code>) distingue a quale dei due gruppi appartiene ogni riga.<br>
+  <strong>Keyword:</strong> <code>REGEX</code>, <code>UNION</code>, <code>FILTER</code>, <code>BIND</code>, <code>DISTINCT</code>, <code>ORDER BY</code></p>
+  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 4 — <span class="sk">REGEX</span> + <span class="sk">UNION</span>: strade &quot;Fratelli&quot; e donne con &quot;Maria&quot; nel nome<span class=<span class="ss">"su"</span>></span></span>
+<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Una sola query che combina due ricerche tematiche con <span class="sk">UNION</span>.<span class=<span class="ss">"su"</span>></span></span>
+<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Keywords: <span class="sk">REGEX</span>, <span class="sk">UNION</span>, <span class="sk">FILTER</span>, <span class="sk">BIND</span>, <span class="sk">DISTINCT</span>, <span class="sk">ORDER BY</span><span class=<span class="ss">"su"</span>></span></span>
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## -- 4a: strade &quot;Fratelli&quot; (Male per denominazione grammaticale) --<span class=<span class="ss">"su"</span>></span></span>
-<span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span> <span class="sv">?genere</span>
+<span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?tipo</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span>
 <span class="sk">WHERE</span> {
-  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-       <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
-  <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
-           <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
-  <span class="sk">FILTER</span>(<span class="sk">REGEX</span>(<span class="sv">?nomeVia</span>, &quot;FRATELLI&quot;, &quot;i&quot;))
+  {
+    <span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## 4a — Strade con &quot;FRATELLI&quot;: il maschile grammaticale oscura la presenza femminile<span class=<span class="ss">"su"</span>></span></span>
+    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
+         <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
+         <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+    <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> .
+    <span class="sk">FILTER</span>(<span class="sk">REGEX</span>(<span class="sv">?nomeVia</span>, &quot;FRATELLI&quot;, &quot;i&quot;))
+    <span class="sk">BIND</span>(&quot;Fratelli&quot; <span class="sk">AS</span> <span class="sv">?tipo</span>)
+  }
+  <span class="sk">UNION</span>
+  {
+    <span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## 4b — Donne onorate con &quot;MARIA&quot; nel nome<span class=<span class="ss">"su"</span>></span></span>
+    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
+         <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
+         <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+    <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
+             <span class="sp">cpv</span>:sex &quot;Female&quot; .
+    <span class="sk">FILTER</span>(<span class="sk">REGEX</span>(<span class="sv">?nomePersona</span>, &quot;MARIA&quot;, &quot;i&quot;))
+    <span class="sk">BIND</span>(&quot;Maria&quot; <span class="sk">AS</span> <span class="sv">?tipo</span>)
+  }
 }
-<span class="sk">ORDER BY</span> <span class="sv">?nomeVia</span>
-
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## -- 4b: donne con &quot;MARIA&quot; nel nome --<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## (decommenta questa query e commenta quella sopra per eseguirla)<span class=<span class="ss">"su"</span>></span></span>
-
-# <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span>
-# <span class="sk">WHERE</span> {
-#   <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-#        <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-#        <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
-#   <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
-#            <span class="sp">cpv</span>:sex &quot;Female&quot; .
-#   <span class="sk">FILTER</span>(<span class="sk">REGEX</span>(<span class="sv">?nomePersona</span>, &quot;MARIA&quot;, &quot;i&quot;))
-# }
-# <span class="sk">ORDER BY</span> <span class="sv">?nomePersona</span>
+<span class="sk">ORDER BY</span> <span class="sv">?tipo</span> <span class="sv">?nomeVia</span>
 </code></pre>
-  <h4>Risultati 4a (strade "Fratelli"):</h4>
+  <h4>Risultati (ordinati per ?tipo, poi ?nomeVia):</h4>
   <div class="table-wrap"><table>
-    <tr><th>?nomeVia</th><th>?nomePersona</th></tr>
-    <tr><td>PASSAGGIO FRATELLI MARINCOLA</td><td>Fratelli Marincola (Giorgio e Isabella)</td></tr>
-    <tr><td>VIA FRATELLI CERVI</td><td>Fratelli Cervi</td></tr>
-    <tr><td>VIA FRATELLI ROSSELLI</td><td>Fratelli Rosselli</td></tr>
-    <tr><td>VIA FRATELLI DANDOLO</td><td>Fratelli Dandolo</td></tr>
+    <tr><th>?tipo</th><th>?nomeVia</th><th>?nomePersona</th></tr>
+    <tr><td>Fratelli</td><td>PASSAGGIO FRATELLI MARINCOLA</td><td>Fratelli Marincola (Giorgio e Isabella)</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI CERVI</td><td>Fratelli Cervi</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI DANDOLO</td><td>Fratelli Dandolo</td></tr>
+    <tr><td>Fratelli</td><td>VIA FRATELLI ROSSELLI</td><td>Fratelli Rosselli</td></tr>
+    <tr><td>Maria</td><td>LARGO MARIELE VENTRE</td><td>Maria Rachele Ventre</td></tr>
+    <tr><td>Maria</td><td>VIA MARIA MONTESSORI</td><td>Maria Montessori</td></tr>
+    <tr><td>Maria</td><td>VIA SANTA MARIA MAGGIORE</td><td>—</td></tr>
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">Il caso di Isabella Marincola è emblematico:
-  una staffetta partigiana afrodiscendente resa invisibile dal sostantivo maschile "fratelli".</p>
+  una staffetta partigiana afrodiscendente resa invisibile dal sostantivo maschile "fratelli".
+  BIND assegna l'etichetta <em>?tipo</em> a ciascun ramo dell'UNION, rendendo leggibili i risultati combinati.</p>
 
   <h2>Query 5 — OPTIONAL: persone con più strade dedicate</h2>
   <p><strong>Domanda:</strong> ci sono personaggi a cui sono dedicate più strade?
