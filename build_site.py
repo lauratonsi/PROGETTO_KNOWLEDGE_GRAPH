@@ -720,11 +720,28 @@ METHODOLOGY = page('Metodologia', '''
     </div>
   </div>
 
+  <h2>Copertura dell'arricchimento biografico</h2>
+  <p>Su <strong>1.129 persone</strong> presenti nel Knowledge Graph, <strong>1.001 (88,7%)</strong>
+  sono state arricchite con le proprietà
+  <code>ex:professione</code>, <code>ex:dataNascita</code>, <code>ex:luogoNascita</code>,
+  <code>ex:dataMorte</code>, <code>ex:luogoMorte</code>.
+  Le restanti <strong>128 (11,3%)</strong> non dispongono di dati biografici per ragioni strutturali:</p>
+  <ul>
+    <li><strong>Nome abbreviato nello stradario</strong>: il TTL contiene il solo cognome o soprannome
+    (es. <code>CAVOUR</code>, <code>DANTE</code>, <code>TINTORETTO</code>) non collegabile automaticamente
+    al nome completo nel foglio dati.</li>
+    <li><strong>Assenza di dati di partenza</strong>: figure locali minori non documentate su Wikidata
+    né nelle fonti archivistiche consultate.</li>
+    <li><strong>Collettivi e coppie</strong>: intitolazioni a gruppi storici
+    (es. <code>AMBROGIO E PIETRO LORENZETTI</code>, <code>FRATELLI CERVI</code>)
+    non corrispondenti a singoli individui nel dataset biografico.</li>
+  </ul>
+
   <h2>Note metodologiche complete</h2>
   <p>La documentazione dettagliata delle scelte classificatorie (santi → Toponimo,
   soprannomi storici → Male/Female, Fratelli → Male, persone transgender, casi critici)
   è disponibile nel file
-  <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/NOTE_METODOLOGICHE.md" target="_blank">NOTE_METODOLOGICHE.md</a>
+  <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/NOTE_METODOLOGICHE.md" target="_blank">NOTE_METODOLOGICHE.md</a>
   nel repository.</p>
 </div>
 ''', active='methodology.html')
