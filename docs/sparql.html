@@ -463,6 +463,62 @@
     <tr><td>VIA ANNE FRANK</td><td>ANNE FRANK</td><td>Via</td><td>Porto - Saragozza</td><td>Letteratura e giornalismo</td><td>Francoforte sul Meno (Germania), 1929 - Bergen Belsen (Germania), 1945</td></tr>
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">La query combina in un unico risultato tutte le nuove proprietà. Alfonsina Morini (la ciclista) non ha <code>ex:macroCategoriaOccupazionale</code> perché la sua professione nel dataset non era mappabile sulle categorie disponibili: un caso concreto di copertura parziale gestito correttamente da <code>OPTIONAL</code>.</p>
+
+  <h2>Query CONSTRUCT — Generazione di triple RDF per le strade femminili</h2>
+  <p><strong>Scopo:</strong> questa query CONSTRUCT è stata usata nella pipeline di arricchimento del KG
+  per estrarre e ricostruire il sotto-grafo delle strade intitolate a donne, pronti per essere
+  iniettati in un nuovo file Turtle o esportati come dataset separato.
+  A differenza delle query SELECT che restituiscono tabelle, <strong>CONSTRUCT produce direttamente
+  triple RDF</strong> nella forma soggetto–predicato–oggetto.<br>
+  <strong>Keyword:</strong> <code>CONSTRUCT</code>, <code>WHERE</code>, <code>OPTIONAL</code>, <code>FILTER</code>, <code>LIMIT</code></p>
+  <pre class="code-block"><code><span class="sc">## Query CONSTRUCT — Sotto-grafo delle strade femminili con dati biografici</span>
+<span class="sc">## Genera triple RDF per ogni strada intitolata a una donna.</span>
+<span class="sc">## OPTIONAL gestisce le proprietà non sempre presenti (professione, categoria).</span>
+<span class="sc">## Keywords: CONSTRUCT, WHERE, OPTIONAL, FILTER, LIMIT</span>
+
+<span class="sk">PREFIX</span> <span class="sp">clv</span>: <span class="su">&lt;https://w3id.org/italia/onto/CLV/&gt;</span>
+<span class="sk">PREFIX</span> <span class="sp">cpv</span>: <span class="su">&lt;https://w3id.org/italia/onto/CPV/&gt;</span>
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  <span class="su">&lt;https://w3id.org/bologna/ontology#&gt;</span>
+
+<span class="sk">CONSTRUCT</span> {
+  <span class="sv">?strada</span>  <span class="sk">a</span>                              <span class="sp">clv</span>:Street ;
+           <span class="sp">clv</span>:hasStreetName               <span class="sv">?nomeVia</span> ;
+           <span class="sp">clv</span>:isDedicatedTo               <span class="sv">?persona</span> ;
+           <span class="sp">ex</span>:quartiere                    <span class="sv">?quartiere</span> .
+  <span class="sv">?persona</span> <span class="sk">a</span>                              <span class="sp">cpv</span>:Person ;
+           <span class="sp">cpv</span>:fullName                    <span class="sv">?nomePersona</span> ;
+           <span class="sp">cpv</span>:sex                         <span class="ss">"Female"</span> ;
+           <span class="sp">ex</span>:professione                  <span class="sv">?professione</span> ;
+           <span class="sp">ex</span>:macroCategoriaOccupazionale  <span class="sv">?categoria</span> .
+}
+<span class="sk">WHERE</span> {
+  <span class="sv">?strada</span>  <span class="sk">a</span>              <span class="sp">clv</span>:Street ;
+           <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
+           <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex      <span class="ss">"Female"</span> ;
+           <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> .
+  <span class="sk">OPTIONAL</span> { <span class="sv">?strada</span>  <span class="sp">ex</span>:quartiere                   <span class="sv">?quartiere</span>  }
+  <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:professione                 <span class="sv">?professione</span> }
+  <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:macroCategoriaOccupazionale  <span class="sv">?categoria</span>  }
+  <span class="sk">FILTER</span> ( <span class="sp">cpv</span>:sex = <span class="ss">"Female"</span> )
+}
+<span class="sk">LIMIT</span> 5
+</code></pre>
+  <h4>Esempio di output RDF (prime 5 triple generate):</h4>
+  <div class="table-wrap"><table>
+    <tr><th>Soggetto (strada)</th><th>Predicato</th><th>Oggetto</th></tr>
+    <tr><td><code>ex:street/5500</code></td><td><code>a</code></td><td><code>clv:Street</code></td></tr>
+    <tr><td><code>ex:street/5500</code></td><td><code>clv:hasStreetName</code></td><td><code>"VIA LAURA BASSI VERATTI"</code></td></tr>
+    <tr><td><code>ex:street/5500</code></td><td><code>clv:isDedicatedTo</code></td><td><code>ex:person/19fbfe5…</code></td></tr>
+    <tr><td><code>ex:person/19fbfe5…</code></td><td><code>cpv:sex</code></td><td><code>"Female"</code></td></tr>
+    <tr><td><code>ex:person/19fbfe5…</code></td><td><code>ex:professione</code></td><td><code>"Fisica, filosofa naturale"</code></td></tr>
+  </table></div>
+  <p style="font-size:0.88rem;color:var(--text-muted)">
+    A differenza delle query SELECT, CONSTRUCT restituisce un grafo RDF — non una tabella.
+    Nell'output reale le righe della tabella qui sopra sono triple serializzate in Turtle.
+    Questa tecnica è stata utilizzata con <strong>SPARQL-Anything</strong> nelle fasi iniziali del progetto
+    per generare le prime triple a partire dai CSV del Comune di Bologna.
+  </p>
 </div>
 
 </main>

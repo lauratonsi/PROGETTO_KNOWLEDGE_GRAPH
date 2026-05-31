@@ -271,12 +271,15 @@ function renderTable() {
     const matchFilter = !activeFilter || w.tipologia.includes(activeFilter);
     return matchSearch && matchFilter;
   });
-  tbody.innerHTML = rows.map(w => `<tr>
+  tbody.innerHTML = rows.map(w => {
+    const wikiUrl = `https://it.wikipedia.org/w/index.php?search=${encodeURIComponent(w.nome)}`;
+    return `<tr>
     <td><strong>${w.label}</strong></td>
-    <td>${w.nome}</td>
+    <td>${w.nome} <a href="${wikiUrl}" target="_blank" rel="noopener" title="Cerca su Wikipedia" style="font-size:0.75rem;color:var(--text-muted);white-space:nowrap">↗ Wikipedia</a></td>
     <td>${w.professione}</td>
     <td>${w.dati}</td>
-  </tr>`).join('');
+  </tr>`;
+  }).join('');
   countEl.textContent = `${rows.length} / ${WOMEN.length} intitolazioni visualizzate`;
 }
 
