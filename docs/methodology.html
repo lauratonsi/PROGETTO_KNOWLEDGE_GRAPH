@@ -45,7 +45,7 @@
     <li><div><strong>Costruzione del Knowledge Graph</strong><br>
       Lo script <code>genera_ttl.py</code> (Python + <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>)
       legge il CSV classificato e genera il file <code>bologna_KG_corretto.ttl</code>
-      in formato Turtle (11.696 triple). Ogni strada è un nodo <code>clv:Street</code>;
+      in formato Turtle. Ogni strada è un nodo <code>clv:Street</code>;
       le strade dedicate a persone sono collegate tramite <code>clv:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
     <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
       Per le ~470 persone identificate, lo script <code>wikidata_fetch.py</code> interroga
@@ -53,9 +53,22 @@
       recuperando professione (P106), data/luogo di nascita (P569/P19) e
       data/luogo di morte (P570/P20). I dati sono salvati nel file <code>F_M DATE.xlsx</code>.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
-      Lo script <code>classifica_professioni.py</code> assegna una delle 12 macro-categorie
+      Lo script <code>classifica_professioni.py</code> assegna una delle 9 macro-categorie
       a ciascuna delle 1.192 persone classificate (1.091 uomini + 67 donne storiche + 34 proposte),
       usando il matching per parole chiave sulle professioni Wikidata.</div></li>
+    <li><div><strong>Arricchimento topografico e semantico</strong><br>
+      Lo script <code>arricchimento_kg.py</code> estende il KG con nuove proprietà estratte da tre fonti:
+      <ul style="margin-top:0.5rem">
+        <li><strong>Strade</strong>: <code>ex:quartiere</code>, <code>ex:geoPoint</code>, <code>ex:dataIstituzione</code>
+            (da <em>bologna_KG_ready.csv</em>) e <code>ex:tipologiaLuogo</code>
+            (da <em>le-aree-verdi-e-le-vie-di-bologna-dedicate-alle-donne.csv</em>, 60 match)</li>
+        <li><strong>Persone</strong>: <code>ex:macroCategoriaOccupazionale</code> su 1.036 persone
+            (da <em>classificazione_professioni.csv</em>); <code>ex:datiAnagrafici</code> su 60 donne
+            (da <em>le-aree-verdi</em>); <code>ex:professione</code> colmato per 3 donne non presenti
+            in Wikidata.</li>
+      </ul>
+      Il file TTL passa da ~18.363 a 27.251 righe (+4.545 triple di arricchimento).
+    </div></li>
     <li><div><strong>Proposte di intitolazione</strong><br>
       Il gruppo di ricerca ha identificato e documentato 34 candidature
       (29 attive + 5 future) per nuove intitolazioni a donne, persone trans e non binarie
@@ -72,29 +85,68 @@
     (Core Person Vocabulary) — per modellare le persone</li>
   </ul>
 
-  <p>Esempio di triple per una strada femminile:</p>
-  <pre class="code-block"><code>&lt;https://w3id.org/bologna/resource/street/abc123&gt;
-    a clv:Street ;
-    clv:hasStreetName "VIA LAURA BASSI" ;
-    clv:isDedicatedTo &lt;https://w3id.org/bologna/resource/person/def456&gt; .
-
-&lt;https://w3id.org/bologna/resource/person/def456&gt;
-    a cpv:Person ;
-    cpv:fullName "Laura Bassi Veratti" ;
-    cpv:sex "Female" .</code></pre>
-
-  <p>Per le proposte di intitolazione, abbiamo esteso il vocabolario con una proprietà custom:</p>
+  <p>Esempio di triple per una strada femminile (con arricchimento completo):</p>
   <pre class="code-block"><code>@prefix ex: &lt;https://w3id.org/bologna/ontology#&gt; .
 
-&lt;https://w3id.org/bologna/resource/person/...&gt;
+&lt;https://w3id.org/bologna/resource/street/5500&gt;
+    a clv:Street ;
+    clv:hasStreetName  "VIA LAURA BASSI VERATTI" ;
+    clv:isDedicatedTo  &lt;https://w3id.org/bologna/resource/person/19fbfe5...&gt; ;
+    ex:quartiere       "Santo Stefano" ;
+    ex:geoPoint        "44.483592003952296, 11.367738980601088" ;
+    ex:dataIstituzione "1991-10-21" ;
+    ex:tipologiaLuogo  "Via" .
+
+&lt;https://w3id.org/bologna/resource/person/19fbfe5...&gt;
+    a cpv:Person ;
+    cpv:fullName  "LAURA BASSI VERATTI" ;
+    cpv:sex       "Female" ;
+    ex:professione                 "Fisica, filosofa naturale" ;
+    ex:dataNascita                 "29 ottobre 1711" ;
+    ex:luogoNascita                "Bologna" ;
+    ex:dataMorte                   "20 febbraio 1778" ;
+    ex:luogoMorte                  "Bologna" ;
+    ex:macroCategoriaOccupazionale "Scienze e medicina" ;
+    ex:datiAnagrafici              "Bologna, 1711 - Bologna, 1778" .</code></pre>
+
+  <p>Per le proposte di intitolazione, il vocabolario è esteso con:</p>
+  <pre class="code-block"><code>&lt;https://w3id.org/bologna/resource/person/...&gt;
     a cpv:Person ;
     cpv:fullName "Maria Dalle Donne" ;
     cpv:sex "Female" ;
     ex:proposta "true" ;
     ex:statoProposta "attiva" .</code></pre>
 
+  <h2>Proprietà del Knowledge Graph</h2>
+  <table style="width:100%;border-collapse:collapse;font-size:0.9rem">
+    <thead>
+      <tr style="background:var(--accent,#c0392b);color:#fff;text-align:left">
+        <th style="padding:0.5rem 0.75rem">Proprietà</th>
+        <th style="padding:0.5rem 0.75rem">Dominio</th>
+        <th style="padding:0.5rem 0.75rem">Fonte</th>
+        <th style="padding:0.5rem 0.75rem">Copertura</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:0.4rem 0.75rem"><code>clv:hasStreetName</code></td><td>Street</td><td>stradario comunale</td><td>1.132</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>clv:isDedicatedTo</code></td><td>Street</td><td>classificazione gruppo</td><td>1.132</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:quartiere</code></td><td>Street</td><td>bologna_KG_ready.csv</td><td>1.132</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:geoPoint</code></td><td>Street</td><td>bologna_KG_ready.csv</td><td>1.132</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:dataIstituzione</code></td><td>Street</td><td>bologna_KG_ready.csv</td><td>1.132</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:tipologiaLuogo</code></td><td>Street</td><td>aree verdi CSV</td><td>60</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>cpv:fullName</code></td><td>Person</td><td>stradario comunale</td><td>1.129</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>cpv:sex</code></td><td>Person</td><td>classificazione gruppo</td><td>1.129</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:professione</code></td><td>Person</td><td>Wikidata P106 + aree verdi</td><td>1.004</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:dataNascita / ex:luogoNascita</code></td><td>Person</td><td>Wikidata P569/P19</td><td>~1.001</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:dataMorte / ex:luogoMorte</code></td><td>Person</td><td>Wikidata P570/P20</td><td>~1.001</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:macroCategoriaOccupazionale</code></td><td>Person</td><td>classificazione_professioni.csv</td><td>1.036</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:datiAnagrafici</code></td><td>Person</td><td>aree verdi CSV</td><td>60</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:proposta / ex:statoProposta</code></td><td>Person</td><td>gruppo di ricerca</td><td>31</td></tr>
+    </tbody>
+  </table>
+
   <h2>Visualizzazione dell'ontologia (WebVOWL)</h2>
-  <p>Lo schema delle classi e proprietà è disponibile nel file <code>schema.ttl</code> in formato OWL/Turtle.
+  <p>Lo schema aggiornato delle classi e proprietà è disponibile nel file <code>schema.ttl</code> in formato OWL/Turtle.
   Puoi esplorarlo interattivamente con <strong>WebVOWL</strong>, uno strumento open source per la
   visualizzazione grafica di ontologie OWL sviluppato dall'Università di Stoccarda.</p>
   <div style="text-align:center; margin:2rem 0">
@@ -104,8 +156,7 @@
       Apri lo schema in WebVOWL &rarr;
     </a>
     <p class="webvowl-note">WebVOWL carica <code>schema.ttl</code> da GitHub Pages e mostra le classi
-    (<em>Street</em>, <em>Person</em>), la proprietà oggetto <em>isDedicatedTo</em> e le proprietà dato
-    (<em>hasStreetName</em>, <em>sex</em>, <em>fullName</em>, <em>proposta</em>, <em>statoProposta</em>)
+    (<em>Street</em>, <em>Person</em>), la proprietà oggetto <em>isDedicatedTo</em> e tutte le proprietà dato
     come grafo interattivo navigabile.</p>
   </div>
 
@@ -146,21 +197,28 @@
     </div>
   </div>
 
-  <h2>Copertura dell'arricchimento biografico</h2>
-  <p>Su <strong>1.129 persone</strong> presenti nel Knowledge Graph, <strong>1.001 (88,7%)</strong>
-  sono state arricchite con le proprietà
-  <code>ex:professione</code>, <code>ex:dataNascita</code>, <code>ex:luogoNascita</code>,
-  <code>ex:dataMorte</code>, <code>ex:luogoMorte</code>.
-  Le restanti <strong>128 (11,3%)</strong> non dispongono di dati biografici per ragioni strutturali:</p>
+  <h2>Copertura dell'arricchimento</h2>
+  <p>Su <strong>1.129 persone</strong> presenti nel Knowledge Graph:</p>
   <ul>
-    <li><strong>Nome abbreviato nello stradario</strong>: il TTL contiene il solo cognome o soprannome
-    (es. <code>CAVOUR</code>, <code>DANTE</code>, <code>TINTORETTO</code>) non collegabile automaticamente
-    al nome completo nel foglio dati.</li>
-    <li><strong>Assenza di dati di partenza</strong>: figure locali minori non documentate su Wikidata
+    <li><strong>1.001 (88,7%)</strong> arricchite via Wikidata con
+    <code>ex:professione</code>, <code>ex:dataNascita</code>, <code>ex:luogoNascita</code>,
+    <code>ex:dataMorte</code>, <code>ex:luogoMorte</code>.</li>
+    <li><strong>1.036 (91,8%)</strong> arricchite con <code>ex:macroCategoriaOccupazionale</code>
+    (include tutte quelle con professione Wikidata + 35 aggiuntive).</li>
+    <li><strong>60 donne</strong> arricchite con <code>ex:datiAnagrafici</code> e
+    <code>ex:tipologiaLuogo</code> dal dataset "Aree verdi e vie dedicate alle donne".</li>
+    <li><strong>3 donne</strong> con <code>ex:professione</code> colmata dalla stessa fonte
+    (non presenti su Wikidata).</li>
+  </ul>
+  <p>Le restanti <strong>128 persone (11,3%)</strong> non dispongono di dati biografici per ragioni strutturali:</p>
+  <ul>
+    <li><strong>Nome abbreviato nello stradario</strong>: solo cognome o soprannome
+    (es. <code>CAVOUR</code>, <code>DANTE</code>, <code>TINTORETTO</code>) non collegabile automaticamente.</li>
+    <li><strong>Assenza di dati</strong>: figure locali minori non documentate su Wikidata
     né nelle fonti archivistiche consultate.</li>
     <li><strong>Collettivi e coppie</strong>: intitolazioni a gruppi storici
     (es. <code>AMBROGIO E PIETRO LORENZETTI</code>, <code>FRATELLI CERVI</code>)
-    non corrispondenti a singoli individui nel dataset biografico.</li>
+    non corrispondenti a singoli individui.</li>
   </ul>
 
   <h2>Note metodologiche complete</h2>

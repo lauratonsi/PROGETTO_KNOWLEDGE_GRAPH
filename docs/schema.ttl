@@ -120,3 +120,55 @@ ex:luogoMorte
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
     rdfs:comment "Wikidata P20."@it .
+
+# ── Datatype Properties — arricchimento topografico (strade) ──────────────────
+
+ex:quartiere
+    a owl:DatatypeProperty ;
+    rdfs:label "quartiere"@it ;
+    rdfs:label "district"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Nome del quartiere bolognese in cui ricade la strada."@it .
+
+ex:geoPoint
+    a owl:DatatypeProperty ;
+    rdfs:label "geo point"@it ;
+    rdfs:label "geo point"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Coordinate WGS84 del centroide della strada (lat, lon), estratte dal dataset Open Data Comune di Bologna."@it .
+
+ex:dataIstituzione
+    a owl:DatatypeProperty ;
+    rdfs:label "data di istituzione"@it ;
+    rdfs:label "institution date"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Data di istituzione ufficiale dell'intitolazione, formato ISO 8601 (es. '1991-10-21')."@it .
+
+ex:tipologiaLuogo
+    a owl:DatatypeProperty ;
+    rdfs:label "tipologia del luogo"@it ;
+    rdfs:label "place type"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Tipo di luogo toponomastico (Via, Largo, Piazza, Passaggio, Rotonda, Parco, Giardino, ecc.). Presente solo per i luoghi dedicati a donne, estratto dal dataset 'Aree verdi e vie dedicate alle donne'."@it .
+
+# ── Datatype Properties — arricchimento semantico (persone) ──────────────────
+
+ex:macroCategoriaOccupazionale
+    a owl:DatatypeProperty ;
+    rdfs:label "macro categoria occupazionale"@it ;
+    rdfs:label "occupational macro category"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Categoria semantica della professione, assegnata dal gruppo di ricerca tramite matching su parole chiave. Valori: 'Arte visiva e architettura', 'Filosofia, storia e accademia', 'Letteratura e giornalismo', 'Musica, teatro e cinema', 'Patrioti, militari ed esploratori', 'Politica e diritto', 'Religione', 'Scienze e medicina', 'Altro / istituzionale'."@it .
+
+ex:datiAnagrafici
+    a owl:DatatypeProperty ;
+    rdfs:label "dati anagrafici"@it ;
+    rdfs:label "biographical data"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Stringa sintetica con luogo e anno di nascita e morte (es. 'Bologna, 1711 - Parigi, 1782'). Presente solo per le donne, estratta dal dataset 'Aree verdi e vie dedicate alle donne'."@it .
