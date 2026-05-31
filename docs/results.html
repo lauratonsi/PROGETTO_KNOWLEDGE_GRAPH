@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 </head>
 <body>
 <nav id="navbar">
@@ -126,11 +127,23 @@
 <div class="section-alt"><div class="section">
   <h2>Mappa interattiva delle strade di Bologna</h2>
   <p>Visualizzazione geografica degli 8.029 archi stradali, colorati in base alla classificazione di genere.<br>
-  <span style="display:inline-block;width:12px;height:12px;background:#c45c82;border-radius:2px;margin-right:4px"></span><strong>Femminile</strong> &nbsp;
-  <span style="display:inline-block;width:12px;height:12px;background:#1b3a6b;border-radius:2px;margin-right:4px"></span><strong>Maschile</strong> &nbsp;
-  <span style="display:inline-block;width:12px;height:12px;background:#aaaaaa;border-radius:2px;margin-right:4px"></span><strong>Toponimo</strong></p>
-  <div id="bologna-map" style="height:540px;border-radius:8px;overflow:hidden;margin:1rem 0;border:1px solid var(--border)"></div>
-  <p style="font-size:0.82rem;color:var(--text-muted)">Dati: Open Data Comune di Bologna — Archi stradali. Le strade femminili (rosa) sono le 66 intitolazioni a donne identificate. Clicca su una strada per vedere il nome e la classificazione.</p>
+  <strong>Filtri di accessibilità:</strong></p>
+  <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;padding:1rem;background:rgba(200,200,200,0.1);border-radius:6px">
+    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:500">
+      <input type="checkbox" id="filter-female" value="Female" checked aria-label="Mostra strade dedicate a donne">
+      <span style="display:inline-block;width:14px;height:14px;background:#c45c82;border-radius:2px;margin-right:2px"></span>Femminile (66)
+    </label>
+    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:500">
+      <input type="checkbox" id="filter-male" value="Male" checked aria-label="Mostra strade dedicate a uomini">
+      <span style="display:inline-block;width:14px;height:14px;background:#1b3a6b;border-radius:2px;margin-right:2px"></span>Maschile (1066)
+    </label>
+    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:500">
+      <input type="checkbox" id="filter-topo" value="Toponimo" checked aria-label="Mostra toponimi">
+      <span style="display:inline-block;width:14px;height:14px;background:#aaaaaa;border-radius:2px;margin-right:2px"></span>Toponimo (828)
+    </label>
+  </div>
+  <div id="bologna-map" style="height:540px;border-radius:8px;overflow:hidden;margin:1rem 0;border:1px solid var(--border)" role="application" aria-label="Mappa interattiva delle strade di Bologna. Clicca su una strada per evidenziarla completamente. Usa i filtri sopra per mostrare/nascondere le categorie."></div>
+  <p style="font-size:0.82rem;color:var(--text-muted)"><strong>Come usare:</strong> Clicca su qualsiasi segmento di una strada per evidenziare l'intera via. Usa i filtri per mostrare/nascondere categorie. Naviga con frecce direzionali o mouse wheel per zoom. Su dispositivi touch, usa due dita per ruotare/inclinare.</p>
 </div></div>
 
 </main>
@@ -218,7 +231,9 @@ document.querySelectorAll('#tfilters .filter-btn').forEach(btn => {
 });
 renderTable();
 
-// Leaflet map
+// ============================================================
+// MAPPA INTERATTIVA CON ACCESSIBILITÀ E CLICK-TOLERANCE
+// ============================================================
 const MAP_COLOR = { Female: '#c45c82', Male: '#1b3a6b', Toponimo: '#aaaaaa' };
 const MAP_WEIGHT = { Female: 3, Male: 1.5, Toponimo: 1.5 };
 const MAP_OPACITY = { Female: 0.95, Male: 0.5, Toponimo: 0.4 };
@@ -229,31 +244,207 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19
 }).addTo(bMap);
 
+let allFeatures = [];        // Store all GeoJSON features
+let layersByCodevia = {};    // Map codvia -> layers array
+let lastHighlightedCodevia = null; // Track highlighted via
+let activeFilters = { Female: true, Male: true, Toponimo: true }; // Filter state
+
+// Update map visibility based on active filters
+function updateMapVisibility() {
+  bMap.eachLayer(layer => {
+    if (layer.feature) {
+      const codvia = String(layer.feature.properties.codvia ?? '');
+      const genere = CODVIA_GENERE[codvia] || 'Toponimo';
+      if (activeFilters[genere]) {
+        layer.setStyle({ opacity: MAP_OPACITY[genere] });
+      } else {
+        layer.setStyle({ opacity: 0 });
+      }
+    }
+  });
+}
+
+// Setup filter checkboxes with keyboard support
+document.querySelectorAll('#filter-female, #filter-male, #filter-topo').forEach(checkbox => {
+  checkbox.addEventListener('change', (e) => {
+    activeFilters[e.target.value] = e.target.checked;
+    updateMapVisibility();
+    // Announce filter change to screen readers
+    const msg = `${e.target.value} ${e.target.checked ? 'mostrato' : 'nascosto'}`;
+    const announce = document.createElement('div');
+    announce.setAttribute('role', 'status');
+    announce.setAttribute('aria-live', 'polite');
+    announce.style.position = 'absolute';
+    announce.style.left = '-9999px';
+    announce.textContent = msg;
+    document.body.appendChild(announce);
+    setTimeout(() => announce.remove(), 1000);
+  });
+});
+
 fetch('rifter_arcstra_li.geojson')
   .then(r => r.json())
   .then(data => {
-    L.geoJSON(data, {
+    allFeatures = data.features;
+    
+    // Group features by codvia for "select whole street" behavior
+    data.features.forEach(feature => {
+      const codvia = String(feature.properties.codvia ?? '');
+      if (!layersByCodevia[codvia]) layersByCodevia[codvia] = [];
+    });
+
+    // Add GeoJSON layer
+    const geoLayer = L.geoJSON(data, {
       style: feature => {
         const codvia = String(feature.properties.codvia ?? '');
         const genere = CODVIA_GENERE[codvia] || 'Toponimo';
         return {
           color: MAP_COLOR[genere] || '#aaa',
           weight: MAP_WEIGHT[genere] || 1.5,
-          opacity: MAP_OPACITY[genere] || 0.4
+          opacity: MAP_OPACITY[genere] || 0.4,
+          lineCap: 'round',
+          lineJoin: 'round'
         };
       },
       onEachFeature: (feature, layer) => {
         const codvia = String(feature.properties.codvia ?? '');
+        layersByCodevia[codvia] = layersByCodevia[codvia] || [];
+        layersByCodevia[codvia].push(layer);
+        
         const genere = CODVIA_GENERE[codvia] || 'Toponimo';
-        const nome = feature.properties.nomevia || '';
-        layer.bindPopup(`<strong>${nome}</strong><br>Classificazione: ${genere}`);
+        const nome = feature.properties.nomevia || 'Senza nome';
+        const tipologia = feature.properties.tipologia || 'Strada';
+        
+        // Popup con info completa e migliore leggibilità
+        const popupHtml = `
+          <div style="font-family:sans-serif;font-size:13px">
+            <strong style="font-size:15px;color:${MAP_COLOR[genere]}">${nome}</strong><br>
+            <small>Tipo: ${tipologia}</small><br>
+            <small>Classificazione: <strong>${genere}</strong></small><br>
+            <small>Quartiere: ${feature.properties.nomequart || 'N/A'}</small>
+          </div>
+        `;
+        layer.bindPopup(popupHtml, { maxWidth: 300 });
+        
+        // Tooltip con nome (non-intrusive)
+        layer.bindTooltip(nome, { permanent: false, direction: 'center', sticky: true });
+        
+        // Click handler: highlight entire via
+        layer.on('click', (e) => {
+          L.DomEvent.stopPropagation(e);
+          
+          // Reset previous highlight
+          if (lastHighlightedCodevia && layersByCodevia[lastHighlightedCodevia]) {
+            layersByCodevia[lastHighlightedCodevia].forEach(l => {
+              const cv = String(l.feature.properties.codvia ?? '');
+              const gen = CODVIA_GENERE[cv] || 'Toponimo';
+              l.setStyle({
+                weight: MAP_WEIGHT[gen],
+                opacity: MAP_OPACITY[gen],
+                dashArray: null
+              });
+            });
+          }
+          
+          // Highlight all segments of this codvia
+          if (layersByCodevia[codvia]) {
+            layersByCodevia[codvia].forEach(l => {
+              l.setStyle({
+                weight: 5,
+                opacity: 1.0,
+                dashArray: '2,2',
+                color: MAP_COLOR[genere]
+              });
+            });
+          }
+          lastHighlightedCodevia = codvia;
+          
+          // Open popup
+          layer.openPopup();
+          
+          // Announce to screen readers
+          const announce = document.createElement('div');
+          announce.setAttribute('role', 'status');
+          announce.setAttribute('aria-live', 'assertive');
+          announce.style.position = 'absolute';
+          announce.style.left = '-9999px';
+          announce.textContent = `Via evidenziata: ${nome} (${genere})`;
+          document.body.appendChild(announce);
+          setTimeout(() => announce.remove(), 2000);
+        });
+        
+        // Hover effect (desktop only)
+        layer.on('mouseover', () => {
+          if (window.matchMedia('(hover: hover)').matches) {
+            layer.setStyle({ weight: 4, opacity: 0.9 });
+          }
+        });
+        layer.on('mouseout', () => {
+          if (lastHighlightedCodevia !== codvia) {
+            const gen = CODVIA_GENERE[codvia] || 'Toponimo';
+            layer.setStyle({
+              weight: MAP_WEIGHT[gen],
+              opacity: MAP_OPACITY[gen],
+              dashArray: null
+            });
+          }
+        });
       }
     }).addTo(bMap);
+    
+    // Click-tolerance: detect nearby features when clicking on map background
+    bMap.on('click', (e) => {
+      const clickPoint = turf.point([e.latlng.lng, e.latlng.lat]);
+      const TOLERANCE_METERS = 30; // 30m radius for detection
+      
+      let nearestCodevia = null;
+      let minDist = Infinity;
+      
+      allFeatures.forEach(feature => {
+        const linestring = turf.feature(feature.geometry);
+        try {
+          const nearest = turf.nearestPointOnLine(linestring, clickPoint);
+          const dist = nearest.properties.dist;
+          
+          if (dist < TOLERANCE_METERS / 1000 && dist < minDist) {
+            minDist = dist;
+            nearestCodevia = String(feature.properties.codvia ?? '');
+          }
+        } catch (err) {
+          // Skip invalid geometries
+        }
+      });
+      
+      // If a nearby feature was found, simulate click on first layer
+      if (nearestCodevia && layersByCodevia[nearestCodevia] && layersByCodevia[nearestCodevia].length > 0) {
+        layersByCodevia[nearestCodevia][0].fireEvent('click');
+      }
+    });
   })
-  .catch(() => {
+  .catch(err => {
+    console.error('Errore caricamento GeoJSON:', err);
     document.getElementById('bologna-map').innerHTML =
-      '<p style="padding:2rem;text-align:center;color:#888">Mappa non disponibile. Il file GeoJSON deve essere nella stessa cartella della pagina.</p>';
+      '<p style="padding:2rem;text-align:center;color:#888">⚠️ Mappa non disponibile. Il file GeoJSON (rifter_arcstra_li.geojson) deve essere nella stessa cartella della pagina.</p>';
   });
+
+// Keyboard accessibility: Escape to close popup and reset highlight
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    bMap.closePopup();
+    if (lastHighlightedCodevia && layersByCodevia[lastHighlightedCodevia]) {
+      layersByCodevia[lastHighlightedCodevia].forEach(l => {
+        const cv = String(l.feature.properties.codvia ?? '');
+        const gen = CODVIA_GENERE[cv] || 'Toponimo';
+        l.setStyle({
+          weight: MAP_WEIGHT[gen],
+          opacity: MAP_OPACITY[gen],
+          dashArray: null
+        });
+      });
+      lastHighlightedCodevia = null;
+    }
+  }
+});
 </script>
 </body>
 </html>
