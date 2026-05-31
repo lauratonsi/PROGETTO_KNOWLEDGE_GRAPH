@@ -282,9 +282,15 @@ document.querySelectorAll('#filter-female, #filter-male, #filter-topo').forEach(
   });
 });
 
-fetch('rifter_arcstra_li.geojson')
-  .then(r => r.json())
-  .then(data => {
+// If the page is opened via file://, fetch will be blocked by the browser.
+// Show a helpful message instructing to serve the site via HTTP.
+if (location.protocol === 'file:') {
+  document.getElementById('bologna-map').innerHTML =
+    '<p style="padding:2rem;text-align:center;color:#888">⚠️ La mappa richiede essere servita via HTTP. Avvia un server locale nella cartella docs (es: <code>python -m http.server</code>) e apri <a href="http://localhost:8000/results.html">http://localhost:8000/results.html</a></p>';
+} else {
+  fetch('rifter_arcstra_li.geojson')
+    .then(r => r.json())
+    .then(data => {
     allFeatures = data.features;
     
     // Group features by codvia for "select whole street" behavior
@@ -426,6 +432,7 @@ fetch('rifter_arcstra_li.geojson')
     document.getElementById('bologna-map').innerHTML =
       '<p style="padding:2rem;text-align:center;color:#888">⚠️ Mappa non disponibile. Il file GeoJSON (rifter_arcstra_li.geojson) deve essere nella stessa cartella della pagina.</p>';
   });
+}
 
 // Keyboard accessibility: Escape to close popup and reset highlight
 document.addEventListener('keydown', (e) => {
