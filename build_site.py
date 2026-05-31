@@ -633,7 +633,7 @@ METHODOLOGY = page('Metodologia', '''
       data/luogo di morte (P570/P20). I dati sono salvati nel file <code>F_M DATE.xlsx</code>.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
       Lo script <code>classifica_professioni.py</code> assegna una delle 12 macro-categorie
-      a ciascuna delle 1.192 persone classificate (1.091 uomini + 67 donne storiche + 34 proposte),
+      a ciascuna delle 1.191 persone classificate (1.091 uomini + 66 donne storiche + 34 proposte),
       usando il matching per parole chiave sulle professioni Wikidata.</div></li>
     <li><div><strong>Proposte di intitolazione</strong><br>
       Il gruppo di ricerca ha identificato e documentato 34 candidature
@@ -1163,7 +1163,7 @@ RESULTS = page('Risultati', f'''
 
   <h2>Categorie professionali per genere</h2>
   <p>Confronto tra la distribuzione per categoria professionale degli uomini onorati (1.091),
-  delle donne storicamente onorate (67) e delle donne proposte (34).
+  delle donne storicamente onorate (66) e delle donne proposte (34).
   I dati rivelano pattern significativi: le donne già onorate sono concentrate
   nello spettacolo (25,4%), mentre le proposte correggono questo squilibrio con
   un forte peso della Resistenza (32,4%) e dell'attivismo civile (17,6%).</p>
