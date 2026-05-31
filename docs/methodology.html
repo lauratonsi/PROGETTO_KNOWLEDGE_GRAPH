@@ -41,17 +41,27 @@
       Per ogni strada è stato identificato il referente (persona, luogo, concetto) e assegnata
       la categoria <em>Male</em>, <em>Female</em> o <em>Toponimo</em>.
       Questa operazione — la più impegnativa — è stata condotta con l'ausilio di LLM
-      (DeepSeek, Gemini, ChatGPT, Claude, Copilot) e validata manualmente.</div></li>
+      (DeepSeek, Gemini, ChatGPT, Claude, Copilot) e validata manualmente.
+      Lo script <code>equita.py</code> applica sistematicamente le correzioni validate:
+      declassa santi e nomi astratti femminili (es. VITTORIA, SERENA) a Toponimo,
+      recupera artisti con soprannome erroneamente classificati come Toponimo (DANTE, CARAVAGGIO…)
+      e corregge tre donne classificate Male (Artemisia Gentileschi, Properzia De Rossi,
+      Bittisia Gozzadini). L'output è <code>bologna_KG_ready.csv</code>.</div></li>
     <li><div><strong>Costruzione del Knowledge Graph</strong><br>
-      Lo script <code>genera_ttl.py</code> (Python + <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>)
-      legge il CSV classificato e genera il file <code>bologna_KG_corretto.ttl</code>
-      in formato Turtle. Ogni strada è un nodo <code>clv:Street</code>;
-      le strade dedicate a persone sono collegate tramite <code>clv:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
+      Lo script <code>genera_ttl.py</code> (Python, solo libreria standard — csv, hashlib, re)
+      legge <code>bologna_KG_ready.csv</code> e scrive direttamente le triple Turtle,
+      replicando la logica della query <code>trasforma_finale.sparql</code> usata nella fase iniziale
+      con SPARQL-Anything. Ogni strada è un nodo <code>clv:Street</code>;
+      le strade dedicate a persone sono collegate tramite <code>clv:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.
+      Output: <code>bologna_KG_corretto.ttl</code>.</div></li>
     <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
-      Per le ~470 persone identificate, lo script <code>wikidata_fetch.py</code> interroga
+      Per le 1.129 persone identificate nel KG, uno script Python interroga
       l'<a href="https://www.wikidata.org/w/api.php" target="_blank">API JSON di Wikidata</a>
-      recuperando professione (P106), data/luogo di nascita (P569/P19) e
-      data/luogo di morte (P570/P20). I dati sono salvati nel file <code>F_M DATE.xlsx</code>.</div></li>
+      (<code>wbsearchentities</code> per la ricerca testuale + <code>wbgetentities</code>
+      per le proprietà strutturate) recuperando professione (P106),
+      data/luogo di nascita (P569/P19) e data/luogo di morte (P570/P20),
+      con verifica che l'entità sia un essere umano (P31 = Q5).
+      Copertura: <strong>1.001 persone (88,7%)</strong>. I dati confluiscono nel file <code>F_M DATE.xlsx</code>.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
       Lo script <code>classifica_professioni.py</code> assegna una delle 12 macro-categorie
       a ciascuna delle 1.191 persone classificate (1.091 uomini + 66 donne storiche + 34 proposte),
@@ -279,7 +289,7 @@
       <!-- cpv:sex -->
       <rect x="546" y="148" width="278" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
       <text x="556" y="164" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">cpv:sex</text>
-      <text x="750" y="164" font-size="10" fill="rgba(255,255,255,0.5)" font-family="sans-serif">"Male"|"Female"</text>
+      <text x="720" y="164" font-size="10" fill="rgba(255,255,255,0.5)" font-family="sans-serif">"Male"|"Female"|"Toponimo"</text>
 
       <!-- Separatore -->
       <line x1="546" y1="182" x2="824" y2="182" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
@@ -344,7 +354,7 @@
       <span class="kg-legend-item kg-legend-street">clv:Street — 1.960 istanze</span>
       <span class="kg-legend-item kg-legend-person">cpv:Person — 1.129 istanze</span>
       <span class="kg-legend-item kg-legend-arrow">clv:isDedicatedTo — 1.132 triple (ObjectProperty)</span>
-      <span class="kg-legend-item" style="color:var(--text-muted)">14 proprietà dato totali</span>
+      <span class="kg-legend-item" style="color:var(--text-muted)">16 proprietà totali (15 dato + 1 annotazione)</span>
     </div>
   </div><!-- /.kg-diagram-wrap -->
 
@@ -362,10 +372,10 @@
   <h2>Strumenti utilizzati</h2>
   <div class="card-grid">
     <div class="card">
-      <h3>Python 3 + rdflib</h3>
-      <p>Generazione e manipolazione del KG in formato Turtle.
-      <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a> è la libreria Python
-      standard per il Semantic Web.</p>
+      <h3>Python 3</h3>
+      <p>Generazione e manipolazione del KG in formato Turtle con sola libreria standard
+      (<code>csv</code>, <code>hashlib</code>, <code>re</code>, <code>openpyxl</code>).
+      Lo script <code>genera_ttl.py</code> scrive le triple Turtle direttamente, senza rdflib.</p>
     </div>
     <div class="card">
       <h3>openpyxl</h3>
@@ -374,14 +384,16 @@
     </div>
     <div class="card">
       <h3>Wikidata API</h3>
-      <p>Recupero automatico di professioni e date biografiche per ~470 persone tramite
+      <p>Recupero automatico di professioni e date biografiche per 1.129 persone tramite
       <a href="https://www.wikidata.org/w/api.php" target="_blank">wbsearchentities</a> e
-      <code>wbgetentities</code>.</p>
+      <code>wbgetentities</code>. Copertura: 1.001 persone (88,7%).</p>
     </div>
     <div class="card">
       <h3>SPARQL-Anything</h3>
-      <p>Tool Java per eseguire query SPARQL CONSTRUCT su file CSV, usato nelle
-      fasi iniziali del progetto per generare le triple RDF.</p>
+      <p>Tool Java per eseguire query SPARQL CONSTRUCT su file CSV. Usato nella
+      fase iniziale del progetto per convertire il CSV classificato in Turtle tramite
+      <code>trasforma_finale.sparql</code>. La pipeline è stata poi riscritta interamente
+      in Python (<code>genera_ttl.py</code>) per eliminare la dipendenza da Java.</p>
     </div>
     <div class="card">
       <h3>LLM (5 modelli)</h3>
