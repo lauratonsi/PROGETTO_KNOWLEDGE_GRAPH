@@ -12,7 +12,22 @@
     a owl:Ontology ;
     rdfs:label "Ontologia Toponomastica di Bologna"@it ;
     rdfs:label "Bologna Street Toponymy Ontology"@en ;
-    rdfs:comment "Ontologia per la classificazione di genere della toponomastica del Comune di Bologna. Riutilizza CLV e CPV (vocabolari controllati italiani) ed estende con proprietà custom per la gestione delle proposte di intitolazione."@it .
+    rdfs:comment "Ontologia per la classificazione di genere della toponomastica del Comune di Bologna. Riutilizza CLV e CPV (vocabolari controllati italiani) ed estende con proprietà custom per la gestione delle proposte di intitolazione."@it ;
+    rdfs:comment "Ontology for gender classification of street toponymy in the Municipality of Bologna. Reuses CLV and CPV (Italian controlled vocabularies) and extends them with custom properties for managing naming proposals."@en ;
+    <http://purl.org/dc/terms/title> "Gender Gap nella Toponomastica di Bologna — Knowledge Graph"@it ;
+    <http://purl.org/dc/terms/title> "Gender Gap in Bologna Street Toponymy — Knowledge Graph"@en ;
+    <http://purl.org/dc/terms/description> "Knowledge Graph RDF per analizzare il divario di genere nelle intitolazioni stradali del Comune di Bologna. Su 1.960 strade censite, solo 66 (5,8%) sono intitolate a donne. Il KG è costruito a partire dagli Open Data del Comune di Bologna, classificato con LLM e arricchito tramite Wikidata."@it ;
+    <http://purl.org/dc/terms/creator> "Susanna Cioni" ;
+    <http://purl.org/dc/terms/creator> "Laura Tonsi" ;
+    <http://purl.org/dc/terms/publisher> "Università di Bologna — Corso GEPID 2024–25" ;
+    <http://purl.org/dc/terms/date> "2026" ;
+    <http://purl.org/dc/terms/source> <https://opendata.comune.bologna.it/> ;
+    <http://purl.org/dc/terms/source> <https://www.wikidata.org/> ;
+    <http://purl.org/dc/terms/license> <https://creativecommons.org/licenses/by/4.0/> ;
+    <http://purl.org/dc/terms/rights> "CC BY 4.0 — Attribuzione richiesta" ;
+    <http://www.w3.org/2002/07/owl#versionInfo> "1.1 — arricchimento topografico e semantico" ;
+    <http://xmlns.com/foaf/0.1/homepage> <https://lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH/> ;
+    <http://xmlns.com/foaf/0.1/page> <https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH> .
 
 # ── Classes ───────────────────────────────────────────────────────────────────
 
