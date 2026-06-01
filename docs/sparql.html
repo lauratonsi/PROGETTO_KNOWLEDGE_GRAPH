@@ -34,11 +34,12 @@
 <div class="section">
   <h2>Interrogazione interattiva</h2>
   <p>Scrivi o modifica una query SPARQL ed eseguila direttamente nel browser sul Knowledge Graph di Bologna.
-  Il file <code>bologna_KG_corretto.ttl</code> (16.244 triple) viene interrogato in tempo reale
-  tramite <a href="https://comunica.dev/" target="_blank">Comunica</a>, un motore SPARQL&nbsp;1.1 open source.</p>
+  Il file <code>bologna_KG_corretto.ttl</code> (16.244 triple) viene caricato in memoria
+  tramite <a href="https://oxigraph.org/" target="_blank">Oxigraph</a>, un motore SPARQL&nbsp;1.1
+  compilato in WebAssembly.</p>
   <p style="font-size:0.88rem;color:var(--text-muted)"><strong>Nota:</strong>
-  al primo avvio il browser scarica il motore (~3&nbsp;MB) e il file RDF (~1&nbsp;MB).
-  Le query successive sono molto più rapide grazie alla cache del browser.</p>
+  al primo click il browser scarica il motore WebAssembly e il file RDF (~1&nbsp;MB).
+  Le query successive sono istantanee perché il KG rimane in memoria.</p>
   <div class="sparql-playground">
     <div class="sparql-examples">
       <button class="example-btn active" onclick="loadExample(0)">Esempio 1 — Conteggio per genere</button>
@@ -338,21 +339,22 @@ function loadExample(i) {
 }
 loadExample(0);
 
-let _sparqlEng = null;
-function _loadComunica() {
-  if (_sparqlEng) return Promise.resolve(_sparqlEng);
+let _oxStore = null;
+
+async function _ensureStore() {
+  if (_oxStore) return _oxStore;
   const st = document.getElementById('sparql-status');
-  st.className = 'sparql-status'; st.textContent = '⏳ Caricamento motore SPARQL…';
-  return new Promise(function(ok, fail) {
-    const s = document.createElement('script');
-    s.src = 'https://comunica.github.io/comunica-browser/versions/latest/comunica-browser.js';
-    s.onload = function() {
-      _sparqlEng = new Comunica.QueryEngine();
-      ok(_sparqlEng);
-    };
-    s.onerror = function() { fail(new Error('Impossibile caricare il motore Comunica')); };
-    document.head.appendChild(s);
-  });
+  st.className = 'sparql-status'; st.textContent = '⏳ Caricamento motore SPARQL (WebAssembly)…';
+  const mod = await import('https://cdn.jsdelivr.net/npm/oxigraph@0.5.8/web.js');
+  await mod.default();
+  const ttlUrl = new URL('bologna_KG_corretto.ttl', window.location.href).href;
+  st.textContent = '⏳ Caricamento Knowledge Graph (~1 MB)…';
+  const resp = await fetch(ttlUrl);
+  if (!resp.ok) throw new Error('Impossibile caricare il KG (HTTP ' + resp.status + ')');
+  const ttl = await resp.text();
+  _oxStore = new mod.Store();
+  _oxStore.load(ttl, { format: 'Turtle', base_iri: ttlUrl });
+  return _oxStore;
 }
 
 async function runSparql() {
@@ -363,32 +365,36 @@ async function runSparql() {
   if (!sparql) return;
   btn.disabled = true; res.innerHTML = '';
   try {
-    const engine = await _loadComunica();
-    const ttlUrl = new URL('bologna_KG_corretto.ttl', window.location.href).href;
-    st.className = 'sparql-status'; st.textContent = '⏳ Interrogazione KG in corso…';
-    const stream = await engine.queryBindings(sparql, { sources: [ttlUrl] });
-    const bindings = await stream.toArray();
-    if (!bindings.length) { st.textContent = 'Nessun risultato trovato.'; return; }
+    const store = await _ensureStore();
+    st.className = 'sparql-status'; st.textContent = '⏳ Interrogazione in corso…';
+    const results = store.query(sparql);
+    if (typeof results === 'boolean') {
+      st.textContent = '✓ Risultato: ' + results;
+      return;
+    }
+    if (!Array.isArray(results) || results.length === 0) {
+      st.textContent = 'Nessun risultato trovato.';
+      return;
+    }
     const MAX = 200;
-    const shown = bindings.slice(0, MAX);
-    const vars = [];
-    shown[0].keys().forEach(function(k) { vars.push(typeof k === 'string' ? k : k.value); });
+    const shown = results.slice(0, MAX);
+    const vars = [...shown[0].keys()];
     let h = '<div class="table-wrap"><table><tr>';
     vars.forEach(function(v) { h += '<th>?' + v + '</th>'; });
     h += '</tr>';
-    shown.forEach(function(b) {
+    shown.forEach(function(row) {
       h += '<tr>';
       vars.forEach(function(v) {
-        const t = b.get(v);
-        const val = t ? (t.value !== undefined ? t.value : String(t)) : null;
-        h += '<td>' + (val !== null ? val.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '<em>—</em>') + '</td>';
+        const t = row.get(v);
+        const val = t ? t.value : null;
+        h += '<td>' + (val !== null ? val.replace(/&/g,'&amp;').replace(/</g,'&lt;') : '<em>—</em>') + '</td>';
       });
       h += '</tr>';
     });
     h += '</table></div>';
     res.innerHTML = h;
-    st.textContent = '✓ ' + bindings.length + ' risultat' + (bindings.length === 1 ? 'o' : 'i') +
-      (bindings.length > MAX ? ' (mostrati i primi ' + MAX + ')' : '');
+    st.textContent = '✓ ' + results.length + ' risultat' + (results.length === 1 ? 'o' : 'i') +
+      (results.length > MAX ? ' (mostrati i primi ' + MAX + ')' : '');
   } catch(e) {
     st.className = 'sparql-status err'; st.textContent = '✗ ' + e.message;
   } finally { btn.disabled = false; }
