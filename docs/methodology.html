@@ -56,12 +56,13 @@
       Output: <code>bologna_KG_corretto.ttl</code>.</div></li>
     <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
       Per le 1.129 persone identificate nel KG, uno script Python interroga
-      l'<a href="https://www.wikidata.org/w/api.php" target="_blank">API JSON di Wikidata</a>
+      l'API JSON di Wikidata
       (<code>wbsearchentities</code> per la ricerca testuale + <code>wbgetentities</code>
       per le proprietà strutturate) recuperando professione (P106),
       data/luogo di nascita (P569/P19) e data/luogo di morte (P570/P20),
       con verifica che l'entità sia un essere umano (P31 = Q5).
-      Copertura: <strong>1.001 persone (88,7%)</strong>. I dati confluiscono nel file <code>F_M DATE.xlsx</code>.</div></li>
+      Copertura: <strong>1.001 persone (88,7%)</strong>. I dati confluiscono nel file <code>F_M DATE.xlsx</code>,
+      che costituisce l'input dello step successivo di classificazione professionale.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
       Lo script <code>classifica_professioni.py</code> assegna una delle 12 macro-categorie
       a ciascuna delle 1.191 persone classificate (1.091 uomini + 66 donne storiche + 34 proposte),
@@ -87,13 +88,26 @@
   </ol>
 
   <h2>Struttura del Knowledge Graph</h2>
-  <p>Il KG utilizza due ontologie del Semantic Web italiano:</p>
+  <p>Il KG si fonda su <strong><a href="https://github.com/italia/daf-ontologie-vocabolari-controllati" target="_blank" rel="noopener">Ontopia</a></strong>,
+  la rete di ontologie e vocabolari controllati per la Pubblica Amministrazione italiana,
+  gestita dall'<strong>AgID</strong> (Agenzia per l'Italia Digitale) e adottata come standard
+  del Semantic Web pubblico italiano. Nello specifico il progetto riutilizza due vocabolari:</p>
   <ul>
     <li><a href="https://w3id.org/italia/onto/CLV/" target="_blank"><strong>CLV</strong></a>
-    (Core Location Vocabulary) — per modellare le strade</li>
+    (Core Location Vocabulary) — modella luoghi e urbanistica.
+    Nel KG: <code>clv:Street</code> identifica ogni arco stradale,
+    <code>clv:hasStreetName</code> ne registra il nome ufficiale,
+    <code>clv:isDedicatedTo</code> collega la strada alla persona onorata.</li>
     <li><a href="https://w3id.org/italia/onto/CPV/" target="_blank"><strong>CPV</strong></a>
-    (Core Person Vocabulary) — per modellare le persone</li>
+    (Core Person Vocabulary) — modella le persone fisiche e le loro caratteristiche anagrafiche.
+    Nel KG: <code>cpv:Person</code> rappresenta il referente umano,
+    <code>cpv:fullName</code> ne registra il nome completo,
+    <code>cpv:sex</code> contiene la classificazione di genere (Male / Female / Toponimo).</li>
   </ul>
+  <p>Il punto di contatto tra le due ontologie è la proprietà oggetto <code>clv:isDedicatedTo</code>:
+  <strong>[clv:Street] → isDedicatedTo → [cpv:Person]</strong>.
+  Questa tripla è il cardine del KG — permette di interrogare l'intero grafo per genere,
+  professione, quartiere e decennio tramite SPARQL.</p>
 
   <p>Esempio di triple per una strada femminile (con arricchimento completo):</p>
   <pre class="code-block"><code>@prefix ex: &lt;https://w3id.org/bologna/ontology#&gt; .
@@ -358,12 +372,82 @@
     non corrispondenti a singoli individui.</li>
   </ul>
 
-  <h2>Note metodologiche complete</h2>
-  <p>La documentazione dettagliata delle scelte classificatorie (santi → Toponimo,
-  soprannomi storici → Male/Female, Fratelli → Male, persone transgender, casi critici)
-  è disponibile nel file
-  <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/NOTE_METODOLOGICHE.md" target="_blank">NOTE_METODOLOGICHE.md</a>
-  nel repository.</p>
+  <h2>Note metodologiche sulla classificazione</h2>
+
+  <h3>Le tre categorie</h3>
+  <ul>
+    <li><strong>Male</strong> — la strada è intitolata a una persona di genere maschile, a un gruppo composto
+    esclusivamente da uomini, o a un collettivo denominato con sostantivo maschile.</li>
+    <li><strong>Female</strong> — la strada è intitolata a una persona di genere femminile.</li>
+    <li><strong>Toponimo</strong> — la strada è intitolata a un luogo, un concetto, un'istituzione,
+    un evento storico, un mestiere, o un nome di famiglia senza riferimento a un individuo specifico.</li>
+  </ul>
+
+  <h3>Criteri di classificazione</h3>
+  <table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin-bottom:1.2rem">
+    <thead>
+      <tr style="background:var(--accent,#c0392b);color:#fff;text-align:left">
+        <th style="padding:0.5rem 0.75rem">Caso</th>
+        <th style="padding:0.5rem 0.75rem">Classificazione</th>
+        <th style="padding:0.5rem 0.75rem">Motivazione</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:0.4rem 0.75rem">Santi e luoghi sacri (es. <em>San Lorenzo</em>, <em>Sant'Anna</em>)</td><td>Toponimo</td><td>Si riferiscono a chiese o quartieri storici, non all'individuo religioso</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem">Soprannomi storici (es. <em>Dante</em>, <em>Caravaggio</em>, <em>Tintoretto</em>)</td><td>Male / Female</td><td>Il referente storico è identificabile con certezza</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem">Nomi di famiglia nobiliare (es. <em>Achillini</em>, <em>Carracci</em>, <em>Bibiena</em>)</td><td>Toponimo</td><td>Non è possibile identificare un singolo individuo di riferimento</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem">Strade "Fratelli…" (es. <em>Fratelli Cervi</em>, <em>Fratelli Rosselli</em>)</td><td>Male</td><td>Il sostantivo è maschile e i referenti identificati sono tutti uomini</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem">Collettivi al maschile (es. <em>Ragazzi del '99</em>)</td><td>Male</td><td>La grammatica italiana usa il maschile plurale come genere non marcato</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem">Nomi femminili astratti (es. <em>Vittoria</em>, <em>Serena</em>, <em>Letizia</em>)</td><td>Toponimo</td><td>Si riferiscono a concetti o eventi, non a persone</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Casi critici</h3>
+
+  <p><strong>Passaggio Fratelli Marincola — classificato Male.</strong>
+  Il passaggio è intitolato a Giorgio <em>e</em> Isabella Marincola, fratello e sorella, entrambi partigiani.
+  Isabella era una donna. La classificazione Male riflette la denominazione ufficiale,
+  ma oscura concretamente il contributo di una donna partigiana afrodiscendente:
+  un caso emblematico di come il maschile grammaticale renda invisibile la presenza femminile nella storia.</p>
+
+  <p><strong>Nomi grammaticalmente femminili ma non riferiti a persone.</strong>
+  Alcuni nomi propri come <em>Vittoria</em>, <em>Serena</em>, <em>Valeria</em> potrebbero essere
+  interpretati come nomi di donna, ma nella toponomastica bolognese si riferiscono a concetti astratti
+  o eventi storici. Sono stati corretti a Toponimo dopo verifica caso per caso.
+  Analogamente, nomi maschili come <em>Spirito Santo</em> o <em>Vittorio Veneto</em>
+  sono stati corretti a Toponimo perché si riferiscono a luoghi.</p>
+
+  <h3>Persone transgender e non binarie</h3>
+  <p>Il dataset non contiene strade esplicitamente dedicate a persone non binarie,
+  riflettendo il fatto che la toponomastica storica è per costruzione binaria.
+  Il sistema di classificazione adottato è anch'esso binario (Male / Female / Toponimo),
+  con il limite esplicito di non poter rappresentare identità non binarie.</p>
+
+  <p><strong>Piazzale Marcella Di Folco — classificato Female.</strong>
+  Marcella Di Folco (1943–2010), nata con un nome maschile e vissuta come donna dagli anni '70,
+  è stata tra le più importanti attiviste per i diritti transgender in Italia.
+  Il gruppo di ricerca ha scelto di classificare questa strada come <strong>Female</strong>,
+  rispettando l'identità di genere autodichiarata — non il genere anagrafico alla nascita.
+  È una posizione etica esplicita, in assenza di indicazioni ufficiali esterne.</p>
+
+  <h3>Quadro normativo per le proposte</h3>
+  <p>L'intitolazione di spazi pubblici a persone fisiche è regolata dalla
+  <strong>Legge 23 giugno 1927, n. 1188</strong>, che richiede il decorso di almeno
+  <strong>dieci anni dal decesso</strong>. Le 34 proposte sono distinte in due categorie:</p>
+  <ul>
+    <li><strong>Attive (29)</strong> — la persona è deceduta da più di dieci anni;
+    la candidatura è immediatamente proponibile al Consiglio Comunale.</li>
+    <li><strong>Future (5)</strong> — la persona è deceduta da meno di dieci anni, è ancora in vita,
+    o la data di morte è incerta. La proposta viene registrata per essere avanzata
+    quando i requisiti temporali saranno soddisfatti.</li>
+  </ul>
+
+  <p style="font-size:0.88rem;color:var(--text-muted)">
+    La documentazione completa — con tutti i casi limite, le fonti archivistiche consultate
+    e le schede biografiche delle proposte — è disponibile nel file
+    <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/NOTE_METODOLOGICHE.md" target="_blank">NOTE_METODOLOGICHE.md</a>
+    nel repository GitHub del progetto.
+  </p>
 </div>
 
 </main>
