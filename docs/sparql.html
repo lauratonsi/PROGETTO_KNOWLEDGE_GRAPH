@@ -27,16 +27,17 @@
 
 <div class="hero" style="padding:3.5rem 1.5rem 3rem">
   <h1>Query SPARQL sul Knowledge Graph</h1>
-  <p>Sei query che interrogano il KG bolognese.
-  Utilizzano tutte le keyword obbligatorie: OPTIONAL, DISTINCT, UNION, FILTER, REGEX, LIMIT, ORDER BY.</p>
+  <p>Dieci query che interrogano il KG bolognese.
+  Le query 1–6 coprono le keyword obbligatorie (OPTIONAL, DISTINCT, UNION, FILTER, REGEX, LIMIT, ORDER BY).
+  Le query 7–10 sfruttano le nuove proprietà topografiche e semantiche:
+  <code>ex:quartiere</code>, <code>ex:dataIstituzione</code>, <code>ex:macroCategoriaOccupazionale</code>, <code>ex:datiAnagrafici</code>.</p>
 </div>
 
 <div class="section">
   <h2>Interrogazione interattiva</h2>
   <p>Scrivi o modifica una query SPARQL ed eseguila direttamente nel browser sul Knowledge Graph di Bologna.
-  Il file <code>bologna_KG_corretto.ttl</code> (16.244 triple) viene caricato in memoria
-  tramite <a href="https://oxigraph.org/" target="_blank">Oxigraph</a>, un motore SPARQL&nbsp;1.1
-  compilato in WebAssembly.</p>
+  Il file <code>bologna_KG_corretto.ttl</code> viene caricato in memoria tramite
+  <a href="https://oxigraph.org/" target="_blank">Oxigraph</a>, un motore SPARQL&nbsp;1.1 compilato in WebAssembly.</p>
   <p style="font-size:0.88rem;color:var(--text-muted)"><strong>Nota:</strong>
   al primo click il browser scarica il motore WebAssembly e il file RDF (~1&nbsp;MB).
   Le query successive sono istantanee perché il KG rimane in memoria.</p>
@@ -57,7 +58,7 @@
   <div class="info-box">
     Il Knowledge Graph è disponibile come file Turtle nel repository:
     <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/bologna_KG_corretto.ttl" target="_blank">
-    bologna_KG_corretto.ttl</a> (16.244 triple).
+    bologna_KG_corretto.ttl</a> (27.251 righe, ~21.000 triple dopo l'arricchimento).
     Per eseguire le query localmente: <code>python run_queries.py</code> (usa
     <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>).
   </div>
@@ -66,11 +67,11 @@
   <p><strong>Domanda:</strong> quante strade di Bologna sono dedicate a uomini e quante a donne?
   Questa è la risposta principale al gender gap.<br>
   <strong>Keyword:</strong> <code>DISTINCT</code>, <code>COUNT</code>, <code>GROUP BY</code>, <code>ORDER BY</code></p>
-  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 1 — Conteggio strade per genere<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Keywords: <span class="sk">DISTINCT</span>, <span class="sk">COUNT</span>, <span class="sk">GROUP BY</span>, <span class="sk">ORDER BY</span><span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Domanda: quante strade di Bologna sono dedicate <span class="sk">a</span> uomini<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## e quante <span class="sk">a</span> donne? Questa è la risposta principale al gender gap.<span class=<span class="ss">"su"</span>></span></span>
+  <pre class="code-block"><code><span class="sc">## Query 1 — Conteggio strade per genere</span>
+<span class="sc">## Keywords: <span class="sk">DISTINCT</span>, <span class="sk">COUNT</span>, <span class="sk">GROUP BY</span>, <span class="sk">ORDER BY</span></span>
+<span class="sc">##</span>
+<span class="sc">## Domanda: quante strade di Bologna sono dedicate <span class="sk">a</span> uomini</span>
+<span class="sc">## e quante <span class="sk">a</span> donne? Questa è la risposta principale al gender gap.</span>
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
@@ -97,11 +98,11 @@
   <h2>Query 2 — Lista delle strade dedicate a donne</h2>
   <p><strong>Domanda:</strong> quali strade di Bologna sono intitolate a donne?<br>
   <strong>Keyword:</strong> <code>DISTINCT</code>, <code>FILTER</code>, <code>ORDER BY</code>, <code>LIMIT</code></p>
-  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 2 — Lista completa delle strade dedicate <span class="sk">a</span> donne<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Keywords: <span class="sk">FILTER</span>, <span class="sk">DISTINCT</span>, <span class="sk">ORDER BY</span>, <span class="sk">LIMIT</span><span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Domanda: quali strade di Bologna sono intitolate <span class="sk">a</span> donne?<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Risultato: nome della via + nome della persona, ordinate alfabeticamente.<span class=<span class="ss">"su"</span>></span></span>
+  <pre class="code-block"><code><span class="sc">## Query 2 — Lista completa delle strade dedicate <span class="sk">a</span> donne</span>
+<span class="sc">## Keywords: <span class="sk">FILTER</span>, <span class="sk">DISTINCT</span>, <span class="sk">ORDER BY</span>, <span class="sk">LIMIT</span></span>
+<span class="sc">##</span>
+<span class="sc">## Domanda: quali strade di Bologna sono intitolate <span class="sk">a</span> donne?</span>
+<span class="sc">## Risultato: nome della via + nome della persona, ordinate alfabeticamente.</span>
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
@@ -123,8 +124,8 @@
   <div class="table-wrap"><table>
     <tr><th>?nomeVia</th><th>?nomePersona</th></tr>
     <tr><td>LARGO MARIELE VENTRE</td><td>Maria Rachele Ventre</td></tr>
-    <tr><td>PIAZZA NILDE IOTTI</td><td>Nilde Iotti</td></tr>
-    <tr><td>VIA ADA NEGRI</td><td>Ada Negri</td></tr>
+    <tr><td>PIAZZA NILDE IOTTI</td><td><a href="https://it.wikipedia.org/wiki/Nilde_Iotti" target="_blank" rel="noopener">Nilde Iotti</a></td></tr>
+    <tr><td>VIA ADA NEGRI</td><td><a href="https://it.wikipedia.org/wiki/Ada_Negri" target="_blank" rel="noopener">Ada Negri</a></td></tr>
     <tr><td>VIA ADELAIDE BORGHI MAMO</td><td>Adelaide Borghi Mamo</td></tr>
     <tr><td>VIA ADELAIDE RISTORI</td><td>Adelaide Ristori</td></tr>
   </table></div>
@@ -133,13 +134,13 @@
   <p><strong>Domanda:</strong> le strade intitolate a donne sono prevalentemente "Via" o "Piazza/Piazzale"?
   La tipologia riflette una gerarchia simbolica nel riconoscimento pubblico.<br>
   <strong>Keyword:</strong> <code>UNION</code>, <code>FILTER</code>, <code>DISTINCT</code>, <code>ORDER BY</code></p>
-  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 3 — Strade dedicate <span class="sk">a</span> donne per tipologia (Via vs Piazza/Piazzale)<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Keywords: <span class="sk">UNION</span>, <span class="sk">FILTER</span>, <span class="sk">DISTINCT</span>, <span class="sk">ORDER BY</span><span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Domanda: le strade intitolate <span class="sk">a</span> donne sono prevalentemente<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## &quot;Via&quot;, &quot;Piazza&quot; o &quot;Piazzale&quot;? La tipologia di intitolazione<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## (strada minore vs spazio pubblico) riflette un&#x27;ulteriore<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## gerarchia simbolica nel riconoscimento delle donne.<span class=<span class="ss">"su"</span>></span></span>
+  <pre class="code-block"><code><span class="sc">## Query 3 — Strade dedicate <span class="sk">a</span> donne per tipologia (Via vs Piazza/Piazzale)</span>
+<span class="sc">## Keywords: <span class="sk">UNION</span>, <span class="sk">FILTER</span>, <span class="sk">DISTINCT</span>, <span class="sk">ORDER BY</span></span>
+<span class="sc">##</span>
+<span class="sc">## Domanda: le strade intitolate <span class="sk">a</span> donne sono prevalentemente</span>
+<span class="sc">## &quot;Via&quot;, &quot;Piazza&quot; o &quot;Piazzale&quot;? La tipologia di intitolazione</span>
+<span class="sc">## (strada minore vs spazio pubblico) riflette un&#x27;ulteriore</span>
+<span class="sc">## gerarchia simbolica nel riconoscimento delle donne.</span>
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
@@ -182,9 +183,9 @@
   E quante donne onorate hanno "MARIA" nel nome? Le due ricerche sono combinate in un'unica query con <code>UNION</code>;
   la variabile <code>?tipo</code> (ottenuta con <code>BIND</code>) distingue a quale dei due gruppi appartiene ogni riga.<br>
   <strong>Keyword:</strong> <code>REGEX</code>, <code>UNION</code>, <code>FILTER</code>, <code>BIND</code>, <code>DISTINCT</code>, <code>ORDER BY</code></p>
-  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 4 — <span class="sk">REGEX</span> + <span class="sk">UNION</span>: strade &quot;Fratelli&quot; e donne con &quot;Maria&quot; nel nome<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Una sola query che combina due ricerche tematiche con <span class="sk">UNION</span>.<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Keywords: <span class="sk">REGEX</span>, <span class="sk">UNION</span>, <span class="sk">FILTER</span>, <span class="sk">BIND</span>, <span class="sk">DISTINCT</span>, <span class="sk">ORDER BY</span><span class=<span class="ss">"su"</span>></span></span>
+  <pre class="code-block"><code><span class="sc">## Query 4 — <span class="sk">REGEX</span> + <span class="sk">UNION</span>: strade &quot;Fratelli&quot; e donne con &quot;Maria&quot; nel nome</span>
+<span class="sc">## Una sola query che combina due ricerche tematiche con <span class="sk">UNION</span>.</span>
+<span class="sc">## Keywords: <span class="sk">REGEX</span>, <span class="sk">UNION</span>, <span class="sk">FILTER</span>, <span class="sk">BIND</span>, <span class="sk">DISTINCT</span>, <span class="sk">ORDER BY</span></span>
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
@@ -192,7 +193,7 @@
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?tipo</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span>
 <span class="sk">WHERE</span> {
   {
-    <span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## 4a — Strade con &quot;FRATELLI&quot;: il maschile grammaticale oscura la presenza femminile<span class=<span class="ss">"su"</span>></span></span>
+    <span class="sc">## 4a — Strade con &quot;FRATELLI&quot;: il maschile grammaticale oscura la presenza femminile</span>
     <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
          <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
          <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
@@ -202,7 +203,7 @@
   }
   <span class="sk">UNION</span>
   {
-    <span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## 4b — Donne onorate con &quot;MARIA&quot; nel nome<span class=<span class="ss">"su"</span>></span></span>
+    <span class="sc">## 4b — Donne onorate con &quot;MARIA&quot; nel nome</span>
     <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
          <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
          <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
@@ -227,8 +228,8 @@
     <tr><td>Fratelli</td><td>VIA FRATELLI PINARDI</td><td>FRATELLI PINARDI</td></tr>
     <tr><td>Fratelli</td><td>VIA FRATELLI ROSSELLI</td><td>FRATELLI ROSSELLI</td></tr>
     <tr><td>Maria</td><td>ROTONDA MARIA ADELE CROCIONI MICHELINI</td><td>MARIA ADELE CROCIONI MICHELINI</td></tr>
-    <tr><td>Maria</td><td>VIA MARIA CALLAS</td><td>MARIA CALLAS</td></tr>
-    <tr><td>Maria</td><td>VIA MARIA GAETANA AGNESI</td><td>MARIA GAETANA AGNESI</td></tr>
+    <tr><td>Maria</td><td>VIA MARIA CALLAS</td><td><a href="https://it.wikipedia.org/wiki/Maria_Callas" target="_blank" rel="noopener">MARIA CALLAS</a></td></tr>
+    <tr><td>Maria</td><td>VIA MARIA GAETANA AGNESI</td><td><a href="https://it.wikipedia.org/wiki/Maria_Gaetana_Agnesi" target="_blank" rel="noopener">MARIA GAETANA AGNESI</a></td></tr>
     <tr><td>Maria</td><td>VIA MARIA MELATO</td><td>MARIA MELATO</td></tr>
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">9 strade con "Fratelli" (tutte classificate Male) e 4 donne con "Maria" nel nome.
@@ -239,17 +240,17 @@
   <p><strong>Domanda:</strong> ci sono personaggi a cui sono dedicate più strade?
   OPTIONAL mostra anche le persone con una sola strada (con <code>?nomeVia2</code> non valorizzato).<br>
   <strong>Keyword:</strong> <code>OPTIONAL</code>, <code>DISTINCT</code>, <code>FILTER</code>, <code>ORDER BY</code>, <code>LIMIT</code></p>
-  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 5 — Personaggi con nome via e dati biografici opzionali<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Keywords: <span class="sk">OPTIONAL</span>, <span class="sk">DISTINCT</span>, <span class="sk">FILTER</span>, <span class="sk">ORDER BY</span><span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Domanda: quali persone sono onorate con più di una strada?<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## <span class="sk">OPTIONAL</span> viene usato per cercare una seconda intitolazione:<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## se esiste, viene mostrata; se non esiste, la riga appare ugualmente<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## (con <span class="sv">?nomeVia2</span> = non valorizzato).<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>##<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Questo pattern <span class="sk">OPTIONAL</span> è utile anche per query future quando<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## il KG verrà esteso con dati biografici (nascita, professione)<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## che non saranno disponibili per tutti i personaggi.<span class=<span class="ss">"su"</span>></span></span>
+  <pre class="code-block"><code><span class="sc">## Query 5 — Personaggi con nome via e dati biografici opzionali</span>
+<span class="sc">## Keywords: <span class="sk">OPTIONAL</span>, <span class="sk">DISTINCT</span>, <span class="sk">FILTER</span>, <span class="sk">ORDER BY</span></span>
+<span class="sc">##</span>
+<span class="sc">## Domanda: quali persone sono onorate con più di una strada?</span>
+<span class="sc">## <span class="sk">OPTIONAL</span> viene usato per cercare una seconda intitolazione:</span>
+<span class="sc">## se esiste, viene mostrata; se non esiste, la riga appare ugualmente</span>
+<span class="sc">## (con <span class="sv">?nomeVia2</span> = non valorizzato).</span>
+<span class="sc">##</span>
+<span class="sc">## Questo pattern <span class="sk">OPTIONAL</span> è utile anche per query future quando</span>
+<span class="sc">## il KG verrà esteso con dati biografici (nascita, professione)</span>
+<span class="sc">## che non saranno disponibili per tutti i personaggi.</span>
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
@@ -278,9 +279,9 @@
   <h4>Esempi di risultati:</h4>
   <div class="table-wrap"><table>
     <tr><th>?nomePersona</th><th>?genere</th><th>?nomeVia1</th><th>?nomeVia2</th></tr>
-    <tr><td>Laura Bassi Veratti</td><td>Female</td><td>VIA LAURA BASSI</td><td>PIAZZA LAURA BASSI</td></tr>
+    <tr><td><a href="https://it.wikipedia.org/wiki/Laura_Bassi" target="_blank" rel="noopener">Laura Bassi Veratti</a></td><td>Female</td><td>VIA LAURA BASSI</td><td>PIAZZA LAURA BASSI</td></tr>
     <tr><td>Ondina Valla</td><td>Female</td><td>VIA ONDINA VALLA</td><td><em>(non valorizzato)</em></td></tr>
-    <tr><td>Giuseppe Garibaldi</td><td>Male</td><td>VIA GARIBALDI</td><td>PIAZZA GARIBALDI</td></tr>
+    <tr><td><a href="https://it.wikipedia.org/wiki/Giuseppe_Garibaldi" target="_blank" rel="noopener">Giuseppe Garibaldi</a></td><td>Male</td><td>VIA GARIBALDI</td><td>PIAZZA GARIBALDI</td></tr>
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">Laura Bassi è l'unica donna con sia una via che una piazza a lei dedicata a Bologna.</p>
 
@@ -288,10 +289,10 @@
   <p><strong>Domanda:</strong> quali sono la professione, la data di nascita e la data di morte delle persone a cui Bologna ha dedicato una strada?
   I dati provengono dall'arricchimento biografico via Wikidata (copertura 88,7% su 1.129 persone).<br>
   <strong>Keyword:</strong> <code>OPTIONAL</code>, <code>SELECT DISTINCT</code>, <code>FILTER</code>, <code>BOUND</code>, <code>ORDER BY</code>, <code>LIMIT</code></p>
-  <pre class="code-block"><code><span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Query 6 — Dati biografici: professione, data di nascita e morte per tutte le persone<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Mostra le proprietà <span class="sp">ex</span>: aggiunte tramite arricchimento Wikidata (88,7% copertura).<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## <span class="sk">OPTIONAL</span> perché non tutte le persone hanno dati completi.<span class=<span class="ss">"su"</span>></span></span>
-<span class=<span class="ss">"su"</span>><span class=<span class="ss">"sc"</span>></span>## Keyword: <span class="sk">OPTIONAL</span>, <span class="sk">SELECT</span> <span class="sk">DISTINCT</span>, <span class="sk">WHERE</span>, <span class="sk">FILTER</span>, <span class="sk">ORDER BY</span>, <span class="sk">LIMIT</span><span class=<span class="ss">"su"</span>></span></span>
+  <pre class="code-block"><code><span class="sc">## Query 6 — Dati biografici: professione, data di nascita e morte per tutte le persone</span>
+<span class="sc">## Mostra le proprietà <span class="sp">ex</span>: aggiunte tramite arricchimento Wikidata (88,7% copertura).</span>
+<span class="sc">## <span class="sk">OPTIONAL</span> perché non tutte le persone hanno dati completi.</span>
+<span class="sc">## Keyword: <span class="sk">OPTIONAL</span>, <span class="sk">SELECT</span> <span class="sk">DISTINCT</span>, <span class="sk">WHERE</span>, <span class="sk">FILTER</span>, <span class="sk">ORDER BY</span>, <span class="sk">LIMIT</span></span>
 <span class="sk">PREFIX</span> <span class="sp">clv</span>:  &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>:  &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:   &lt;https://w3id.org/bologna/ontology#&gt;
@@ -314,13 +315,234 @@
   <h4>Primi 5 risultati (su 1.001 persone con dati biografici):</h4>
   <div class="table-wrap"><table>
     <tr><th>?nomeVia</th><th>?nomePersona</th><th>?genere</th><th>?professione</th><th>?dataNascita</th><th>?dataMorte</th></tr>
-    <tr><td>VIA ADA NEGRI</td><td>Ada Negri</td><td>Female</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
+    <tr><td>VIA ADA NEGRI</td><td><a href="https://it.wikipedia.org/wiki/Ada_Negri" target="_blank" rel="noopener">Ada Negri</a></td><td>Female</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
     <tr><td>VIA ADELCHI SERENA</td><td>Adelchi Serena</td><td>Male</td><td>Politico</td><td>20 novembre 1895</td><td>19 dicembre 1970</td></tr>
     <tr><td>VIA ADELFO BERGONZONI</td><td>Adelfo Bergonzoni</td><td>Male</td><td>Partigiano</td><td>—</td><td>1944</td></tr>
-    <tr><td>VIA LAURA BASSI</td><td>Laura Bassi Veratti</td><td>Female</td><td>Fisica e filosofa naturale</td><td>31 ottobre 1711</td><td>20 febbraio 1778</td></tr>
-    <tr><td>PIAZZA NILDE IOTTI</td><td>Nilde Iotti</td><td>Female</td><td>Politica</td><td>26 aprile 1920</td><td>4 dicembre 1999</td></tr>
+    <tr><td>VIA LAURA BASSI</td><td><a href="https://it.wikipedia.org/wiki/Laura_Bassi" target="_blank" rel="noopener">Laura Bassi Veratti</a></td><td>Female</td><td>Fisica e filosofa naturale</td><td>31 ottobre 1711</td><td>20 febbraio 1778</td></tr>
+    <tr><td>PIAZZA NILDE IOTTI</td><td><a href="https://it.wikipedia.org/wiki/Nilde_Iotti" target="_blank" rel="noopener">Nilde Iotti</a></td><td>Female</td><td>Politica</td><td>26 aprile 1920</td><td>4 dicembre 1999</td></tr>
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">OPTIONAL consente di restituire anche le persone con dati parziali. FILTER(BOUND(?professione)||BOUND(?dataNascita)) esclude solo i record completamente privi di dati (128 persone, 11,3%).</p>
+
+  <h2>Query 7 — Gender gap per quartiere</h2>
+  <p><strong>Domanda:</strong> in quali quartieri di Bologna il divario di genere è più marcato?
+  La nuova proprietà <code>ex:quartiere</code> permette di disaggregare geograficamente il dato.<br>
+  <strong>Keyword:</strong> <code>DISTINCT</code>, <code>COUNT</code>, <code>FILTER</code>, <code>GROUP BY</code>, <code>ORDER BY</code></p>
+  <pre class="code-block"><code><span class="sc">## Query 7 — Strade maschili e femminili per quartiere</span>
+<span class="sc">## ex:quartiere permette di disaggregare il gender gap per zona della città.</span>
+<span class="sc">## Keywords: DISTINCT, COUNT, FILTER, GROUP BY, ORDER BY</span>
+
+<span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+
+<span class="sk">SELECT</span> <span class="sv">?quartiere</span> <span class="sv">?genere</span>
+       (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?via</span>) <span class="sk">AS</span> <span class="sv">?numStrade</span>)
+<span class="sk">WHERE</span> {
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
+       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> ;
+       <span class="sp">ex</span>:quartiere <span class="sv">?quartiere</span> .
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
+  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = &quot;Female&quot; || <span class="sv">?genere</span> = &quot;Male&quot;)
+}
+<span class="sk">GROUP BY</span> <span class="sv">?quartiere</span> <span class="sv">?genere</span>
+<span class="sk">ORDER BY</span> <span class="sv">?quartiere</span> <span class="sv">?genere</span>
+</code></pre>
+  <h4>Risultati (strade femminili per quartiere, ordinate per quartiere):</h4>
+  <div class="table-wrap"><table>
+    <tr><th>?quartiere</th><th>?genere</th><th>?numStrade</th></tr>
+    <tr><td>Borgo Panigale - Reno</td><td>Female</td><td>11</td></tr>
+    <tr><td>Borgo Panigale - Reno</td><td>Male</td><td>195</td></tr>
+    <tr><td>Navile</td><td>Female</td><td>8</td></tr>
+    <tr><td>Navile</td><td>Male</td><td>176</td></tr>
+    <tr><td>Porto - Saragozza</td><td>Female</td><td>7</td></tr>
+    <tr><td>Porto - Saragozza</td><td>Male</td><td>181</td></tr>
+    <tr><td>San Donato - San Vitale</td><td>Female</td><td>26</td></tr>
+    <tr><td>San Donato - San Vitale</td><td>Male</td><td>207</td></tr>
+    <tr><td>Santo Stefano</td><td>Female</td><td>10</td></tr>
+    <tr><td>Santo Stefano</td><td>Male</td><td>158</td></tr>
+    <tr><td>Savena</td><td>Female</td><td>4</td></tr>
+    <tr><td>Savena</td><td>Male</td><td>149</td></tr>
+  </table></div>
+  <p style="font-size:0.88rem;color:var(--text-muted)">San Donato–San Vitale concentra il 39% delle strade femminili (26 su 66), ma rimane il quartiere con il divario assoluto più alto (207 maschili vs 26 femminili). In nessun quartiere la percentuale femminile supera il 15%.</p>
+
+  <h2>Query 8 — Macro-categorie occupazionali per genere</h2>
+  <p><strong>Domanda:</strong> in quali ambiti professionali le donne sono onorate dalla toponomastica rispetto agli uomini?
+  La proprietà <code>ex:macroCategoriaOccupazionale</code> permette il confronto semantico tra i due gruppi.<br>
+  <strong>Keyword:</strong> <code>OPTIONAL</code>, <code>DISTINCT</code>, <code>COUNT</code>, <code>FILTER</code>, <code>GROUP BY</code>, <code>ORDER BY</code></p>
+  <pre class="code-block"><code><span class="sc">## Query 8 — Distribuzione delle macro-categorie occupazionali per genere</span>
+<span class="sc">## ex:macroCategoriaOccupazionale aggrega le professioni in ambiti semantici.</span>
+<span class="sc">## Keywords: OPTIONAL, DISTINCT, COUNT, FILTER, GROUP BY, ORDER BY</span>
+
+<span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+
+<span class="sk">SELECT</span> <span class="sv">?genere</span> <span class="sv">?categoria</span>
+       (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?persona</span>) <span class="sk">AS</span> <span class="sv">?persone</span>)
+<span class="sk">WHERE</span> {
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
+       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex <span class="sv">?genere</span> ;
+           <span class="sp">ex</span>:macroCategoriaOccupazionale <span class="sv">?categoria</span> .
+  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = &quot;Female&quot; || <span class="sv">?genere</span> = &quot;Male&quot;)
+}
+<span class="sk">GROUP BY</span> <span class="sv">?genere</span> <span class="sv">?categoria</span>
+<span class="sk">ORDER BY</span> <span class="sv">?genere</span> <span class="sk">DESC</span>(<span class="sv">?persone</span>)
+</code></pre>
+  <h4>Risultati — donne (su 62 con categoria assegnata):</h4>
+  <div class="table-wrap"><table>
+    <tr><th>?categoria</th><th>?persone (Female)</th><th>?persone (Male)</th></tr>
+    <tr><td>Musica, teatro e cinema</td><td>17</td><td>99</td></tr>
+    <tr><td>Letteratura e giornalismo</td><td>7</td><td>74</td></tr>
+    <tr><td>Sindacalismo e attivismo civile</td><td>6</td><td>17</td></tr>
+    <tr><td>Arte visiva e architettura</td><td>6</td><td>159</td></tr>
+    <tr><td>Istruzione ed educazione</td><td>4</td><td>19</td></tr>
+    <tr><td>Resistenza e antifascismo</td><td>4</td><td>56</td></tr>
+    <tr><td>Sport</td><td>4</td><td>13</td></tr>
+    <tr><td>Religione</td><td>4</td><td>24</td></tr>
+    <tr><td>Scienze e medicina</td><td>2</td><td>138</td></tr>
+    <tr><td>Filosofia, storia e accademia</td><td>2</td><td>81</td></tr>
+    <tr><td>Altro / istituzionale</td><td>2</td><td>115</td></tr>
+  </table></div>
+  <p style="font-size:0.88rem;color:var(--text-muted)">Le donne sono rappresentate proporzionalmente meglio nello sport (4 su 17 totali, 24%) e nel sindacalismo (6 su 23 totali, 26%) rispetto alle scienze, dove nonostante figure come Laura Bassi e Maria Gaetana Agnesi, le donne sono solo 2 su 140 (1,4%).</p>
+
+  <h2>Query 9 — Evoluzione storica delle intitolazioni femminili</h2>
+  <p><strong>Domanda:</strong> come è cambiato nel tempo il ritmo di intitolazione di strade a donne?
+  La proprietà <code>ex:dataIstituzione</code> permette di raggruppare le intitolazioni per decennio con <code>SUBSTR</code> e <code>BIND</code>.<br>
+  <strong>Keyword:</strong> <code>BIND</code>, <code>SUBSTR</code>, <code>CONCAT</code>, <code>COUNT</code>, <code>DISTINCT</code>, <code>FILTER</code>, <code>GROUP BY</code>, <code>ORDER BY</code></p>
+  <pre class="code-block"><code><span class="sc">## Query 9 — Intitolazioni femminili per decennio</span>
+<span class="sc">## SUBSTR e CONCAT estraggono il decennio da ex:dataIstituzione (formato "YYYY-MM-DD").</span>
+<span class="sc">## Keywords: BIND, SUBSTR, CONCAT, COUNT, DISTINCT, FILTER, GROUP BY, ORDER BY</span>
+
+<span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+
+<span class="sk">SELECT</span> <span class="sv">?decennio</span>
+       (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?via</span>) <span class="sk">AS</span> <span class="sv">?nuoveStrade</span>)
+<span class="sk">WHERE</span> {
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
+       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> ;
+       <span class="sp">ex</span>:dataIstituzione <span class="sv">?dataIst</span> .
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex &quot;Female&quot; .
+  <span class="sk">BIND</span>(<span class="sk">CONCAT</span>(<span class="sk">SUBSTR</span>(<span class="sv">?dataIst</span>, 1, 3), &quot;0s&quot;) <span class="sk">AS</span> <span class="sv">?decennio</span>)
+}
+<span class="sk">GROUP BY</span> <span class="sv">?decennio</span>
+<span class="sk">ORDER BY</span> <span class="sv">?decennio</span>
+</code></pre>
+  <h4>Risultati (tutte le 66 strade femminili):</h4>
+  <div class="table-wrap"><table>
+    <tr><th>?decennio</th><th>?nuoveStrade</th></tr>
+    <tr><td>1990s</td><td>29</td></tr>
+    <tr><td>2000s</td><td>13</td></tr>
+    <tr><td>2010s</td><td>11</td></tr>
+    <tr><td>2020s</td><td>13</td></tr>
+  </table></div>
+  <p style="font-size:0.88rem;color:var(--text-muted)">Il picco degli anni '90 (29 strade) coincide con il grande piano di toponomastica del Comune. Il rallentamento nel decennio 2010-2019 (11 strade) è parzialmente compensato dalla ripresa nel 2020-2025 (13 strade), probabilmente influenzata dall'aumentata sensibilità pubblica sul gender gap urbano.</p>
+
+  <h2>Query 10 — Scheda biografica completa delle donne onorate</h2>
+  <p><strong>Domanda:</strong> quali sono il quartiere, la tipologia del luogo, la professione, la macro-categoria e i dati anagrafici delle donne a cui Bologna ha dedicato una strada?
+  Questa query combina tutte le nuove proprietà con <code>OPTIONAL</code> per gestire la copertura parziale.<br>
+  <strong>Keyword:</strong> <code>OPTIONAL</code>, <code>DISTINCT</code>, <code>FILTER</code>, <code>ORDER BY</code>, <code>LIMIT</code></p>
+  <pre class="code-block"><code><span class="sc">## Query 10 — Scheda completa: tutte le nuove proprietà per le donne onorate</span>
+<span class="sc">## OPTIONAL gestisce la copertura parziale: datiAnagrafici e tipologiaLuogo</span>
+<span class="sc">## sono presenti solo per le 60 donne nel dataset "aree verdi".</span>
+<span class="sc">## Keywords: OPTIONAL, DISTINCT, FILTER, ORDER BY, LIMIT</span>
+
+<span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+
+<span class="sk">SELECT</span> <span class="sk">DISTINCT</span>
+       <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span> <span class="sv">?tipologia</span> <span class="sv">?quartiere</span>
+       <span class="sv">?professione</span> <span class="sv">?categoria</span> <span class="sv">?datiAnagrafici</span>
+<span class="sk">WHERE</span> {
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
+       <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
+       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> ;
+       <span class="sp">ex</span>:quartiere <span class="sv">?quartiere</span> .
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
+           <span class="sp">cpv</span>:sex &quot;Female&quot; .
+  <span class="sk">OPTIONAL</span> { <span class="sv">?via</span>     <span class="sp">ex</span>:tipologiaLuogo               <span class="sv">?tipologia</span>      }
+  <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:professione                 <span class="sv">?professione</span>    }
+  <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:macroCategoriaOccupazionale  <span class="sv">?categoria</span>      }
+  <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:datiAnagrafici               <span class="sv">?datiAnagrafici</span> }
+}
+<span class="sk">ORDER BY</span> <span class="sv">?nomePersona</span>
+<span class="sk">LIMIT</span> 20
+</code></pre>
+  <h4>Primi 8 risultati (su 66 totali):</h4>
+  <div class="table-wrap"><table>
+    <tr><th>?nomeVia</th><th>?nomePersona</th><th>?tipologia</th><th>?quartiere</th><th>?categoria</th><th>?datiAnagrafici</th></tr>
+    <tr><td>VIA ADA NEGRI</td><td>ADA NEGRI</td><td>Via</td><td>San Donato - San Vitale</td><td>Letteratura e giornalismo</td><td>Lodi (MI), 1870 - Milano, 1945</td></tr>
+    <tr><td>VIA ADELAIDE BORGHI MAMO</td><td>ADELAIDE BORGHI MAMO</td><td>Via</td><td>Santo Stefano</td><td>Musica, teatro e cinema</td><td>Bologna, 1829-1901</td></tr>
+    <tr><td>VIA ADELAIDE RISTORI</td><td>ADELAIDE RISTORI</td><td>Via</td><td>San Donato - San Vitale</td><td>Musica, teatro e cinema</td><td>Cividale del Friuli (UD), 1822 - Torino, 1906</td></tr>
+    <tr><td>PASSAGGIO ALFONSINA MORINI</td><td>ALFONSINA MORINI</td><td>Passaggio</td><td>Santo Stefano</td><td><em>(non valorizzato)</em></td><td>Castelfranco Emilia (MO), 1891 - Milano, 1959</td></tr>
+    <tr><td>VIA AMALIA BETTINI</td><td>AMALIA BETTINI</td><td>Via</td><td>San Donato - San Vitale</td><td>Musica, teatro e cinema</td><td>Milano, 1809 - Roma, 1894</td></tr>
+    <tr><td>VIA ANNA GRASSETTI</td><td>ANNA GRASSETTI</td><td>Via</td><td>San Donato - San Vitale</td><td>Sindacalismo e attivismo civile</td><td>Bologna, 1815-1896</td></tr>
+    <tr><td>PIAZZETTA ANNA MAGNANI</td><td><a href="https://it.wikipedia.org/wiki/Anna_Magnani" target="_blank" rel="noopener">ANNA MAGNANI</a></td><td>Piazzetta</td><td>Porto - Saragozza</td><td>Musica, teatro e cinema</td><td>Roma, 1908-1973</td></tr>
+    <tr><td>VIA ANNE FRANK</td><td><a href="https://it.wikipedia.org/wiki/Anne_Frank" target="_blank" rel="noopener">ANNE FRANK</a></td><td>Via</td><td>Porto - Saragozza</td><td>Letteratura e giornalismo</td><td>Francoforte sul Meno (Germania), 1929 - Bergen Belsen (Germania), 1945</td></tr>
+  </table></div>
+  <p style="font-size:0.88rem;color:var(--text-muted)">La query combina in un unico risultato tutte le nuove proprietà. Alfonsina Morini (la ciclista) non ha <code>ex:macroCategoriaOccupazionale</code> perché la sua professione nel dataset non era mappabile sulle categorie disponibili: un caso concreto di copertura parziale gestito correttamente da <code>OPTIONAL</code>.</p>
+
+  <h2>Query CONSTRUCT — Generazione di triple RDF per le strade femminili</h2>
+  <p><strong>Scopo:</strong> questa query CONSTRUCT è stata usata nella pipeline di arricchimento del KG
+  per estrarre e ricostruire il sotto-grafo delle strade intitolate a donne, pronti per essere
+  iniettati in un nuovo file Turtle o esportati come dataset separato.
+  A differenza delle query SELECT che restituiscono tabelle, <strong>CONSTRUCT produce direttamente
+  triple RDF</strong> nella forma soggetto–predicato–oggetto.<br>
+  <strong>Keyword:</strong> <code>CONSTRUCT</code>, <code>WHERE</code>, <code>OPTIONAL</code>, <code>FILTER</code>, <code>LIMIT</code></p>
+  <pre class="code-block"><code><span class="sc">## Query CONSTRUCT — Sotto-grafo delle strade femminili con dati biografici</span>
+<span class="sc">## Genera triple RDF per ogni strada intitolata a una donna.</span>
+<span class="sc">## OPTIONAL gestisce le proprietà non sempre presenti (professione, categoria).</span>
+<span class="sc">## Keywords: CONSTRUCT, WHERE, OPTIONAL, FILTER, LIMIT</span>
+
+<span class="sk">PREFIX</span> <span class="sp">clv</span>: <span class="su">&lt;https://w3id.org/italia/onto/CLV/&gt;</span>
+<span class="sk">PREFIX</span> <span class="sp">cpv</span>: <span class="su">&lt;https://w3id.org/italia/onto/CPV/&gt;</span>
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  <span class="su">&lt;https://w3id.org/bologna/ontology#&gt;</span>
+
+<span class="sk">CONSTRUCT</span> {
+  <span class="sv">?strada</span>  <span class="sk">a</span>                              <span class="sp">clv</span>:Street ;
+           <span class="sp">clv</span>:hasStreetName               <span class="sv">?nomeVia</span> ;
+           <span class="sp">clv</span>:isDedicatedTo               <span class="sv">?persona</span> ;
+           <span class="sp">ex</span>:quartiere                    <span class="sv">?quartiere</span> .
+  <span class="sv">?persona</span> <span class="sk">a</span>                              <span class="sp">cpv</span>:Person ;
+           <span class="sp">cpv</span>:fullName                    <span class="sv">?nomePersona</span> ;
+           <span class="sp">cpv</span>:sex                         <span class="ss">"Female"</span> ;
+           <span class="sp">ex</span>:professione                  <span class="sv">?professione</span> ;
+           <span class="sp">ex</span>:macroCategoriaOccupazionale  <span class="sv">?categoria</span> .
+}
+<span class="sk">WHERE</span> {
+  <span class="sv">?strada</span>  <span class="sk">a</span>              <span class="sp">clv</span>:Street ;
+           <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
+           <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex      <span class="ss">"Female"</span> ;
+           <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> .
+  <span class="sk">OPTIONAL</span> { <span class="sv">?strada</span>  <span class="sp">ex</span>:quartiere                   <span class="sv">?quartiere</span>  }
+  <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:professione                 <span class="sv">?professione</span> }
+  <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:macroCategoriaOccupazionale  <span class="sv">?categoria</span>  }
+  <span class="sk">FILTER</span> ( <span class="sp">cpv</span>:sex = <span class="ss">"Female"</span> )
+}
+<span class="sk">LIMIT</span> 5
+</code></pre>
+  <h4>Esempio di output RDF (prime 5 triple generate):</h4>
+  <div class="table-wrap"><table>
+    <tr><th>Soggetto (strada)</th><th>Predicato</th><th>Oggetto</th></tr>
+    <tr><td><code>ex:street/5500</code></td><td><code>a</code></td><td><code>clv:Street</code></td></tr>
+    <tr><td><code>ex:street/5500</code></td><td><code>clv:hasStreetName</code></td><td><code>"VIA LAURA BASSI VERATTI"</code></td></tr>
+    <tr><td><code>ex:street/5500</code></td><td><code>clv:isDedicatedTo</code></td><td><code>ex:person/19fbfe5…</code></td></tr>
+    <tr><td><code>ex:person/19fbfe5…</code></td><td><code>cpv:sex</code></td><td><code>"Female"</code></td></tr>
+    <tr><td><code>ex:person/19fbfe5…</code></td><td><code>ex:professione</code></td><td><code>"Fisica, filosofa naturale"</code></td></tr>
+  </table></div>
+  <p style="font-size:0.88rem;color:var(--text-muted)">
+    A differenza delle query SELECT, CONSTRUCT restituisce un grafo RDF — non una tabella.
+    Nell'output reale le righe della tabella qui sopra sono triple serializzate in Turtle.
+    Nella fase iniziale del progetto, la generazione del Turtle è avvenuta tramite
+    <strong>SPARQL-Anything</strong> e la query <code>trasforma_finale.sparql</code> eseguita via Java.
+    La pipeline è stata poi riscritta in Python (<code>genera_ttl.py</code>) per eliminare
+    la dipendenza da Java, replicando la stessa logica CONSTRUCT senza modificare il formato del KG.
+    La query mostrata sopra illustra questa logica di trasformazione CSV → RDF.
+  </p>
 </div>
 
 </main>
@@ -331,8 +553,9 @@
        Knowledge Graph: <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH" target="_blank">GitHub</a></p>
   </div>
 </footer>
+
 <script>
-const _SPARQL_EX = ["PREFIX clv: <https://w3id.org/italia/onto/CLV/>\nPREFIX cpv: <https://w3id.org/italia/onto/CPV/>\n\nSELECT ?genere (COUNT(DISTINCT ?via) AS ?numero)\nWHERE {\n  ?via a clv:Street ;\n       clv:isDedicatedTo ?persona .\n  ?persona cpv:sex ?genere .\n}\nGROUP BY ?genere\nORDER BY DESC(?numero)", "PREFIX clv: <https://w3id.org/italia/onto/CLV/>\nPREFIX cpv: <https://w3id.org/italia/onto/CPV/>\nPREFIX ex:  <https://w3id.org/bologna/ontology#>\n\nSELECT DISTINCT ?nomeVia ?nomePersona ?professione\nWHERE {\n  ?via a clv:Street ;\n       clv:hasStreetName ?nomeVia ;\n       clv:isDedicatedTo ?persona .\n  ?persona cpv:fullName ?nomePersona ;\n           cpv:sex \"Female\" .\n  OPTIONAL { ?persona ex:professione ?professione }\n}\nORDER BY ?nomeVia\nLIMIT 20", "PREFIX clv: <https://w3id.org/italia/onto/CLV/>\nPREFIX cpv: <https://w3id.org/italia/onto/CPV/>\nPREFIX ex:  <https://w3id.org/bologna/ontology#>\n\nSELECT DISTINCT ?nomePersona ?professione ?dataNascita ?dataMorte\nWHERE {\n  ?via a clv:Street ;\n       clv:isDedicatedTo ?persona .\n  ?persona cpv:fullName ?nomePersona ;\n           cpv:sex \"Female\" .\n  OPTIONAL { ?persona ex:professione ?professione }\n  OPTIONAL { ?persona ex:dataNascita ?dataNascita }\n  OPTIONAL { ?persona ex:dataMorte   ?dataMorte   }\n  FILTER ( BOUND(?professione) || BOUND(?dataNascita) )\n}\nORDER BY ?nomePersona"];
+const _SPARQL_EX = ["PREFIX clv: <https://w3id.org/italia/onto/CLV/>\nPREFIX cpv: <https://w3id.org/italia/onto/CPV/>\n\nSELECT ?genere (COUNT(DISTINCT ?via) AS ?numero)\nWHERE {\n  ?via a clv:Street ;\n       clv:isDedicatedTo ?persona .\n  ?persona cpv:sex ?genere .\n}\nGROUP BY ?genere\nORDER BY DESC(?numero)","PREFIX clv: <https://w3id.org/italia/onto/CLV/>\nPREFIX cpv: <https://w3id.org/italia/onto/CPV/>\nPREFIX ex:  <https://w3id.org/bologna/ontology#>\n\nSELECT DISTINCT ?nomeVia ?nomePersona ?professione\nWHERE {\n  ?via a clv:Street ;\n       clv:hasStreetName ?nomeVia ;\n       clv:isDedicatedTo ?persona .\n  ?persona cpv:fullName ?nomePersona ;\n           cpv:sex \"Female\" .\n  OPTIONAL { ?persona ex:professione ?professione }\n}\nORDER BY ?nomeVia\nLIMIT 20","PREFIX clv: <https://w3id.org/italia/onto/CLV/>\nPREFIX cpv: <https://w3id.org/italia/onto/CPV/>\nPREFIX ex:  <https://w3id.org/bologna/ontology#>\n\nSELECT DISTINCT ?nomePersona ?professione ?dataNascita ?dataMorte\nWHERE {\n  ?via a clv:Street ;\n       clv:isDedicatedTo ?persona .\n  ?persona cpv:fullName ?nomePersona ;\n           cpv:sex \"Female\" .\n  OPTIONAL { ?persona ex:professione ?professione }\n  OPTIONAL { ?persona ex:dataNascita ?dataNascita }\n  OPTIONAL { ?persona ex:dataMorte   ?dataMorte   }\n  FILTER ( BOUND(?professione) || BOUND(?dataNascita) )\n}\nORDER BY ?nomePersona"];
 function loadExample(i) {
   document.getElementById('sparql-input').value = _SPARQL_EX[i];
   document.querySelectorAll('.example-btn').forEach(function(b,j) { b.classList.toggle('active', j===i); });
@@ -340,7 +563,6 @@ function loadExample(i) {
 loadExample(0);
 
 let _oxStore = null;
-
 async function _ensureStore() {
   if (_oxStore) return _oxStore;
   const st = document.getElementById('sparql-status');
@@ -356,7 +578,6 @@ async function _ensureStore() {
   _oxStore.load(ttl, { format: 'Turtle', base_iri: ttlUrl });
   return _oxStore;
 }
-
 async function runSparql() {
   const btn = document.getElementById('run-btn');
   const st  = document.getElementById('sparql-status');
@@ -368,14 +589,8 @@ async function runSparql() {
     const store = await _ensureStore();
     st.className = 'sparql-status'; st.textContent = '⏳ Interrogazione in corso…';
     const results = store.query(sparql);
-    if (typeof results === 'boolean') {
-      st.textContent = '✓ Risultato: ' + results;
-      return;
-    }
-    if (!Array.isArray(results) || results.length === 0) {
-      st.textContent = 'Nessun risultato trovato.';
-      return;
-    }
+    if (typeof results === 'boolean') { st.textContent = '✓ Risultato: ' + results; return; }
+    if (!Array.isArray(results) || results.length === 0) { st.textContent = 'Nessun risultato trovato.'; return; }
     const MAX = 200;
     const shown = results.slice(0, MAX);
     const vars = [...shown[0].keys()];
