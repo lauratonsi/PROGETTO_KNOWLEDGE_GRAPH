@@ -2,7 +2,7 @@
 Generates the full docs/ website from project CSV data.
 Run once; re-run whenever data changes.
 """
-import sys, csv, json, re, html
+import sys, csv, json, re, html, shutil
 from pathlib import Path
 from collections import Counter
 
@@ -1144,7 +1144,7 @@ print('llm.html ✓')
 RESULTS = page('Risultati', f'''
 <div class="hero" style="padding:3.5rem 1.5rem 3rem">
   <h1>Risultati</h1>
-  <p>Visualizzazioni del divario di genere e classificazione professionale delle 1.192 persone nel KG.</p>
+  <p>Visualizzazioni del divario di genere nelle 1.960 strade di Bologna e classificazione professionale delle 1.192 persone censite.</p>
 </div>
 
 <div class="section">
@@ -1156,14 +1156,18 @@ RESULTS = page('Risultati', f'''
     <div class="stat-box stat-pct"><div class="number">{PCT_F}%</div><div class="label">Quota femminile</div></div>
   </div>
 
-  <h2>Distribuzione strade per genere</h2>
+  <h2>Distribuzione delle strade dedicate a persone per genere</h2>
+  <p>Su 1.132 strade dedicate a persone identificate (escluse le 828 classificate come Toponimo),
+  solo il <strong>5,8%</strong> è intitolato a una donna.</p>
   <div class="chart-wrap" style="max-width:400px">
     <canvas id="donutChart"></canvas>
   </div>
+  <p style="font-size:0.85rem;color:var(--text-muted)">Le 828 strade classificate come Toponimo (luoghi, eventi, mestieri, famiglie)
+  sono escluse da questo grafico perché non si riferiscono a persone identificate.</p>
 
   <h2>Categorie professionali per genere</h2>
-  <p>Confronto tra la distribuzione per categoria professionale degli uomini onorati (1.091),
-  delle donne storicamente onorate (67) e delle donne proposte (34).
+  <p>Confronto tra la distribuzione per categoria professionale degli uomini onorati (1.091 persone),
+  delle donne storicamente onorate (67 persone) e delle donne proposte (34 candidature).
   I dati rivelano pattern significativi: le donne già onorate sono concentrate
   nello spettacolo (25,4%), mentre le proposte correggono questo squilibrio con
   un forte peso della Resistenza (32,4%) e dell'attivismo civile (17,6%).</p>
@@ -1171,9 +1175,11 @@ RESULTS = page('Risultati', f'''
     <canvas id="barChart"></canvas>
   </div>
 
-  <h2>Strade dedicate a donne (123 intitolazioni a persone)</h2>
-  <p>Tabella filtrabile delle strade bolognesi intitolate a donne identificate.
-  Escluse le intitolazioni a sante, nomi generici e nominativi non individuali (157 totali nel dataset del Comune).</p>
+  <h2>Strade dedicate a donne (123 intitolazioni a persone identificate)</h2>
+  <p>Tabella filtrabile dal dataset del Comune di Bologna "Vie dedicate alle donne" (157 voci totali).
+  Escluse sante, nomi generici e collettivi non individuali. Le 123 voci corrispondono a intitolazioni
+  di strade con nome di persona identificata; il KG conta 66 archi stradali femminili
+  (una stessa via può essere composta da più archi).</p>
 
   <div style="display:flex;flex-wrap:wrap;gap:0.8rem;align-items:center;margin-bottom:1rem">
     <input type="text" id="search-box" placeholder="Cerca nome o professione…">
@@ -1257,17 +1263,31 @@ const F_DATA = {F_DATA_JS};
 const P_DATA = {P_DATA_JS};
 const CODVIA_GENERE = {CODVIA_GENERE_JS};
 
-// Donut chart
+// Donut chart — solo strade dedicate a persone (Male + Female, esclusi Toponimi)
 new Chart(document.getElementById('donutChart'), {{
   type: 'doughnut',
   data: {{
-    labels: ['Uomini (1066)', 'Donne (66)', 'Toponimi (828)'],
-    datasets: [{{ data: [1066, 66, 828],
-      backgroundColor: ['#1b3a6b','#8b1a4a','#9e9e9e'],
+    labels: ['Uomini — 1.066 (94,2%)', 'Donne — 66 (5,8%)'],
+    datasets: [{{ data: [1066, 66],
+      backgroundColor: ['#1b3a6b','#8b1a4a'],
       borderWidth: 2, borderColor: '#fff'
     }}]
   }},
-  options: {{ plugins: {{ legend: {{ position: 'bottom' }} }}, cutout: '60%' }}
+  options: {{
+    plugins: {{
+      legend: {{ position: 'bottom' }},
+      tooltip: {{
+        callbacks: {{
+          label: ctx => {{
+            const tot = 1066 + 66;
+            const pct = (ctx.parsed / tot * 100).toFixed(1);
+            return ` ${{ctx.label.split(' — ')[0]}}: ${{ctx.parsed}} strade (${{pct}}%)`;
+          }}
+        }}
+      }}
+    }},
+    cutout: '60%'
+  }}
 }});
 
 // Bar chart
