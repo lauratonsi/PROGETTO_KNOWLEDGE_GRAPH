@@ -9,26 +9,6 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-  <style>
-    /* Lightbox */
-    #lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;
-        align-items:center;justify-content:center;cursor:zoom-out}
-    #lb.open{display:flex}
-    #lb img{max-width:92vw;max-height:90vh;border-radius:6px;
-            box-shadow:0 8px 40px rgba(0,0,0,0.6);cursor:default}
-    #lb-close{position:absolute;top:1rem;right:1.5rem;color:#fff;font-size:2.2rem;
-              cursor:pointer;background:none;border:none;line-height:1;opacity:0.8}
-    #lb-close:hover{opacity:1}
-    /* Grafici grid migliorato */
-    .grafici-grid{grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:2rem}
-    .grafici-grid figure{border-radius:10px;border:none;
-        box-shadow:0 2px 12px rgba(0,0,0,0.09);background:#fff}
-    .grafici-grid img{cursor:zoom-in;border-radius:10px 10px 0 0}
-    .grafici-grid figcaption{padding:0.8rem 1rem;font-size:0.84rem;color:#333;
-        text-align:left;line-height:1.5}
-    .grafici-grid figcaption strong{display:block;margin-bottom:0.2rem;
-        color:var(--primary);font-size:0.9rem}
-  </style>
 </head>
 <body>
 <nav id="navbar">
@@ -108,56 +88,38 @@
 </div>
 
 <div class="section">
-  <h2>Grafici — Gender Gap</h2>
-  <p>Visualizzazioni del divario di genere nella toponomastica bolognese. Clicca su un grafico per ingrandirlo.</p>
-  <div class="grafici-grid">
-    <figure>
-      <img src="grafici_gender_gap/01_gender_gap_globale.png" alt="Gender gap globale" loading="lazy"
-           onclick="openLightbox(this.src,this.alt)">
-      <figcaption><strong>Distribuzione globale</strong>
-        Su 1.960 strade dedicate a persone o luoghi, solo 66 (5,8%) portano un nome femminile. Il rapporto maschi/femmine è di 16:1.</figcaption>
-    </figure>
-    <figure>
-      <img src="grafici_gender_gap/02_distribuzione_quartieri.png" alt="Distribuzione per quartiere" loading="lazy"
-           onclick="openLightbox(this.src,this.alt)">
-      <figcaption><strong>Gender gap per quartiere</strong>
-        San Donato–San Vitale è il quartiere più inclusivo (12% femminile); Savena il meno (2,9%). Il divario è sistemico in tutti i quartieri.</figcaption>
-    </figure>
-    <figure>
-      <img src="grafici_gender_gap/03_evoluzione_storica.png" alt="Evoluzione storica" loading="lazy"
-           onclick="openLightbox(this.src,this.alt)">
-      <figcaption><strong>Evoluzione storica</strong>
-        15 intitolazioni femminili nel solo 1991 (censimento comunale). Dal 2016 si registra un'accelerazione: 5 nuove nel 2016 e altre 5 nel 2026.</figcaption>
-    </figure>
-    <figure>
-      <img src="grafici_gender_gap/04_lunghezza_strade.png" alt="Lunghezza strade" loading="lazy"
-           onclick="openLightbox(this.src,this.alt)">
-      <figcaption><strong>Lunghezza media per genere</strong>
-        Le strade femminili sono mediamente più corte di quelle maschili, a conferma di un riconoscimento simbolicamente minore.</figcaption>
-    </figure>
+  <h2>Visualizzazioni — Gender Gap</h2>
+
+  <h3>Rapporto maschile / femminile</h3>
+  <p>Confronto diretto tra strade maschili e femminili (esclusi i 828 Toponimi).
+  Il rapporto è di <strong>16:1</strong>: per ogni strada dedicata a una donna ce ne sono sedici dedicate a un uomo.</p>
+  <div class="chart-wrap" style="max-width:480px">
+    <canvas id="chartRapporto"></canvas>
+  </div>
+  <p style="font-size:0.88rem;color:var(--text-muted)">Le 828 strade classificate come Toponimo (luoghi, concetti, eventi) non compaiono in questo grafico perché non riferite a persone.</p>
+
+  <h3>Strade per quartiere — conteggi assoluti</h3>
+  <p>Numero assoluto di strade maschili e femminili in ciascun quartiere di Bologna.
+  San Donato–San Vitale concentra il maggior numero di strade femminili (26), ma anche il divario assoluto più alto (191 maschili).</p>
+  <div class="chart-wrap-full" style="height:320px">
+    <canvas id="chartQuartieriAbs"></canvas>
+  </div>
+  <p style="font-size:0.88rem;color:var(--text-muted)">In nessun quartiere la quota femminile supera il 12%. Le strade femminili sono sistematicamente minoritarie su tutto il territorio comunale.</p>
+
+  <h2>Visualizzazioni — Classificazione Professionale</h2>
+
+  <h3>Categorie delle donne già onorate</h3>
+  <p>Distribuzione per macro-categoria professionale delle 66 donne storicamente onorate dalla toponomastica bolognese.
+  Lo spettacolo (attrici, cantanti, ballerine) domina con il 25,4%; scienze e politica sono gravemente sottorappresentate.</p>
+  <div class="chart-wrap-full" style="height:340px">
+    <canvas id="chartFemminili"></canvas>
   </div>
 
-  <h2>Grafici — Classificazione Professionale</h2>
-  <p>Confronto tra le macro-categorie professionali degli uomini, delle donne storiche e delle candidature proposte.</p>
-  <div class="grafici-grid">
-    <figure>
-      <img src="grafici_professioni_rivisti/01_divario_storico_categorie.png" alt="Divario storico per categorie" loading="lazy"
-           onclick="openLightbox(this.src,this.alt)">
-      <figcaption><strong>Divario per categoria (persone storiche)</strong>
-        Spettacolo e letteratura concentrano il 40% delle donne già onorate; politica, scienze e militari dominano tra gli uomini.</figcaption>
-    </figure>
-    <figure>
-      <img src="grafici_professioni_rivisti/02_focus_nuove_proposte.png" alt="Focus nuove proposte" loading="lazy"
-           onclick="openLightbox(this.src,this.alt)">
-      <figcaption><strong>Profilo delle 34 proposte</strong>
-        Le candidature proposte correggono attivamente il bias: Resistenza 32,4%, Scienze e medicina 17,6%, Attivismo civile 17,6%.</figcaption>
-    </figure>
-    <figure>
-      <img src="grafici_professioni_rivisti/03_top_professioni_femminili.png" alt="Top professioni femminili" loading="lazy"
-           onclick="openLightbox(this.src,this.alt)">
-      <figcaption><strong>Categorie nelle strade femminili esistenti</strong>
-        Il 25,4% delle donne già onorate è legata allo spettacolo (attrici, cantanti). Scienze e politica sono sottorappresentate.</figcaption>
-    </figure>
+  <h3>Profilo delle 34 proposte di nuova intitolazione</h3>
+  <p>Le candidature proposte correggono attivamente i bias: la Resistenza rappresenta il 32,4% delle proposte,
+  seguita da scienze e medicina (14,7%) e sindacalismo e attivismo civile (14,7%).</p>
+  <div class="chart-wrap" style="max-width:500px">
+    <canvas id="chartProposte"></canvas>
   </div>
 </div>
 
@@ -190,8 +152,8 @@
 
 <div class="section-alt"><div class="section">
   <h2>Mappa interattiva delle strade di Bologna</h2>
-  <p>Visualizzazione geografica degli 8.029 archi stradali, colorati in base alla classificazione di genere.<br>
-  <strong>Filtri di accessibilità:</strong></p>
+  <p>Visualizzazione geografica delle strade intitolate a persone: <strong style="color:#c45c82">66 femminili</strong> e <strong style="color:#1b3a6b">1.066 maschili</strong>. Le strade a toponimo (luoghi, concetti, istituzioni) non sono mostrate.<br>
+  <strong>Filtri:</strong></p>
   <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;padding:1rem;background:rgba(200,200,200,0.1);border-radius:6px">
     <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:500">
       <input type="checkbox" id="filter-female" value="Female" checked aria-label="Mostra strade dedicate a donne">
@@ -200,10 +162,6 @@
     <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:500">
       <input type="checkbox" id="filter-male" value="Male" checked aria-label="Mostra strade dedicate a uomini">
       <span style="display:inline-block;width:14px;height:14px;background:#1b3a6b;border-radius:2px;margin-right:2px"></span>Maschile (1066)
-    </label>
-    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:500">
-      <input type="checkbox" id="filter-topo" value="Toponimo" checked aria-label="Mostra toponimi">
-      <span style="display:inline-block;width:14px;height:14px;background:#aaaaaa;border-radius:2px;margin-right:2px"></span>Toponimo (828)
     </label>
   </div>
   <div id="bologna-map" style="height:540px;border-radius:8px;overflow:hidden;margin:1rem 0;border:1px solid var(--border)" role="application" aria-label="Mappa interattiva delle strade di Bologna. Clicca su una strada per evidenziarla completamente. Usa i filtri sopra per mostrare/nascondere le categorie."></div>
@@ -299,20 +257,96 @@ document.querySelectorAll('#tfilters .filter-btn').forEach(btn => {
 renderTable();
 
 // ============================================================
-// LIGHTBOX
+// NUOVI GRAFICI INLINE
 // ============================================================
-function openLightbox(src, alt) {
-  const lb = document.getElementById('lb');
-  lb.querySelector('img').src = src;
-  lb.querySelector('img').alt = alt || '';
-  lb.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeLightbox() {
-  document.getElementById('lb').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// chartRapporto — bar M vs F (senza Toponimi)
+new Chart(document.getElementById('chartRapporto'), {
+  type: 'bar',
+  data: {
+    labels: ['Strade maschili (1.066)', 'Strade femminili (66)'],
+    datasets: [{
+      data: [1066, 66],
+      backgroundColor: ['#1b3a6b', '#8b1a4a'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.raw} strade (${ctx.dataIndex === 0 ? '94,2' : '5,8'}%)` } }
+    },
+    scales: {
+      y: { beginAtZero: true, title: { display: true, text: 'Numero di strade' } }
+    }
+  }
+});
+
+// chartQuartieriAbs — grouped bar assoluto per quartiere
+new Chart(document.getElementById('chartQuartieriAbs'), {
+  type: 'bar',
+  data: {
+    labels: Q_LABELS,
+    datasets: [
+      { label: 'Maschili', data: Q_M_ABS, backgroundColor: 'rgba(27,58,107,0.8)' },
+      { label: 'Femminili', data: Q_F_ABS, backgroundColor: 'rgba(139,26,74,0.85)' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      x: { ticks: { maxRotation: 25 } },
+      y: { beginAtZero: true, title: { display: true, text: 'Numero di strade' } }
+    }
+  }
+});
+
+// chartFemminili — horizontal bar categorie femminili (ordinate per valore)
+(function() {
+  const pairs = CAT_LABELS.map((l, i) => ({ label: l, val: F_DATA[i] }))
+    .filter(p => p.val > 0)
+    .sort((a, b) => b.val - a.val);
+  new Chart(document.getElementById('chartFemminili'), {
+    type: 'bar',
+    data: {
+      labels: pairs.map(p => p.label),
+      datasets: [{ label: '% donne storiche', data: pairs.map(p => p.val),
+        backgroundColor: 'rgba(139,26,74,0.8)', borderWidth: 0 }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, title: { display: true, text: '% sul totale delle donne onorate' } }
+      }
+    }
+  });
+})();
+
+// chartProposte — doughnut proposte per categoria
+(function() {
+  const pairs = CAT_LABELS.map((l, i) => ({ label: l, val: P_DATA[i] }))
+    .filter(p => p.val > 0)
+    .sort((a, b) => b.val - a.val);
+  const palette = ['#8b1a4a','#c0392b','#1b3a6b','#2980b9','#27ae60','#f39c12','#8e44ad','#16a085'];
+  new Chart(document.getElementById('chartProposte'), {
+    type: 'doughnut',
+    data: {
+      labels: pairs.map(p => p.label),
+      datasets: [{ data: pairs.map(p => p.val),
+        backgroundColor: palette.slice(0, pairs.length),
+        borderWidth: 2, borderColor: '#fff' }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '55%',
+      plugins: { legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 14 } } }
+    }
+  });
+})();
 
 // ============================================================
 // GRAFICI ANALISI DETTAGLIATE
@@ -420,7 +454,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let allFeatures = [];        // Store all GeoJSON features
 let layersByCodevia = {};    // Map codvia -> layers array
 let lastHighlightedCodevia = null; // Track highlighted via
-let activeFilters = { Female: true, Male: true, Toponimo: true }; // Filter state
+let activeFilters = { Female: true, Male: true }; // Filter state
 
 // Update map visibility based on active filters
 function updateMapVisibility() {
@@ -448,7 +482,7 @@ function updateMapVisibility() {
 }
 
 // Setup filter checkboxes with keyboard support
-document.querySelectorAll('#filter-female, #filter-male, #filter-topo').forEach(checkbox => {
+document.querySelectorAll('#filter-female, #filter-male').forEach(checkbox => {
   checkbox.addEventListener('change', (e) => {
     activeFilters[e.target.value] = e.target.checked;
     updateMapVisibility();
@@ -474,16 +508,23 @@ if (location.protocol === 'file:') {
   fetch('rifter_arcstra_li.geojson')
     .then(r => r.json())
     .then(data => {
-    allFeatures = data.features;
+    allFeatures = data.features.filter(f => {
+      const g = CODVIA_GENERE[String(f.properties.codvia ?? '')] || 'Toponimo';
+      return g !== 'Toponimo';
+    });
     
     // Group features by codvia for "select whole street" behavior
-    data.features.forEach(feature => {
+    allFeatures.forEach(feature => {
       const codvia = String(feature.properties.codvia ?? '');
       if (!layersByCodevia[codvia]) layersByCodevia[codvia] = [];
     });
 
     // Add GeoJSON layer
     const geoLayer = L.geoJSON(data, {
+      filter: feature => {
+        const g = CODVIA_GENERE[String(feature.properties.codvia ?? '')] || 'Toponimo';
+        return g !== 'Toponimo';
+      },
       style: feature => {
         const codvia = String(feature.properties.codvia ?? '');
         const genere = CODVIA_GENERE[codvia] || 'Toponimo';
@@ -651,9 +692,5 @@ document.addEventListener('keydown', (e) => {
   }
 });
 </script>
-<div id="lb" onclick="closeLightbox()" role="dialog" aria-modal="true" aria-label="Grafico ingrandito">
-  <button id="lb-close" onclick="closeLightbox()" aria-label="Chiudi">&times;</button>
-  <img src="" alt="" onclick="event.stopPropagation()">
-</div>
 </body>
 </html>

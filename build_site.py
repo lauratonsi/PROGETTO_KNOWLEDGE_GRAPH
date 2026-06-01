@@ -1240,10 +1240,9 @@ RESULTS = page('Risultati', f'''
 
 <div class="section-alt"><div class="section">
   <h2>Mappa interattiva delle strade di Bologna</h2>
-  <p>Visualizzazione geografica degli 8.029 archi stradali, colorati in base alla classificazione di genere.<br>
+  <p>Visualizzazione geografica delle strade intitolate a persone: <strong style="color:#c45c82">66 femminili</strong> e <strong style="color:#1b3a6b">1.066 maschili</strong>. Le strade a toponimo non sono mostrate.<br>
   <span style="display:inline-block;width:12px;height:12px;background:#c45c82;border-radius:2px;margin-right:4px"></span><strong>Femminile</strong> &nbsp;
-  <span style="display:inline-block;width:12px;height:12px;background:#1b3a6b;border-radius:2px;margin-right:4px"></span><strong>Maschile</strong> &nbsp;
-  <span style="display:inline-block;width:12px;height:12px;background:#aaaaaa;border-radius:2px;margin-right:4px"></span><strong>Toponimo</strong></p>
+  <span style="display:inline-block;width:12px;height:12px;background:#1b3a6b;border-radius:2px;margin-right:4px"></span><strong>Maschile</strong></p>
   <div id="bologna-map" style="height:540px;border-radius:8px;overflow:hidden;margin:1rem 0;border:1px solid var(--border)"></div>
   <p style="font-size:0.82rem;color:var(--text-muted)">Dati: Open Data Comune di Bologna — Archi stradali. Le strade femminili (rosa) sono le 66 intitolazioni a donne identificate. Clicca su una strada per vedere il nome e la classificazione.</p>
 </div></div>
@@ -1341,6 +1340,10 @@ fetch('rifter_arcstra_li.geojson')
   .then(r => r.json())
   .then(data => {{
     L.geoJSON(data, {{
+      filter: feature => {{
+        const g = CODVIA_GENERE[String(feature.properties.codvia ?? '')] || 'Toponimo';
+        return g !== 'Toponimo';
+      }},
       style: feature => {{
         const codvia = String(feature.properties.codvia ?? '');
         const genere = CODVIA_GENERE[codvia] || 'Toponimo';
@@ -1354,7 +1357,7 @@ fetch('rifter_arcstra_li.geojson')
         const codvia = String(feature.properties.codvia ?? '');
         const genere = CODVIA_GENERE[codvia] || 'Toponimo';
         const nome = feature.properties.nomevia || '';
-        layer.bindPopup(`<strong>${{nome}}</strong><br>Classificazione: ${{genere}}`);
+        layer.bindPopup(`<strong>${{nome}}</strong><br><strong>${{genere}}</strong>`);
       }}
     }}).addTo(bMap);
   }})
