@@ -17,9 +17,10 @@
     <http://purl.org/dc/terms/title> "Gender Gap nella Toponomastica di Bologna — Knowledge Graph"@it ;
     <http://purl.org/dc/terms/title> "Gender Gap in Bologna Street Toponymy — Knowledge Graph"@en ;
     <http://purl.org/dc/terms/description> "Il KG è composto da circa 21.000 triple RDF. La pipeline: (1) Open Data CSV del Comune → classificazione LLM (Claude, ChatGPT, Gemini, DeepSeek, Copilot) → correzione sistematica con equita.py → generazione Turtle con genera_ttl.py; (2) arricchimento biografico via API Wikidata (P106, P569, P570) su 1.129 persone, copertura 88,7%; (3) 34 proposte di nuove intitolazioni con stato attiva/futura. Progetto universitario GEPID 2024–25, Università di Bologna."@it ;
+    <http://purl.org/dc/terms/description> "The KG consists of about 21,000 RDF triples. Pipeline: (1) Municipality CSV Open Data → LLM classification (Claude, ChatGPT, Gemini, DeepSeek, Copilot) → systematic correction with equita.py → Turtle generation with genera_ttl.py; (2) biographical enrichment via Wikidata API (P106, P569, P570) for 1,129 people, 88.7% coverage; (3) 34 new street dedication proposals with active/future status. GEPID university project 2026, University of Bologna."@en ;
     <http://purl.org/dc/terms/creator> "Susanna Cioni" ;
     <http://purl.org/dc/terms/creator> "Laura Tonsi" ;
-    <http://purl.org/dc/terms/publisher> "Università di Bologna — Corso GEPID 2024–25" ;
+    <http://purl.org/dc/terms/publisher> "Università di Bologna — Corso GEPID 2026" ;
     <http://purl.org/dc/terms/date> "2026" ;
     <http://purl.org/dc/terms/source> <https://opendata.comune.bologna.it/> ;
     <http://purl.org/dc/terms/source> <https://www.wikidata.org/> ;
