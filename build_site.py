@@ -349,12 +349,12 @@ tr:hover td { background: #ede8e0; }
 
 /* ── Step list ── */
 .step-list { list-style: none; margin: 1rem 0; padding: 0; counter-reset: steps; }
-.step-list li {
+.step-list > li {
   counter-increment: steps; display: flex; gap: 1rem;
   padding: 1rem; background: var(--white); border-radius: var(--radius);
   box-shadow: var(--shadow); margin-bottom: 0.8rem;
 }
-.step-list li::before {
+.step-list > li::before {
   content: counter(steps); min-width: 2rem; height: 2rem;
   background: var(--primary); color: #fff; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
@@ -624,7 +624,7 @@ METHODOLOGY = page('Metodologia', '''
     <li><div><strong>Costruzione del Knowledge Graph</strong><br>
       Lo script <code>genera_ttl.py</code> (Python + <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>)
       legge il CSV classificato e genera il file <code>bologna_KG_corretto.ttl</code>
-      in formato Turtle (6.783 triple). Ogni strada è un nodo <code>clv:Street</code>;
+      in formato Turtle (11.696 triple). Ogni strada è un nodo <code>clv:Street</code>;
       le strade dedicate a persone sono collegate tramite <code>clv:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
     <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
       Per le ~470 persone identificate, lo script <code>wikidata_fetch.py</code> interroga
@@ -633,7 +633,7 @@ METHODOLOGY = page('Metodologia', '''
       data/luogo di morte (P570/P20). I dati sono salvati nel file <code>F_M DATE.xlsx</code>.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
       Lo script <code>classifica_professioni.py</code> assegna una delle 12 macro-categorie
-      a ciascuna delle 1.192 persone classificate (1.091 uomini + 67 donne storiche + 34 proposte),
+      a ciascuna delle 1.191 persone classificate (1.091 uomini + 66 donne storiche + 34 proposte),
       usando il matching per parole chiave sulle professioni Wikidata.</div></li>
     <li><div><strong>Proposte di intitolazione</strong><br>
       Il gruppo di ricerca ha identificato e documentato 34 candidature
@@ -797,7 +797,7 @@ SPARQL = page('Query SPARQL', f'''
   <div class="info-box">
     Il Knowledge Graph è disponibile come file Turtle nel repository:
     <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/bologna_KG_corretto.ttl" target="_blank">
-    bologna_KG_corretto.ttl</a> (6.783 triple).
+    bologna_KG_corretto.ttl</a> (11.696 triple).
     Per eseguire le query localmente: <code>python run_queries.py</code> (usa
     <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>).
   </div>

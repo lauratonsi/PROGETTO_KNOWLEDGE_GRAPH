@@ -41,21 +41,45 @@
       Per ogni strada è stato identificato il referente (persona, luogo, concetto) e assegnata
       la categoria <em>Male</em>, <em>Female</em> o <em>Toponimo</em>.
       Questa operazione — la più impegnativa — è stata condotta con l'ausilio di LLM
-      (DeepSeek, Gemini, ChatGPT, Claude, Copilot) e validata manualmente.</div></li>
+      (DeepSeek, Gemini, ChatGPT, Claude, Copilot) e validata manualmente.
+      Lo script <code>equita.py</code> applica sistematicamente le correzioni validate:
+      declassa santi e nomi astratti femminili (es. VITTORIA, SERENA) a Toponimo,
+      recupera artisti con soprannome erroneamente classificati come Toponimo (DANTE, CARAVAGGIO…)
+      e corregge tre donne classificate Male (Artemisia Gentileschi, Properzia De Rossi,
+      Bittisia Gozzadini). L'output è <code>bologna_KG_ready.csv</code>.</div></li>
     <li><div><strong>Costruzione del Knowledge Graph</strong><br>
-      Lo script <code>genera_ttl.py</code> (Python + <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>)
-      legge il CSV classificato e genera il file <code>bologna_KG_corretto.ttl</code>
-      in formato Turtle (6.783 triple). Ogni strada è un nodo <code>clv:Street</code>;
-      le strade dedicate a persone sono collegate tramite <code>clv:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
+      Lo script <code>genera_ttl.py</code> (Python, solo libreria standard — csv, hashlib, re)
+      legge <code>bologna_KG_ready.csv</code> e scrive direttamente le triple Turtle,
+      replicando la logica della query <code>trasforma_finale.sparql</code> usata nella fase iniziale
+      con SPARQL-Anything. Ogni strada è un nodo <code>clv:Street</code>;
+      le strade dedicate a persone sono collegate tramite <code>clv:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.
+      Output: <code>bologna_KG_corretto.ttl</code>.</div></li>
     <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
-      Per le ~470 persone identificate, lo script <code>wikidata_fetch.py</code> interroga
-      l'<a href="https://www.wikidata.org/w/api.php" target="_blank">API JSON di Wikidata</a>
-      recuperando professione (P106), data/luogo di nascita (P569/P19) e
-      data/luogo di morte (P570/P20). I dati sono salvati nel file <code>F_M DATE.xlsx</code>.</div></li>
+      Per le 1.129 persone identificate nel KG, uno script Python interroga
+      l'API JSON di Wikidata
+      (<code>wbsearchentities</code> per la ricerca testuale + <code>wbgetentities</code>
+      per le proprietà strutturate) recuperando professione (P106),
+      data/luogo di nascita (P569/P19) e data/luogo di morte (P570/P20),
+      con verifica che l'entità sia un essere umano (P31 = Q5).
+      Copertura: <strong>1.001 persone (88,7%)</strong>. I dati confluiscono nel file <code>F_M DATE.xlsx</code>,
+      che costituisce l'input dello step successivo di classificazione professionale.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
       Lo script <code>classifica_professioni.py</code> assegna una delle 12 macro-categorie
-      a ciascuna delle 1.192 persone classificate (1.091 uomini + 67 donne storiche + 34 proposte),
+      a ciascuna delle 1.191 persone classificate (1.091 uomini + 66 donne storiche + 34 proposte),
       usando il matching per parole chiave sulle professioni Wikidata.</div></li>
+    <li><div><strong>Arricchimento topografico e semantico</strong><br>
+      Lo script <code>arricchimento_kg.py</code> estende il KG con nuove proprietà estratte da tre fonti:
+      <ul style="margin-top:0.5rem">
+        <li><strong>Strade</strong>: <code>ex:quartiere</code>, <code>ex:geoPoint</code>, <code>ex:dataIstituzione</code>
+            (da <em>bologna_KG_ready.csv</em>) e <code>ex:tipologiaLuogo</code>
+            (da <em>le-aree-verdi-e-le-vie-di-bologna-dedicate-alle-donne.csv</em>, 60 match)</li>
+        <li><strong>Persone</strong>: <code>ex:macroCategoriaOccupazionale</code> su 1.036 persone
+            (da <em>classificazione_professioni.csv</em>); <code>ex:datiAnagrafici</code> su 60 donne
+            (da <em>le-aree-verdi</em>); <code>ex:professione</code> colmato per 3 donne non presenti
+            in Wikidata.</li>
+      </ul>
+      Il file TTL passa da ~18.363 a 27.251 righe (+4.545 triple di arricchimento).
+    </div></li>
     <li><div><strong>Proposte di intitolazione</strong><br>
       Il gruppo di ricerca ha identificato e documentato 34 candidature
       (29 attive + 5 future) per nuove intitolazioni a donne, persone trans e non binarie
@@ -64,58 +88,234 @@
   </ol>
 
   <h2>Struttura del Knowledge Graph</h2>
-  <p>Il KG utilizza due ontologie del Semantic Web italiano:</p>
+  <p>Il KG si fonda su <strong><a href="https://github.com/italia/daf-ontologie-vocabolari-controllati" target="_blank" rel="noopener">Ontopia</a></strong>,
+  la rete di ontologie e vocabolari controllati per la Pubblica Amministrazione italiana,
+  gestita dall'<strong>AgID</strong> (Agenzia per l'Italia Digitale) e adottata come standard
+  del Semantic Web pubblico italiano. Nello specifico il progetto riutilizza due vocabolari:</p>
   <ul>
     <li><a href="https://w3id.org/italia/onto/CLV/" target="_blank"><strong>CLV</strong></a>
-    (Core Location Vocabulary) — per modellare le strade</li>
+    (Core Location Vocabulary) — modella luoghi e urbanistica.
+    Nel KG: <code>clv:Street</code> identifica ogni arco stradale,
+    <code>clv:hasStreetName</code> ne registra il nome ufficiale,
+    <code>clv:isDedicatedTo</code> collega la strada alla persona onorata.</li>
     <li><a href="https://w3id.org/italia/onto/CPV/" target="_blank"><strong>CPV</strong></a>
-    (Core Person Vocabulary) — per modellare le persone</li>
+    (Core Person Vocabulary) — modella le persone fisiche e le loro caratteristiche anagrafiche.
+    Nel KG: <code>cpv:Person</code> rappresenta il referente umano,
+    <code>cpv:fullName</code> ne registra il nome completo,
+    <code>cpv:sex</code> contiene la classificazione di genere (Male / Female / Toponimo).</li>
   </ul>
+  <p>Il punto di contatto tra le due ontologie è la proprietà oggetto <code>clv:isDedicatedTo</code>:
+  <strong>[clv:Street] → isDedicatedTo → [cpv:Person]</strong>.
+  Questa tripla è il cardine del KG — permette di interrogare l'intero grafo per genere,
+  professione, quartiere e decennio tramite SPARQL.</p>
 
-  <p>Esempio di triple per una strada femminile:</p>
-  <pre class="code-block"><code>&lt;https://w3id.org/bologna/resource/street/abc123&gt;
-    a clv:Street ;
-    clv:hasStreetName "VIA LAURA BASSI" ;
-    clv:isDedicatedTo &lt;https://w3id.org/bologna/resource/person/def456&gt; .
-
-&lt;https://w3id.org/bologna/resource/person/def456&gt;
-    a cpv:Person ;
-    cpv:fullName "Laura Bassi Veratti" ;
-    cpv:sex "Female" .</code></pre>
-
-  <p>Per le proposte di intitolazione, abbiamo esteso il vocabolario con una proprietà custom:</p>
+  <p>Esempio di triple per una strada femminile (con arricchimento completo):</p>
   <pre class="code-block"><code>@prefix ex: &lt;https://w3id.org/bologna/ontology#&gt; .
 
-&lt;https://w3id.org/bologna/resource/person/...&gt;
+&lt;https://w3id.org/bologna/resource/street/5500&gt;
+    a clv:Street ;
+    clv:hasStreetName  "VIA LAURA BASSI VERATTI" ;
+    clv:isDedicatedTo  &lt;https://w3id.org/bologna/resource/person/19fbfe5...&gt; ;
+    ex:quartiere       "Santo Stefano" ;
+    ex:geoPoint        "44.483592003952296, 11.367738980601088" ;
+    ex:dataIstituzione "1991-10-21" ;
+    ex:tipologiaLuogo  "Via" .
+
+&lt;https://w3id.org/bologna/resource/person/19fbfe5...&gt;
+    a cpv:Person ;
+    cpv:fullName  "LAURA BASSI VERATTI" ;
+    cpv:sex       "Female" ;
+    ex:professione                 "Fisica, filosofa naturale" ;
+    ex:dataNascita                 "29 ottobre 1711" ;
+    ex:luogoNascita                "Bologna" ;
+    ex:dataMorte                   "20 febbraio 1778" ;
+    ex:luogoMorte                  "Bologna" ;
+    ex:macroCategoriaOccupazionale "Scienze e medicina" ;
+    ex:datiAnagrafici              "Bologna, 1711 - Bologna, 1778" .</code></pre>
+
+  <p>Per le proposte di intitolazione, il vocabolario è esteso con:</p>
+  <pre class="code-block"><code>&lt;https://w3id.org/bologna/resource/person/...&gt;
     a cpv:Person ;
     cpv:fullName "Maria Dalle Donne" ;
     cpv:sex "Female" ;
     ex:proposta "true" ;
     ex:statoProposta "attiva" .</code></pre>
 
+  <h2>Proprietà del Knowledge Graph</h2>
+  <table style="width:100%;border-collapse:collapse;font-size:0.9rem">
+    <thead>
+      <tr style="background:var(--accent,#c0392b);color:#fff;text-align:left">
+        <th style="padding:0.5rem 0.75rem">Proprietà</th>
+        <th style="padding:0.5rem 0.75rem">Dominio</th>
+        <th style="padding:0.5rem 0.75rem">Fonte</th>
+        <th style="padding:0.5rem 0.75rem">Copertura</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:0.4rem 0.75rem"><code>clv:hasStreetName</code></td><td>Street</td><td>stradario comunale</td><td>1.132</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>clv:isDedicatedTo</code></td><td>Street</td><td>classificazione gruppo</td><td>1.132</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:quartiere</code></td><td>Street</td><td>bologna_KG_ready.csv</td><td>1.132</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:geoPoint</code></td><td>Street</td><td>bologna_KG_ready.csv</td><td>1.132</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:dataIstituzione</code></td><td>Street</td><td>bologna_KG_ready.csv</td><td>1.132</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:tipologiaLuogo</code></td><td>Street</td><td>aree verdi CSV</td><td>60</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>cpv:fullName</code></td><td>Person</td><td>stradario comunale</td><td>1.129</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>cpv:sex</code></td><td>Person</td><td>classificazione gruppo</td><td>1.129</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:professione</code></td><td>Person</td><td>Wikidata P106 + aree verdi</td><td>1.004</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:dataNascita / ex:luogoNascita</code></td><td>Person</td><td>Wikidata P569/P19</td><td>~1.001</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:dataMorte / ex:luogoMorte</code></td><td>Person</td><td>Wikidata P570/P20</td><td>~1.001</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:macroCategoriaOccupazionale</code></td><td>Person</td><td>classificazione_professioni.csv</td><td>1.036</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:datiAnagrafici</code></td><td>Person</td><td>aree verdi CSV</td><td>60</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:proposta / ex:statoProposta</code></td><td>Person</td><td>gruppo di ricerca</td><td>31</td></tr>
+    </tbody>
+  </table>
+
   <h2>Visualizzazione dell'ontologia (WebVOWL)</h2>
-  <p>Lo schema delle classi e proprietà è disponibile nel file <code>schema.ttl</code> in formato OWL/Turtle.
+  <p>Lo schema aggiornato delle classi e proprietà è disponibile nel file <code>schema.ttl</code> in formato OWL/Turtle.
   Puoi esplorarlo interattivamente con <strong>WebVOWL</strong>, uno strumento open source per la
   visualizzazione grafica di ontologie OWL sviluppato dall'Università di Stoccarda.</p>
+
+  <!-- Anteprima statica del grafo — SVG -->
+  <div class="kg-diagram-wrap">
+    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;text-align:center">
+      Schema completo delle classi e proprietà dell'ontologia (<code>schema.ttl</code>).
+      Le proprietà dato sono raggruppate per classe; la freccia indica la proprietà oggetto.
+    </p>
+
+    <svg class="kg-svg" viewBox="0 0 940 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramma del Knowledge Graph: Street collegata a Person tramite isDedicatedTo">
+
+      <defs>
+        <marker id="arrowhead-obj" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#1b3a6b"/>
+        </marker>
+      </defs>
+
+      <!-- ══ clv:Street (sinistra) — box x=20..350 ══ -->
+      <rect x="20" y="30" width="330" height="460" rx="12" ry="12" fill="#1b3a6b" stroke="#0f2347" stroke-width="2"/>
+      <rect x="20" y="30" width="330" height="52" rx="12" ry="12" fill="#0f2347"/>
+      <rect x="20" y="62" width="330" height="20" fill="#0f2347"/>
+      <text x="46" y="63" font-size="20" font-family="serif">🏙️</text>
+      <text x="76" y="64" font-size="15" font-weight="bold" fill="#ffffff" font-family="Consolas,Monaco,monospace">clv:Street</text>
+      <text x="76" y="78" font-size="10" fill="rgba(255,255,255,0.65)" font-family="sans-serif">Core Location Vocabulary</text>
+
+      <line x1="36" y1="96" x2="334" y2="96" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="36" y="114" font-size="9" fill="rgba(255,255,255,0.5)" font-family="sans-serif" font-weight="bold" letter-spacing="1">PROPRIETÀ CLV</text>
+
+      <rect x="36" y="120" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="46" y="136" font-size="11" fill="#a8d8ff" font-family="Consolas,Monaco,monospace">clv:hasStreetName</text>
+
+      <rect x="36" y="148" width="298" height="24" rx="4" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.35)" stroke-width="1" stroke-dasharray="4,2"/>
+      <text x="46" y="164" font-size="11" fill="#ffffff" font-family="Consolas,Monaco,monospace" font-weight="bold">clv:isDedicatedTo</text>
+      <text x="328" y="164" font-size="10" fill="rgba(255,255,255,0.6)" font-family="sans-serif" text-anchor="end">→ Person</text>
+
+      <line x1="36" y1="182" x2="334" y2="182" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="36" y="198" font-size="9" fill="rgba(255,255,255,0.5)" font-family="sans-serif" font-weight="bold" letter-spacing="1">PROPRIETÀ EX: (ARRICCHIMENTO)</text>
+
+      <rect x="36" y="204" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="46" y="220" font-size="11" fill="#a8d8ff" font-family="Consolas,Monaco,monospace">ex:quartiere</text>
+
+      <rect x="36" y="232" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="46" y="248" font-size="11" fill="#a8d8ff" font-family="Consolas,Monaco,monospace">ex:geoPoint</text>
+
+      <rect x="36" y="260" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="46" y="276" font-size="11" fill="#a8d8ff" font-family="Consolas,Monaco,monospace">ex:dataIstituzione</text>
+
+      <rect x="36" y="288" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="46" y="304" font-size="11" fill="#a8d8ff" font-family="Consolas,Monaco,monospace">ex:tipologiaLuogo</text>
+      <text x="328" y="304" font-size="9" fill="rgba(255,255,255,0.45)" font-family="sans-serif" text-anchor="end">60 strade</text>
+
+      <text x="36" y="336" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">1.960 istanze · 1.132 con isDedicatedTo</text>
+      <text x="36" y="350" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">tipologiaLuogo: solo 60 strade femminili</text>
+
+      <!-- ══ Freccia clv:isDedicatedTo ══ -->
+      <line x1="350" y1="260" x2="597" y2="260" stroke="#1b3a6b" stroke-width="2.5" marker-end="url(#arrowhead-obj)"/>
+      <rect x="369" y="244" width="160" height="18" rx="4" fill="#f8f6f2"/>
+      <text x="449" y="256" font-size="10.5" fill="#1b3a6b" font-family="Consolas,Monaco,monospace" font-weight="bold" text-anchor="middle">clv:isDedicatedTo</text>
+      <text x="449" y="278" font-size="9" fill="#5a5a5a" font-family="sans-serif" text-anchor="middle">ObjectProperty · domain → range</text>
+
+      <!-- ══ cpv:Person (destra) — box x=600..930 ══ -->
+      <rect x="600" y="30" width="330" height="460" rx="12" ry="12" fill="#8b1a4a" stroke="#5a0f30" stroke-width="2"/>
+      <rect x="600" y="30" width="330" height="52" rx="12" ry="12" fill="#5a0f30"/>
+      <rect x="600" y="62" width="330" height="20" fill="#5a0f30"/>
+      <text x="626" y="63" font-size="20" font-family="serif">👤</text>
+      <text x="656" y="64" font-size="15" font-weight="bold" fill="#ffffff" font-family="Consolas,Monaco,monospace">cpv:Person</text>
+      <text x="656" y="78" font-size="10" fill="rgba(255,255,255,0.65)" font-family="sans-serif">Core Person Vocabulary</text>
+
+      <line x1="616" y1="96" x2="914" y2="96" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="616" y="114" font-size="9" fill="rgba(255,255,255,0.5)" font-family="sans-serif" font-weight="bold" letter-spacing="1">PROPRIETÀ CPV</text>
+
+      <rect x="616" y="120" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="626" y="136" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">cpv:fullName</text>
+      <text x="908" y="136" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">annotation</text>
+
+      <rect x="616" y="148" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="626" y="164" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">cpv:sex</text>
+      <text x="908" y="164" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">Male · Female · Toponimo</text>
+
+      <line x1="616" y1="182" x2="914" y2="182" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="616" y="198" font-size="9" fill="rgba(255,255,255,0.5)" font-family="sans-serif" font-weight="bold" letter-spacing="1">METADATI BIOGRAFICI (Wikidata)</text>
+
+      <rect x="616" y="204" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="626" y="220" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">ex:professione</text>
+      <text x="908" y="220" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">P106</text>
+
+      <rect x="616" y="232" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="626" y="248" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">ex:dataNascita · ex:dataMorte</text>
+
+      <rect x="616" y="260" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="626" y="276" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">ex:luogoNascita · ex:luogoMorte</text>
+
+      <line x1="616" y1="294" x2="914" y2="294" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="616" y="310" font-size="9" fill="rgba(255,255,255,0.5)" font-family="sans-serif" font-weight="bold" letter-spacing="1">ARRICCHIMENTO SEMANTICO</text>
+
+      <rect x="616" y="316" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="626" y="332" font-size="10.5" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">ex:macroCategoriaOccupazionale</text>
+
+      <rect x="616" y="344" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="626" y="360" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">ex:datiAnagrafici</text>
+      <text x="908" y="360" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">60 donne</text>
+
+      <line x1="616" y1="378" x2="914" y2="378" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      <text x="616" y="394" font-size="9" fill="rgba(255,255,255,0.5)" font-family="sans-serif" font-weight="bold" letter-spacing="1">PROPOSTE DI INTITOLAZIONE</text>
+
+      <rect x="616" y="400" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="626" y="416" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">ex:proposta</text>
+      <text x="908" y="416" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">"true"</text>
+
+      <rect x="616" y="428" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
+      <text x="626" y="444" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">ex:statoProposta</text>
+      <text x="908" y="444" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">attiva · futura</text>
+
+      <text x="616" y="474" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">1.129 persone · copertura Wikidata: 88,7%</text>
+      <text x="616" y="488" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">34 proposte (29 attive + 5 future)</text>
+
+    </svg>
+
+    <div class="kg-diagram-legend">
+      <span class="kg-legend-item kg-legend-street">clv:Street — 1.960 istanze</span>
+      <span class="kg-legend-item kg-legend-person">cpv:Person — 1.129 istanze</span>
+      <span class="kg-legend-item kg-legend-arrow">clv:isDedicatedTo — 1.132 triple (ObjectProperty)</span>
+      <span class="kg-legend-item" style="color:var(--text-muted)">16 proprietà totali (15 dato + 1 annotazione)</span>
+    </div>
+  </div><!-- /.kg-diagram-wrap -->
+
   <div style="text-align:center; margin:2rem 0">
     <a class="btn-webvowl"
        href="https://service.tib.eu/webvowl/#iri=https://lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH/schema.ttl"
        target="_blank" rel="noopener">
-      Apri lo schema in WebVOWL &rarr;
+      Esplora il grafo in WebVOWL &rarr;
     </a>
     <p class="webvowl-note">WebVOWL carica <code>schema.ttl</code> da GitHub Pages e mostra le classi
-    (<em>Street</em>, <em>Person</em>), la proprietà oggetto <em>isDedicatedTo</em> e le proprietà dato
-    (<em>hasStreetName</em>, <em>sex</em>, <em>fullName</em>, <em>proposta</em>, <em>statoProposta</em>)
-    come grafo interattivo navigabile.</p>
+    (<em>Street</em>, <em>Person</em>), la proprietà oggetto <em>isDedicatedTo</em> e tutte le proprietà dato
+    come grafo interattivo navigabile. Usa lo scroll per zoomare e trascina i nodi per riorganizzare il layout.</p>
   </div>
 
   <h2>Strumenti utilizzati</h2>
   <div class="card-grid">
     <div class="card">
-      <h3>Python 3 + rdflib</h3>
-      <p>Generazione e manipolazione del KG in formato Turtle.
-      <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a> è la libreria Python
-      standard per il Semantic Web.</p>
+      <h3>Python 3</h3>
+      <p>Generazione e manipolazione del KG in formato Turtle con sola libreria standard
+      (<code>csv</code>, <code>hashlib</code>, <code>re</code>, <code>openpyxl</code>).
+      Lo script <code>genera_ttl.py</code> scrive le triple Turtle direttamente, senza rdflib.</p>
     </div>
     <div class="card">
       <h3>openpyxl</h3>
@@ -124,14 +324,16 @@
     </div>
     <div class="card">
       <h3>Wikidata API</h3>
-      <p>Recupero automatico di professioni e date biografiche per ~470 persone tramite
+      <p>Recupero automatico di professioni e date biografiche per 1.129 persone tramite
       <a href="https://www.wikidata.org/w/api.php" target="_blank">wbsearchentities</a> e
-      <code>wbgetentities</code>.</p>
+      <code>wbgetentities</code>. Copertura: 1.001 persone (88,7%).</p>
     </div>
     <div class="card">
       <h3>SPARQL-Anything</h3>
-      <p>Tool Java per eseguire query SPARQL CONSTRUCT su file CSV, usato nelle
-      fasi iniziali del progetto per generare le triple RDF.</p>
+      <p>Tool Java per eseguire query SPARQL CONSTRUCT su file CSV. Usato nella
+      fase iniziale del progetto per convertire il CSV classificato in Turtle tramite
+      <code>trasforma_finale.sparql</code>. La pipeline è stata poi riscritta interamente
+      in Python (<code>genera_ttl.py</code>) per eliminare la dipendenza da Java.</p>
     </div>
     <div class="card">
       <h3>LLM (5 modelli)</h3>
@@ -146,29 +348,106 @@
     </div>
   </div>
 
-  <h2>Copertura dell'arricchimento biografico</h2>
-  <p>Su <strong>1.129 persone</strong> presenti nel Knowledge Graph, <strong>1.001 (88,7%)</strong>
-  sono state arricchite con le proprietà
-  <code>ex:professione</code>, <code>ex:dataNascita</code>, <code>ex:luogoNascita</code>,
-  <code>ex:dataMorte</code>, <code>ex:luogoMorte</code>.
-  Le restanti <strong>128 (11,3%)</strong> non dispongono di dati biografici per ragioni strutturali:</p>
+  <h2>Copertura dell'arricchimento</h2>
+  <p>Su <strong>1.129 persone</strong> presenti nel Knowledge Graph:</p>
   <ul>
-    <li><strong>Nome abbreviato nello stradario</strong>: il TTL contiene il solo cognome o soprannome
-    (es. <code>CAVOUR</code>, <code>DANTE</code>, <code>TINTORETTO</code>) non collegabile automaticamente
-    al nome completo nel foglio dati.</li>
-    <li><strong>Assenza di dati di partenza</strong>: figure locali minori non documentate su Wikidata
+    <li><strong>1.001 (88,7%)</strong> arricchite via Wikidata con
+    <code>ex:professione</code>, <code>ex:dataNascita</code>, <code>ex:luogoNascita</code>,
+    <code>ex:dataMorte</code>, <code>ex:luogoMorte</code>.</li>
+    <li><strong>1.036 (91,8%)</strong> arricchite con <code>ex:macroCategoriaOccupazionale</code>
+    (include tutte quelle con professione Wikidata + 35 aggiuntive).</li>
+    <li><strong>60 donne</strong> arricchite con <code>ex:datiAnagrafici</code> e
+    <code>ex:tipologiaLuogo</code> dal dataset "Aree verdi e vie dedicate alle donne".</li>
+    <li><strong>3 donne</strong> con <code>ex:professione</code> colmata dalla stessa fonte
+    (non presenti su Wikidata).</li>
+  </ul>
+  <p>Le restanti <strong>128 persone (11,3%)</strong> non dispongono di dati biografici per ragioni strutturali:</p>
+  <ul>
+    <li><strong>Nome abbreviato nello stradario</strong>: solo cognome o soprannome
+    (es. <code>CAVOUR</code>, <code>DANTE</code>, <code>TINTORETTO</code>) non collegabile automaticamente.</li>
+    <li><strong>Assenza di dati</strong>: figure locali minori non documentate su Wikidata
     né nelle fonti archivistiche consultate.</li>
     <li><strong>Collettivi e coppie</strong>: intitolazioni a gruppi storici
     (es. <code>AMBROGIO E PIETRO LORENZETTI</code>, <code>FRATELLI CERVI</code>)
-    non corrispondenti a singoli individui nel dataset biografico.</li>
+    non corrispondenti a singoli individui.</li>
   </ul>
 
-  <h2>Note metodologiche complete</h2>
-  <p>La documentazione dettagliata delle scelte classificatorie (santi → Toponimo,
-  soprannomi storici → Male/Female, Fratelli → Male, persone transgender, casi critici)
-  è disponibile nel file
-  <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/NOTE_METODOLOGICHE.md" target="_blank">NOTE_METODOLOGICHE.md</a>
-  nel repository.</p>
+  <h2>Note metodologiche sulla classificazione</h2>
+
+  <h3>Le tre categorie</h3>
+  <ul>
+    <li><strong>Male</strong> — la strada è intitolata a una persona di genere maschile, a un gruppo composto
+    esclusivamente da uomini, o a un collettivo denominato con sostantivo maschile.</li>
+    <li><strong>Female</strong> — la strada è intitolata a una persona di genere femminile.</li>
+    <li><strong>Toponimo</strong> — la strada è intitolata a un luogo, un concetto, un'istituzione,
+    un evento storico, un mestiere, o un nome di famiglia senza riferimento a un individuo specifico.</li>
+  </ul>
+
+  <h3>Criteri di classificazione</h3>
+  <table style="width:100%;border-collapse:collapse;font-size:0.9rem;margin-bottom:1.2rem">
+    <thead>
+      <tr style="background:var(--accent,#c0392b);color:#fff;text-align:left">
+        <th style="padding:0.5rem 0.75rem">Caso</th>
+        <th style="padding:0.5rem 0.75rem">Classificazione</th>
+        <th style="padding:0.5rem 0.75rem">Motivazione</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="padding:0.4rem 0.75rem">Santi e luoghi sacri (es. <em>San Lorenzo</em>, <em>Sant'Anna</em>)</td><td>Toponimo</td><td>Si riferiscono a chiese o quartieri storici, non all'individuo religioso</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem">Soprannomi storici (es. <em>Dante</em>, <em>Caravaggio</em>, <em>Tintoretto</em>)</td><td>Male / Female</td><td>Il referente storico è identificabile con certezza</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem">Nomi di famiglia nobiliare (es. <em>Achillini</em>, <em>Carracci</em>, <em>Bibiena</em>)</td><td>Toponimo</td><td>Non è possibile identificare un singolo individuo di riferimento</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem">Strade "Fratelli…" (es. <em>Fratelli Cervi</em>, <em>Fratelli Rosselli</em>)</td><td>Male</td><td>Il sostantivo è maschile e i referenti identificati sono tutti uomini</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem">Collettivi al maschile (es. <em>Ragazzi del '99</em>)</td><td>Male</td><td>La grammatica italiana usa il maschile plurale come genere non marcato</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem">Nomi femminili astratti (es. <em>Vittoria</em>, <em>Serena</em>, <em>Letizia</em>)</td><td>Toponimo</td><td>Si riferiscono a concetti o eventi, non a persone</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Casi critici</h3>
+
+  <p><strong>Passaggio Fratelli Marincola — classificato Male.</strong>
+  Il passaggio è intitolato a Giorgio <em>e</em> Isabella Marincola, fratello e sorella, entrambi partigiani.
+  Isabella era una donna. La classificazione Male riflette la denominazione ufficiale,
+  ma oscura concretamente il contributo di una donna partigiana afrodiscendente:
+  un caso emblematico di come il maschile grammaticale renda invisibile la presenza femminile nella storia.</p>
+
+  <p><strong>Nomi grammaticalmente femminili ma non riferiti a persone.</strong>
+  Alcuni nomi propri come <em>Vittoria</em>, <em>Serena</em>, <em>Valeria</em> potrebbero essere
+  interpretati come nomi di donna, ma nella toponomastica bolognese si riferiscono a concetti astratti
+  o eventi storici. Sono stati corretti a Toponimo dopo verifica caso per caso.
+  Analogamente, nomi maschili come <em>Spirito Santo</em> o <em>Vittorio Veneto</em>
+  sono stati corretti a Toponimo perché si riferiscono a luoghi.</p>
+
+  <h3>Persone transgender e non binarie</h3>
+  <p>Il dataset non contiene strade esplicitamente dedicate a persone non binarie,
+  riflettendo il fatto che la toponomastica storica è per costruzione binaria.
+  Il sistema di classificazione adottato è anch'esso binario (Male / Female / Toponimo),
+  con il limite esplicito di non poter rappresentare identità non binarie.</p>
+
+  <p><strong>Piazzale Marcella Di Folco — classificato Female.</strong>
+  Marcella Di Folco (1943–2010), nata con un nome maschile e vissuta come donna dagli anni '70,
+  è stata tra le più importanti attiviste per i diritti transgender in Italia.
+  Il gruppo di ricerca ha scelto di classificare questa strada come <strong>Female</strong>,
+  rispettando l'identità di genere autodichiarata — non il genere anagrafico alla nascita.
+  È una posizione etica esplicita, in assenza di indicazioni ufficiali esterne.</p>
+
+  <h3>Quadro normativo per le proposte</h3>
+  <p>L'intitolazione di spazi pubblici a persone fisiche è regolata dalla
+  <strong>Legge 23 giugno 1927, n. 1188</strong>, che richiede il decorso di almeno
+  <strong>dieci anni dal decesso</strong>. Le 34 proposte sono distinte in due categorie:</p>
+  <ul>
+    <li><strong>Attive (29)</strong> — la persona è deceduta da più di dieci anni;
+    la candidatura è immediatamente proponibile al Consiglio Comunale.</li>
+    <li><strong>Future (5)</strong> — la persona è deceduta da meno di dieci anni, è ancora in vita,
+    o la data di morte è incerta. La proposta viene registrata per essere avanzata
+    quando i requisiti temporali saranno soddisfatti.</li>
+  </ul>
+
+  <p style="font-size:0.88rem;color:var(--text-muted)">
+    La documentazione completa — con tutti i casi limite, le fonti archivistiche consultate
+    e le schede biografiche delle proposte — è disponibile nel file
+    <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/NOTE_METODOLOGICHE.md" target="_blank">NOTE_METODOLOGICHE.md</a>
+    nel repository GitHub del progetto.
+  </p>
 </div>
 
 </main>

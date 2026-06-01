@@ -12,7 +12,22 @@
     a owl:Ontology ;
     rdfs:label "Ontologia Toponomastica di Bologna"@it ;
     rdfs:label "Bologna Street Toponymy Ontology"@en ;
-    rdfs:comment "Ontologia per la classificazione di genere della toponomastica del Comune di Bologna. Riutilizza CLV e CPV (vocabolari controllati italiani) ed estende con proprietà custom per la gestione delle proposte di intitolazione."@it .
+    rdfs:comment "Knowledge Graph per l'analisi del divario di genere nella toponomastica di Bologna. Modella 1.960 strade del Comune, classificate per genere dell'intestatario (Male / Female / Toponimo). Solo 66 strade su 1.960 (5,8%) sono dedicate a donne — un rapporto di 1 a 16 rispetto agli uomini. Il KG integra dati Open Data del Comune, classificazione LLM, arricchimento biografico via Wikidata e 34 proposte di nuove intitolazioni a donne, persone trans e non binarie."@it ;
+    rdfs:comment "Knowledge Graph for analysing the gender gap in Bologna's street toponymy. Models 1,960 municipal streets classified by the honoree's gender (Male / Female / Toponym). Only 66 streets (5.8%) are dedicated to women — a 1-to-16 ratio against men. The KG combines Open Data from the Municipality of Bologna, LLM-based gender classification, Wikidata biographical enrichment, and 34 proposals for new dedications to women, trans and non-binary people."@en ;
+    <http://purl.org/dc/terms/title> "Gender Gap nella Toponomastica di Bologna — Knowledge Graph"@it ;
+    <http://purl.org/dc/terms/title> "Gender Gap in Bologna Street Toponymy — Knowledge Graph"@en ;
+    <http://purl.org/dc/terms/description> "Il KG è composto da circa 21.000 triple RDF. La pipeline: (1) Open Data CSV del Comune → classificazione LLM (Claude, ChatGPT, Gemini, DeepSeek, Copilot) → correzione sistematica con equita.py → generazione Turtle con genera_ttl.py; (2) arricchimento biografico via API Wikidata (P106, P569, P570) su 1.129 persone, copertura 88,7%; (3) 34 proposte di nuove intitolazioni con stato attiva/futura. Progetto universitario GEPID 2024–25, Università di Bologna."@it ;
+    <http://purl.org/dc/terms/creator> "Susanna Cioni" ;
+    <http://purl.org/dc/terms/creator> "Laura Tonsi" ;
+    <http://purl.org/dc/terms/publisher> "Università di Bologna — Corso GEPID 2024–25" ;
+    <http://purl.org/dc/terms/date> "2026" ;
+    <http://purl.org/dc/terms/source> <https://opendata.comune.bologna.it/> ;
+    <http://purl.org/dc/terms/source> <https://www.wikidata.org/> ;
+    <http://purl.org/dc/terms/license> <https://creativecommons.org/licenses/by/4.0/> ;
+    <http://purl.org/dc/terms/rights> "CC BY 4.0 — Attribuzione richiesta" ;
+    <http://www.w3.org/2002/07/owl#versionInfo> "1.1 — arricchimento topografico e semantico" ;
+    <http://xmlns.com/foaf/0.1/homepage> <https://lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH/> ;
+    <http://xmlns.com/foaf/0.1/page> <https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH> .
 
 # ── Classes ───────────────────────────────────────────────────────────────────
 
@@ -20,13 +35,13 @@ clv:Street
     a owl:Class ;
     rdfs:label "Strada"@it ;
     rdfs:label "Street"@en ;
-    rdfs:comment "Arco stradale del grafo viario del Comune di Bologna (via, piazza, viale, passaggio, largo, ecc.)."@it .
+    rdfs:comment "Arco stradale del grafo viario bolognese (via, piazza, viale, passaggio, largo, rotonda, parco, giardino, ecc.). Ogni istanza corrisponde a un CODVIA univoco degli Open Data comunali. Le strade possono avere proprietà di arricchimento: quartiere, coordinate geografiche, data di istituzione, tipologia luogo."@it .
 
 cpv:Person
     a owl:Class ;
     rdfs:label "Persona"@it ;
     rdfs:label "Person"@en ;
-    rdfs:comment "Persona storica a cui è intitolata una strada, oppure candidatura proposta per una futura intitolazione."@it .
+    rdfs:comment "Persona storica a cui è intitolata almeno una strada bolognese, oppure candidatura proposta dal gruppo di ricerca per una futura intitolazione. Classificata come Male, Female o Toponimo. Le istanze Female includono dati biografici da Wikidata (professione, nascita, morte). Le istanze proposte hanno ex:proposta 'true' e ex:statoProposta 'attiva' o 'futura'."@it .
 
 # ── Object Property ───────────────────────────────────────────────────────────
 
@@ -36,7 +51,7 @@ clv:isDedicatedTo
     rdfs:label "is dedicated to"@en ;
     rdfs:domain clv:Street ;
     rdfs:range  cpv:Person ;
-    rdfs:comment "Collega una strada alla persona a cui è intitolata (solo strade Male o Female)."@it .
+    rdfs:comment "Collega una strada alla persona a cui è intitolata. Presente solo per strade di genere Male o Female — i Toponimi non hanno questo collegamento."@it .
 
 # ── Datatype Properties (rilevanti per l'analisi) ─────────────────────────────
 
@@ -53,7 +68,7 @@ cpv:sex
     rdfs:label "gender classification"@en ;
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
-    rdfs:comment "Valori: 'Male', 'Female', 'Toponimo'."@it .
+    rdfs:comment "Valori: 'Male' (strada intitolata a uomo), 'Female' (intitolata a donna), 'Toponimo' (luoghi geografici, istituzioni, eventi, animali, concetti astratti)."@it .
 
 ex:professione
     a owl:DatatypeProperty ;
@@ -120,3 +135,55 @@ ex:luogoMorte
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
     rdfs:comment "Wikidata P20."@it .
+
+# ── Datatype Properties — arricchimento topografico (strade) ──────────────────
+
+ex:quartiere
+    a owl:DatatypeProperty ;
+    rdfs:label "quartiere"@it ;
+    rdfs:label "district"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Nome del quartiere bolognese in cui ricade la strada."@it .
+
+ex:geoPoint
+    a owl:DatatypeProperty ;
+    rdfs:label "geo point"@it ;
+    rdfs:label "geo point"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Coordinate WGS84 del centroide della strada (lat, lon), estratte dal dataset Open Data Comune di Bologna."@it .
+
+ex:dataIstituzione
+    a owl:DatatypeProperty ;
+    rdfs:label "data di istituzione"@it ;
+    rdfs:label "institution date"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Data di istituzione ufficiale dell'intitolazione, formato ISO 8601 (es. '1991-10-21')."@it .
+
+ex:tipologiaLuogo
+    a owl:DatatypeProperty ;
+    rdfs:label "tipologia del luogo"@it ;
+    rdfs:label "place type"@en ;
+    rdfs:domain clv:Street ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Tipo di luogo toponomastico (Via, Largo, Piazza, Passaggio, Rotonda, Parco, Giardino, ecc.). Presente solo per i luoghi dedicati a donne, estratto dal dataset 'Aree verdi e vie dedicate alle donne'."@it .
+
+# ── Datatype Properties — arricchimento semantico (persone) ──────────────────
+
+ex:macroCategoriaOccupazionale
+    a owl:DatatypeProperty ;
+    rdfs:label "macro categoria occupazionale"@it ;
+    rdfs:label "occupational macro category"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Categoria semantica della professione, assegnata tramite matching su parole chiave. 9 valori: Arte visiva e architettura · Filosofia, storia e accademia · Letteratura e giornalismo · Musica, teatro e cinema · Patrioti, militari ed esploratori · Politica e diritto · Religione · Scienze e medicina · Altro/istituzionale."@it .
+
+ex:datiAnagrafici
+    a owl:DatatypeProperty ;
+    rdfs:label "dati anagrafici"@it ;
+    rdfs:label "biographical data"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Stringa sintetica con luogo e anno di nascita e morte (es. 'Bologna, 1711 - Parigi, 1782'). Presente solo per le donne, estratta dal dataset 'Aree verdi e vie dedicate alle donne'."@it .
