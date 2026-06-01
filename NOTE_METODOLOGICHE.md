@@ -13,7 +13,7 @@ Poiché lo stradario comunale di base non include nativamente una classificazion
 
 ## Arricchimento biografico tramite Wikidata
 
-Per le circa 470 persone identificate nel Knowledge Graph (strade intitolate a persone di genere **Male** o **Female**), i dati biografici — professione/occupazione, data e luogo di nascita, data e luogo di morte — sono stati recuperati automaticamente tramite l'**API JSON di Wikidata** ([https://www.wikidata.org/w/api.php](https://www.wikidata.org/w/api.php)), utilizzando le seguenti proprietà:
+Per le 1.129 persone identificate nel Knowledge Graph (strade intitolate a persone di genere **Male** o **Female**), i dati biografici — professione/occupazione, data e luogo di nascita, data e luogo di morte — sono stati recuperati automaticamente tramite l'**API JSON di Wikidata** ([https://www.wikidata.org/w/api.php](https://www.wikidata.org/w/api.php)), utilizzando le seguenti proprietà:
 
 | Proprietà | Significato |
 |-----------|-------------|
@@ -123,15 +123,15 @@ In una seconda fase di arricchimento, il Knowledge Graph è stato esteso con nuo
 
 ### Nuove proprietà su `clv:Street`
 
-- **`ex:quartiere`** — nome del quartiere bolognese in cui ricade la strada (es. `"Savena"`, `"Porto - Saragozza"`). Presente per tutte le 1.132 strade Male e Female.
+- **`ex:quartiere`** — nome del quartiere bolognese in cui ricade la strada (es. `"Savena"`, `"Porto - Saragozza"`). Presente per tutte le 1.131 strade Male e Female.
 - **`ex:geoPoint`** — coordinate WGS84 del centroide della strada, formato `"lat, lon"` (es. `"44.483592003952296, 11.367738980601088"`). Abilita query e visualizzazioni geospaziali.
 - **`ex:dataIstituzione`** — data di istituzione ufficiale dell'intitolazione in formato ISO 8601 (es. `"1991-10-21"`). Permette analisi storiche sull'evoluzione temporale delle intitolazioni.
-- **`ex:tipologiaLuogo`** — tipo di luogo toponomastico (`"Via"`, `"Largo"`, `"Piazza"`, `"Passaggio"`, `"Rotonda"`, `"Parco"`, `"Giardino"`, ecc.). Estratto solo per i luoghi presenti nel dataset "Aree verdi e vie dedicate alle donne" (60 match su 66 luoghi femminili).
+- **`ex:tipologiaLuogo`** — tipo di luogo toponomastico (`"Via"`, `"Largo"`, `"Piazza"`, `"Passaggio"`, `"Rotonda"`, `"Parco"`, `"Giardino"`, ecc.). Estratto solo per i luoghi presenti nel dataset "Aree verdi e vie dedicate alle donne" (59 match su 66 luoghi femminili).
 
 ### Nuove proprietà su `cpv:Person`
 
-- **`ex:macroCategoriaOccupazionale`** — categoria semantica della professione, assegnata tramite matching su parole chiave sul campo `ex:professione`. Valori possibili: `"Arte visiva e architettura"`, `"Scienze e medicina"`, `"Politica e diritto"`, `"Musica, teatro e cinema"`, `"Letteratura e giornalismo"`, `"Filosofia, storia e accademia"`, `"Patrioti, militari ed esploratori"`, `"Religione"`, `"Altro / istituzionale"`. Aggiunto a 1.036 persone.
-- **`ex:datiAnagrafici`** — stringa sintetica con luogo e anno di nascita e di morte (es. `"Bologna, 1711 - Parigi, 1782"`). Estratto dal campo `DATI ANAGRAFICI` del dataset "Aree verdi e vie dedicate alle donne". Presente solo per le persone di genere Female con un match nel dataset (60 persone).
+- **`ex:macroCategoriaOccupazionale`** — categoria semantica della professione, assegnata tramite matching su parole chiave sul campo `ex:professione`. Valori possibili: `"Arte visiva e architettura"`, `"Scienze e medicina"`, `"Politica e diritto"`, `"Musica, teatro e cinema"`, `"Letteratura e giornalismo"`, `"Filosofia, storia e accademia"`, `"Patrioti, militari ed esploratori"`, `"Religione"`, `"Altro / istituzionale"`. Aggiunto a 1.030 persone.
+- **`ex:datiAnagrafici`** — stringa sintetica con luogo e anno di nascita e di morte (es. `"Bologna, 1711 - Parigi, 1782"`). Estratto dal campo `DATI ANAGRAFICI` del dataset "Aree verdi e vie dedicate alle donne". Presente solo per le persone di genere Female con un match nel dataset (59 persone).
 - **`ex:professione`** (colmatura) — per 3 persone di genere Female non documentate su Wikidata e quindi prive di `ex:professione` nella fase di arricchimento biografico, il campo è stato colmato con il valore `CLASSIFICAZIONE` del dataset "Aree verdi e vie dedicate alle donne".
 
 ### Script e riproducibilità

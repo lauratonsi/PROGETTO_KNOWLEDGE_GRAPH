@@ -74,7 +74,7 @@ Output: `classificazione_professioni.csv`
 python classifica_professioni.py
 ```
 
-Assegna una macro-categoria occupazionale a ciascuna delle 1.191 persone classificate
+Assegna una macro-categoria occupazionale a ciascuna delle 1.192 persone classificate
 tramite matching su parole chiave nelle professioni Wikidata.
 
 ---
@@ -91,7 +91,7 @@ python arricchimento_kg.py
 
 Aggiunge a `clv:Street`: `ex:quartiere`, `ex:geoPoint`, `ex:dataIstituzione`, `ex:tipologiaLuogo`.  
 Aggiunge a `cpv:Person`: `ex:macroCategoriaOccupazionale`, `ex:datiAnagrafici`, `ex:professione` (completamento).  
-Il TTL passa da ~18.363 a 27.251 righe (+4.545 triple di arricchimento).
+Il TTL risultante conta 27.251 righe (~16.000 triple RDF).
 
 ---
 
@@ -102,8 +102,6 @@ Il TTL passa da ~18.363 a 27.251 righe (+4.545 triple di arricchimento).
 | `normalizzazione_CSV.py` | Pulizia e normalizzazione dei CSV grezzi comunali |
 | `pulizia.py` | Pre-processing del testo (nomi vie) |
 | `cross_check.py` / `detailed_match.py` | Verifica incrociata classificazioni |
-| `professioni_analisi.py` | Analisi statistica delle professioni |
-| `generazione_grafici_analisi.py` | Genera i grafici per il sito |
 | `run_queries.py` | Esegue query SPARQL sul KG localmente |
 | `build_site.py` | Utility per il build del sito |
 | `P106.py` | Prototipo iniziale: estrazione P106 via SPARQL-Anything (non nella pipeline finale) |
@@ -116,7 +114,7 @@ Il TTL passa da ~18.363 a 27.251 righe (+4.545 triple di arricchimento).
 |---|---|
 | `bologna_entita_uniche_comma.csv` | Classificazione LLM grezza (input) |
 | `bologna_KG_ready.csv` | CSV classificato e corretto (output di `equita.py`) |
-| `bologna_KG_corretto.ttl` | Knowledge Graph finale (~27.000 righe, ~21.000 triple) |
+| `bologna_KG_corretto.ttl` | Knowledge Graph finale (~27.000 righe, ~16.000 triple) |
 | `F_M DATE.xlsx` | Dati biografici Wikidata per 1.129 persone |
 | `classificazione_professioni.csv` | Macro-categorie occupazionali |
 | `proposte_intitolazioni_future.csv` | 34 proposte di nuove intitolazioni |
