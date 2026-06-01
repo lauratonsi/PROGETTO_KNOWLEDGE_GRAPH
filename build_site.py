@@ -424,6 +424,18 @@ footer p { margin-bottom: 0.4rem; }
 }
 .btn-webvowl:hover { background: var(--primary-light); color: #fff; }
 .webvowl-note { font-size: 0.85rem; color: #555; margin-top: 0.75rem; }
+
+/* ── SPARQL Playground ── */
+.sparql-playground { background: #f5f5fa; border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; }
+.sparql-examples { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem; }
+.example-btn { background: #fff; border: 2px solid var(--primary); color: var(--primary); padding: 0.4rem 0.9rem; border-radius: 20px; cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.2s; }
+.example-btn.active, .example-btn:hover { background: var(--primary); color: #fff; }
+.sparql-textarea { width: 100%; box-sizing: border-box; font-family: 'Consolas','Monaco','Courier New',monospace; font-size: 0.82rem; line-height: 1.65; background: #1e1e2e; color: #cdd6f4; border: none; border-radius: var(--radius); padding: 1rem 1.2rem; min-height: 220px; resize: vertical; outline: none; margin-bottom: 0.8rem; display: block; }
+.run-btn { background: var(--primary); color: #fff; border: none; padding: 0.65rem 2rem; border-radius: 6px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.run-btn:hover { background: var(--primary-light); }
+.run-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.sparql-status { margin: 0.6rem 0; font-size: 0.88rem; color: var(--text-muted); min-height: 1.4em; }
+.sparql-status.err { color: #c0392b; }
 '''
 
 (DOCS / 'style.css').write_text(CSS, encoding='utf-8')
@@ -786,18 +798,87 @@ WHERE {
 ORDER BY ?nomePersona
 LIMIT 20'''
 
+# ── SPARQL playground example queries ─────────────────────────────────────────
+_PLAY_Q1 = '''PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+
+SELECT ?genere (COUNT(DISTINCT ?via) AS ?numero)
+WHERE {
+  ?via a clv:Street ;
+       clv:isDedicatedTo ?persona .
+  ?persona cpv:sex ?genere .
+}
+GROUP BY ?genere
+ORDER BY DESC(?numero)'''
+
+_PLAY_Q2 = '''PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
+
+SELECT DISTINCT ?nomeVia ?nomePersona ?professione
+WHERE {
+  ?via a clv:Street ;
+       clv:hasStreetName ?nomeVia ;
+       clv:isDedicatedTo ?persona .
+  ?persona cpv:fullName ?nomePersona ;
+           cpv:sex "Female" .
+  OPTIONAL { ?persona ex:professione ?professione }
+}
+ORDER BY ?nomeVia
+LIMIT 20'''
+
+_PLAY_Q3 = '''PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
+
+SELECT DISTINCT ?nomePersona ?professione ?dataNascita ?dataMorte
+WHERE {
+  ?via a clv:Street ;
+       clv:isDedicatedTo ?persona .
+  ?persona cpv:fullName ?nomePersona ;
+           cpv:sex "Female" .
+  OPTIONAL { ?persona ex:professione ?professione }
+  OPTIONAL { ?persona ex:dataNascita ?dataNascita }
+  OPTIONAL { ?persona ex:dataMorte   ?dataMorte   }
+  FILTER ( BOUND(?professione) || BOUND(?dataNascita) )
+}
+ORDER BY ?nomePersona'''
+
+SPARQL_EXAMPLES_JS = json.dumps([_PLAY_Q1, _PLAY_Q2, _PLAY_Q3], ensure_ascii=False)
+
 SPARQL = page('Query SPARQL', f'''
 <div class="hero" style="padding:3.5rem 1.5rem 3rem">
   <h1>Query SPARQL sul Knowledge Graph</h1>
-  <p>Cinque query che interrogano il KG bolognese.
+  <p>Sei query che interrogano il KG bolognese.
   Utilizzano tutte le keyword obbligatorie: OPTIONAL, DISTINCT, UNION, FILTER, REGEX, LIMIT, ORDER BY.</p>
+</div>
+
+<div class="section">
+  <h2>Interrogazione interattiva</h2>
+  <p>Scrivi o modifica una query SPARQL ed eseguila direttamente nel browser sul Knowledge Graph di Bologna.
+  Il file <code>bologna_KG_corretto.ttl</code> (16.244 triple) viene interrogato in tempo reale
+  tramite <a href="https://comunica.dev/" target="_blank">Comunica</a>, un motore SPARQL&nbsp;1.1 open source.</p>
+  <p style="font-size:0.88rem;color:var(--text-muted)"><strong>Nota:</strong>
+  al primo avvio il browser scarica il motore (~3&nbsp;MB) e il file RDF (~1&nbsp;MB).
+  Le query successive sono molto più rapide grazie alla cache del browser.</p>
+  <div class="sparql-playground">
+    <div class="sparql-examples">
+      <button class="example-btn active" onclick="loadExample(0)">Esempio 1 — Conteggio per genere</button>
+      <button class="example-btn" onclick="loadExample(1)">Esempio 2 — Strade femminili</button>
+      <button class="example-btn" onclick="loadExample(2)">Esempio 3 — Dati biografici</button>
+    </div>
+    <textarea id="sparql-input" class="sparql-textarea" spellcheck="false"></textarea>
+    <button id="run-btn" class="run-btn" onclick="runSparql()">&#9654; Esegui query</button>
+    <div id="sparql-status" class="sparql-status"></div>
+    <div id="sparql-results"></div>
+  </div>
 </div>
 
 <div class="section">
   <div class="info-box">
     Il Knowledge Graph è disponibile come file Turtle nel repository:
     <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/bologna_KG_corretto.ttl" target="_blank">
-    bologna_KG_corretto.ttl</a> (11.696 triple).
+    bologna_KG_corretto.ttl</a> (16.244 triple).
     Per eseguire le query localmente: <code>python run_queries.py</code> (usa
     <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>).
   </div>
@@ -901,7 +982,70 @@ SPARQL = page('Query SPARQL', f'''
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">OPTIONAL consente di restituire anche le persone con dati parziali. FILTER(BOUND(?professione)||BOUND(?dataNascita)) esclude solo i record completamente privi di dati (128 persone, 11,3%).</p>
 </div>
-''', active='sparql.html')
+''', active='sparql.html', extra_js=f'''<script>
+const _SPARQL_EX = {SPARQL_EXAMPLES_JS};
+function loadExample(i) {{
+  document.getElementById('sparql-input').value = _SPARQL_EX[i];
+  document.querySelectorAll('.example-btn').forEach(function(b,j) {{ b.classList.toggle('active', j===i); }});
+}}
+loadExample(0);
+
+let _sparqlEng = null;
+function _loadComunica() {{
+  if (_sparqlEng) return Promise.resolve(_sparqlEng);
+  const st = document.getElementById('sparql-status');
+  st.className = 'sparql-status'; st.textContent = '⏳ Caricamento motore SPARQL…';
+  return new Promise(function(ok, fail) {{
+    const s = document.createElement('script');
+    s.src = 'https://comunica.github.io/comunica-browser/versions/latest/comunica-browser.js';
+    s.onload = function() {{
+      _sparqlEng = new Comunica.QueryEngine();
+      ok(_sparqlEng);
+    }};
+    s.onerror = function() {{ fail(new Error('Impossibile caricare il motore Comunica')); }};
+    document.head.appendChild(s);
+  }});
+}}
+
+async function runSparql() {{
+  const btn = document.getElementById('run-btn');
+  const st  = document.getElementById('sparql-status');
+  const res = document.getElementById('sparql-results');
+  const sparql = document.getElementById('sparql-input').value.trim();
+  if (!sparql) return;
+  btn.disabled = true; res.innerHTML = '';
+  try {{
+    const engine = await _loadComunica();
+    const ttlUrl = new URL('bologna_KG_corretto.ttl', window.location.href).href;
+    st.className = 'sparql-status'; st.textContent = '⏳ Interrogazione KG in corso…';
+    const stream = await engine.queryBindings(sparql, {{ sources: [ttlUrl] }});
+    const bindings = await stream.toArray();
+    if (!bindings.length) {{ st.textContent = 'Nessun risultato trovato.'; return; }}
+    const MAX = 200;
+    const shown = bindings.slice(0, MAX);
+    const vars = [];
+    shown[0].keys().forEach(function(k) {{ vars.push(typeof k === 'string' ? k : k.value); }});
+    let h = '<div class="table-wrap"><table><tr>';
+    vars.forEach(function(v) {{ h += '<th>?' + v + '</th>'; }});
+    h += '</tr>';
+    shown.forEach(function(b) {{
+      h += '<tr>';
+      vars.forEach(function(v) {{
+        const t = b.get(v);
+        const val = t ? (t.value !== undefined ? t.value : String(t)) : null;
+        h += '<td>' + (val !== null ? val.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '<em>—</em>') + '</td>';
+      }});
+      h += '</tr>';
+    }});
+    h += '</table></div>';
+    res.innerHTML = h;
+    st.textContent = '✓ ' + bindings.length + ' risultat' + (bindings.length === 1 ? 'o' : 'i') +
+      (bindings.length > MAX ? ' (mostrati i primi ' + MAX + ')' : '');
+  }} catch(e) {{
+    st.className = 'sparql-status err'; st.textContent = '✗ ' + e.message;
+  }} finally {{ btn.disabled = false; }}
+}}
+</script>''')
 
 (DOCS / 'sparql.html').write_text(SPARQL, encoding='utf-8')
 print('sparql.html ✓')
@@ -1489,6 +1633,9 @@ renderProps();
 
 (DOCS / 'proposals.html').write_text(PROPOSALS_PAGE, encoding='utf-8')
 print('proposals.html ✓')
+
+shutil.copy2(BASE / 'bologna_KG_corretto.ttl', DOCS / 'bologna_KG_corretto.ttl')
+print('bologna_KG_corretto.ttl → docs/ ✓')
 
 print('\nSite built successfully in docs/')
 print(f'Files: {", ".join(p.name for p in sorted(DOCS.iterdir()))}')
