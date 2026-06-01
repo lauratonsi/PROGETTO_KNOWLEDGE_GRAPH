@@ -33,26 +33,6 @@
   <code>ex:quartiere</code>, <code>ex:dataIstituzione</code>, <code>ex:macroCategoriaOccupazionale</code>, <code>ex:datiAnagrafici</code>.</p>
 </div>
 
-<div class="section">
-  <h2>Interrogazione interattiva</h2>
-  <p>Scrivi o modifica una query SPARQL ed eseguila direttamente nel browser sul Knowledge Graph di Bologna.
-  Il file <code>bologna_KG_corretto.ttl</code> viene caricato in memoria tramite
-  <a href="https://oxigraph.org/" target="_blank">Oxigraph</a>, un motore SPARQL&nbsp;1.1 compilato in WebAssembly.</p>
-  <p style="font-size:0.88rem;color:var(--text-muted)"><strong>Nota:</strong>
-  al primo click il browser scarica il motore WebAssembly e il file RDF (~1&nbsp;MB).
-  Le query successive sono istantanee perché il KG rimane in memoria.</p>
-  <div class="sparql-playground">
-    <div class="sparql-examples">
-      <button class="example-btn active" onclick="loadExample(0)">Esempio 1 — Conteggio per genere</button>
-      <button class="example-btn" onclick="loadExample(1)">Esempio 2 — Strade femminili</button>
-      <button class="example-btn" onclick="loadExample(2)">Esempio 3 — Dati biografici</button>
-    </div>
-    <textarea id="sparql-input" class="sparql-textarea" spellcheck="false"></textarea>
-    <button id="run-btn" class="run-btn" onclick="runSparql()">&#9654; Esegui query</button>
-    <div id="sparql-status" class="sparql-status"></div>
-    <div id="sparql-results"></div>
-  </div>
-</div>
 
 <div class="section">
   <div class="info-box">
@@ -554,66 +534,5 @@
   </div>
 </footer>
 
-<script>
-const _SPARQL_EX = ["PREFIX clv: <https://w3id.org/italia/onto/CLV/>\nPREFIX cpv: <https://w3id.org/italia/onto/CPV/>\n\nSELECT ?genere (COUNT(DISTINCT ?via) AS ?numero)\nWHERE {\n  ?via a clv:Street ;\n       clv:isDedicatedTo ?persona .\n  ?persona cpv:sex ?genere .\n}\nGROUP BY ?genere\nORDER BY DESC(?numero)","PREFIX clv: <https://w3id.org/italia/onto/CLV/>\nPREFIX cpv: <https://w3id.org/italia/onto/CPV/>\nPREFIX ex:  <https://w3id.org/bologna/ontology#>\n\nSELECT DISTINCT ?nomeVia ?nomePersona ?professione\nWHERE {\n  ?via a clv:Street ;\n       clv:hasStreetName ?nomeVia ;\n       clv:isDedicatedTo ?persona .\n  ?persona cpv:fullName ?nomePersona ;\n           cpv:sex \"Female\" .\n  OPTIONAL { ?persona ex:professione ?professione }\n}\nORDER BY ?nomeVia\nLIMIT 20","PREFIX clv: <https://w3id.org/italia/onto/CLV/>\nPREFIX cpv: <https://w3id.org/italia/onto/CPV/>\nPREFIX ex:  <https://w3id.org/bologna/ontology#>\n\nSELECT DISTINCT ?nomePersona ?professione ?dataNascita ?dataMorte\nWHERE {\n  ?via a clv:Street ;\n       clv:isDedicatedTo ?persona .\n  ?persona cpv:fullName ?nomePersona ;\n           cpv:sex \"Female\" .\n  OPTIONAL { ?persona ex:professione ?professione }\n  OPTIONAL { ?persona ex:dataNascita ?dataNascita }\n  OPTIONAL { ?persona ex:dataMorte   ?dataMorte   }\n  FILTER ( BOUND(?professione) || BOUND(?dataNascita) )\n}\nORDER BY ?nomePersona"];
-function loadExample(i) {
-  document.getElementById('sparql-input').value = _SPARQL_EX[i];
-  document.querySelectorAll('.example-btn').forEach(function(b,j) { b.classList.toggle('active', j===i); });
-}
-loadExample(0);
-
-let _oxStore = null;
-async function _ensureStore() {
-  if (_oxStore) return _oxStore;
-  const st = document.getElementById('sparql-status');
-  st.className = 'sparql-status'; st.textContent = '⏳ Caricamento motore SPARQL (WebAssembly)…';
-  const mod = await import('https://cdn.jsdelivr.net/npm/oxigraph@0.5.8/web.js');
-  await mod.default();
-  const ttlUrl = new URL('bologna_KG_corretto.ttl', window.location.href).href;
-  st.textContent = '⏳ Caricamento Knowledge Graph (~1 MB)…';
-  const resp = await fetch(ttlUrl);
-  if (!resp.ok) throw new Error('Impossibile caricare il KG (HTTP ' + resp.status + ')');
-  const ttl = await resp.text();
-  _oxStore = new mod.Store();
-  _oxStore.load(ttl, { format: 'Turtle', base_iri: ttlUrl });
-  return _oxStore;
-}
-async function runSparql() {
-  const btn = document.getElementById('run-btn');
-  const st  = document.getElementById('sparql-status');
-  const res = document.getElementById('sparql-results');
-  const sparql = document.getElementById('sparql-input').value.trim();
-  if (!sparql) return;
-  btn.disabled = true; res.innerHTML = '';
-  try {
-    const store = await _ensureStore();
-    st.className = 'sparql-status'; st.textContent = '⏳ Interrogazione in corso…';
-    const results = store.query(sparql);
-    if (typeof results === 'boolean') { st.textContent = '✓ Risultato: ' + results; return; }
-    if (!Array.isArray(results) || results.length === 0) { st.textContent = 'Nessun risultato trovato.'; return; }
-    const MAX = 200;
-    const shown = results.slice(0, MAX);
-    const vars = [...shown[0].keys()];
-    let h = '<div class="table-wrap"><table><tr>';
-    vars.forEach(function(v) { h += '<th>?' + v + '</th>'; });
-    h += '</tr>';
-    shown.forEach(function(row) {
-      h += '<tr>';
-      vars.forEach(function(v) {
-        const t = row.get(v);
-        const val = t ? t.value : null;
-        h += '<td>' + (val !== null ? val.replace(/&/g,'&amp;').replace(/</g,'&lt;') : '<em>—</em>') + '</td>';
-      });
-      h += '</tr>';
-    });
-    h += '</table></div>';
-    res.innerHTML = h;
-    st.textContent = '✓ ' + results.length + ' risultat' + (results.length === 1 ? 'o' : 'i') +
-      (results.length > MAX ? ' (mostrati i primi ' + MAX + ')' : '');
-  } catch(e) {
-    st.className = 'sparql-status err'; st.textContent = '✗ ' + e.message;
-  } finally { btn.disabled = false; }
-}
-</script>
 </body>
 </html>

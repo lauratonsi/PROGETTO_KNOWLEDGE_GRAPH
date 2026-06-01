@@ -416,15 +416,3 @@ footer p { margin-bottom: 0.4rem; }
   .kg-arrow-head { transform: rotate(90deg); }
   .kg-node { min-width: unset; width: 100%; max-width: 100%; }
 }
-
-/* ── SPARQL Playground ── */
-.sparql-playground { background: #f5f5fa; border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0; }
-.sparql-examples { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem; }
-.example-btn { background: #fff; border: 2px solid var(--primary); color: var(--primary); padding: 0.4rem 0.9rem; border-radius: 20px; cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.2s; }
-.example-btn.active, .example-btn:hover { background: var(--primary); color: #fff; }
-.sparql-textarea { width: 100%; box-sizing: border-box; font-family: 'Consolas','Monaco','Courier New',monospace; font-size: 0.82rem; line-height: 1.65; background: #1e1e2e; color: #cdd6f4; border: none; border-radius: var(--radius); padding: 1rem 1.2rem; min-height: 220px; resize: vertical; outline: none; margin-bottom: 0.8rem; display: block; }
-.run-btn { background: var(--primary); color: #fff; border: none; padding: 0.65rem 2rem; border-radius: 6px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-.run-btn:hover { background: var(--primary-light); }
-.run-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-.sparql-status { margin: 0.6rem 0; font-size: 0.88rem; color: var(--text-muted); min-height: 1.4em; }
-.sparql-status.err { color: #c0392b; }
