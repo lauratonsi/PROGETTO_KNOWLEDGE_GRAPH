@@ -12,12 +12,12 @@
     a owl:Ontology ;
     rdfs:label "Ontologia Toponomastica di Bologna"@it ;
     rdfs:label "Bologna Street Toponymy Ontology"@en ;
-    rdfs:comment "Knowledge Graph per l'analisi del divario di genere nella toponomastica di Bologna. Modella 1.962 strade del Comune, classificate per genere dell'intestatario (Male / Female / Toponimo). Solo 66 strade su 1.131 intitolate a persone (5,8%) sono dedicate a donne — un rapporto di 1 a 16 rispetto agli uomini. Il KG integra dati Open Data del Comune, classificazione LLM, arricchimento biografico via Wikidata e 34 proposte di nuove intitolazioni a donne, persone trans e non binarie."@it ;
-    rdfs:comment "Knowledge Graph for analysing the gender gap in Bologna's street toponymy. Models 1,962 municipal streets classified by the honoree's gender (Male / Female / Toponym). Only 66 of 1,131 person-dedicated streets (5.8%) are dedicated to women — a 1-to-16 ratio against men. The KG combines Open Data from the Municipality of Bologna, LLM-based gender classification, Wikidata biographical enrichment, and 34 proposals for new dedications to women, trans and non-binary people."@en ;
+    rdfs:comment "Knowledge Graph per l'analisi del divario di genere nella toponomastica di Bologna. Modella 1.131 strade intitolate a persone (Male o Female) su 1.960 censite. Solo 66 (5,8%) sono dedicate a donne — un rapporto di 1 a 16 rispetto agli uomini. Il KG integra dati Open Data del Comune, classificazione LLM, arricchimento biografico via Wikidata e 34 proposte di nuove intitolazioni in un file separato (proposte_KG.ttl)."@it ;
+    rdfs:comment "Knowledge Graph for analysing the gender gap in Bologna's street toponymy. Models 1,131 streets dedicated to people (Male or Female) out of 1,960 surveyed. Only 66 (5.8%) are dedicated to women — a 1-to-16 ratio against men. The KG combines Open Data from the Municipality of Bologna, LLM-based gender classification, Wikidata biographical enrichment, and 34 proposals for new dedications stored in a separate file (proposte_KG.ttl)."@en ;
     <http://purl.org/dc/terms/title> "Gender Gap nella Toponomastica di Bologna — Knowledge Graph"@it ;
     <http://purl.org/dc/terms/title> "Gender Gap in Bologna Street Toponymy — Knowledge Graph"@en ;
-    <http://purl.org/dc/terms/description> "Il KG è composto da circa 16.000 triple RDF. La pipeline: (1) Open Data CSV del Comune → classificazione LLM (Claude, ChatGPT, Gemini, DeepSeek, Copilot) → correzione sistematica con equita.py → generazione Turtle con genera_ttl.py; (2) arricchimento biografico via API Wikidata (P106, P569, P570) su 1.129 persone, copertura 88,7%; (3) 34 proposte di nuove intitolazioni con stato attiva/futura. Progetto universitario GEPID 2024–25, Università di Bologna."@it ;
-    <http://purl.org/dc/terms/description> "The KG consists of about 16,000 RDF triples. Pipeline: (1) Municipality CSV Open Data → LLM classification (Claude, ChatGPT, Gemini, DeepSeek, Copilot) → systematic correction with equita.py → Turtle generation with genera_ttl.py; (2) biographical enrichment via Wikidata API (P106, P569, P570) for 1,129 people, 88.7% coverage; (3) 34 new street dedication proposals with active/future status. GEPID university project 2026, University of Bologna."@en ;
+    <http://purl.org/dc/terms/description> "Il KG è composto da 16.244 triple RDF. La pipeline: (1) Open Data CSV del Comune → classificazione LLM (Claude, ChatGPT, Gemini, DeepSeek, Copilot) → correzione sistematica con equita.py → generazione Turtle con genera_ttl.py; (2) arricchimento biografico via API Wikidata (P106, P569, P570) su 1.129 persone, copertura 88,7%; (3) 34 proposte di nuove intitolazioni in proposte_KG.ttl (file separato). Progetto universitario GEPID 2024–25, Università di Bologna."@it ;
+    <http://purl.org/dc/terms/description> "The KG consists of 16,244 RDF triples. Pipeline: (1) Municipality CSV Open Data → LLM classification (Claude, ChatGPT, Gemini, DeepSeek, Copilot) → systematic correction with equita.py → Turtle generation with genera_ttl.py; (2) biographical enrichment via Wikidata API (P106, P569, P570) for 1,129 people, 88.7% coverage; (3) 34 new street dedication proposals in proposte_KG.ttl (separate file). GEPID university project 2026, University of Bologna."@en ;
     <http://purl.org/dc/terms/creator> "Susanna Cioni" ;
     <http://purl.org/dc/terms/creator> "Laura Tonsi" ;
     <http://purl.org/dc/terms/publisher> "Università di Bologna — Corso GEPID 2026" ;
@@ -42,7 +42,7 @@ cpv:Person
     a owl:Class ;
     rdfs:label "Persona"@it ;
     rdfs:label "Person"@en ;
-    rdfs:comment "Persona storica a cui è intitolata almeno una strada bolognese, oppure candidatura proposta dal gruppo di ricerca per una futura intitolazione. Classificata come Male, Female o Toponimo. Le istanze Female includono dati biografici da Wikidata (professione, nascita, morte). Le istanze proposte hanno ex:proposta 'true' e ex:statoProposta 'attiva' o 'futura'."@it .
+    rdfs:comment "Persona storica a cui è intitolata almeno una strada bolognese, oppure candidatura proposta dal gruppo di ricerca per una futura intitolazione. Classificata come Male o Female. Le istanze Female includono dati biografici da Wikidata (professione, nascita, morte). Le istanze proposte hanno ex:statoProposta 'attiva' o 'futura' e sono contenute nel file separato proposte_KG.ttl."@it .
 
 # ── Object Property ───────────────────────────────────────────────────────────
 
@@ -69,7 +69,7 @@ cpv:sex
     rdfs:label "gender classification"@en ;
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
-    rdfs:comment "Valori: 'Male' (strada intitolata a uomo), 'Female' (intitolata a donna), 'Toponimo' (luoghi geografici, istituzioni, eventi, animali, concetti astratti)."@it .
+    rdfs:comment "Valori: 'Male' (strada intitolata a uomo), 'Female' (intitolata a donna). Le strade non intitolate a persone identificabili sono escluse dal KG."@it .
 
 ex:professione
     a owl:DatatypeProperty ;
@@ -79,21 +79,13 @@ ex:professione
     rdfs:range  xsd:string ;
     rdfs:comment "Ricavata da Wikidata P106 o fonti archivistiche locali."@it .
 
-ex:proposta
-    a owl:DatatypeProperty ;
-    rdfs:label "proposta di intitolazione"@it ;
-    rdfs:label "naming proposal"@en ;
-    rdfs:domain cpv:Person ;
-    rdfs:range  xsd:string ;
-    rdfs:comment "Valore 'true' per le candidature proposte dal gruppo di ricerca."@it .
-
 ex:statoProposta
     a owl:DatatypeProperty ;
     rdfs:label "stato della proposta"@it ;
     rdfs:label "proposal status"@en ;
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
-    rdfs:comment "Valori: 'attiva' (decesso >10 anni) o 'futura' (decesso <10 anni o persona in vita)."@it .
+    rdfs:comment "Valori: 'attiva' (decesso >10 anni) o 'futura' (decesso <10 anni o persona in vita). Proprietà presente solo nelle istanze di proposte_KG.ttl, non nel KG principale."@it .
 
 # ── Annotation Properties (identificatori) ────────────────────────────────────
 
