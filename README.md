@@ -91,7 +91,7 @@ python arricchimento_kg.py
 
 Aggiunge a `clv:Street`: `ex:quartiere`, `ex:geoPoint`, `ex:dataIstituzione`, `ex:tipologiaLuogo`.  
 Aggiunge a `cpv:Person`: `ex:macroCategoriaOccupazionale`, `ex:datiAnagrafici`, `ex:professione` (completamento).  
-Il TTL risultante conta 27.251 righe (~16.000 triple RDF).
+Il TTL risultante conta 27.251 righe (16.244 triple RDF).
 
 ---
 
@@ -114,13 +114,90 @@ Il TTL risultante conta 27.251 righe (~16.000 triple RDF).
 |---|---|
 | `bologna_entita_uniche_comma.csv` | Classificazione LLM grezza (input) |
 | `bologna_KG_ready.csv` | CSV classificato e corretto (output di `equita.py`) |
-| `bologna_KG_corretto.ttl` | Knowledge Graph finale (~27.000 righe, ~16.000 triple) |
+| `bologna_KG_corretto.ttl` | Knowledge Graph finale (27.251 righe, 16.244 triple) |
 | `F_M DATE.xlsx` | Dati biografici Wikidata per 1.129 persone |
 | `classificazione_professioni.csv` | Macro-categorie occupazionali |
 | `proposte_intitolazioni_future.csv` | 34 proposte di nuove intitolazioni |
 | `proposte_KG.ttl` | Triple RDF per le proposte |
 | `trasforma_finale.sparql` | Query CONSTRUCT originale (fase SPARQL-Anything) |
 | `docs/schema.ttl` | Ontologia OWL in formato Turtle |
+
+---
+
+## Usare il Knowledge Graph
+
+Il file `bologna_KG_corretto.ttl` è un grafo RDF in formato Turtle (16.244 triple) interrogabile con qualsiasi strumento SPARQL.
+
+### Caricare il grafo
+
+**Apache Jena (da riga di comando):**
+```bash
+# Installare Jena: https://jena.apache.org/download/
+sparql --data bologna_KG_corretto.ttl --query la_tua_query.sparql
+```
+
+**GraphDB (interfaccia grafica):**
+1. Creare un nuovo repository in GraphDB Free
+2. Import → Upload RDF files → selezionare `bologna_KG_corretto.ttl`
+3. Eseguire le query dall'interfaccia SPARQL Workbench
+
+**Python (con rdflib):**
+```bash
+pip install rdflib
+```
+```python
+from rdflib import Graph
+g = Graph()
+g.parse("bologna_KG_corretto.ttl", format="turtle")
+results = g.query("SELECT ?via WHERE { ?via a <https://w3id.org/italia/onto/CLV/Street> } LIMIT 10")
+for row in results:
+    print(row)
+```
+
+### Prefissi principali
+
+```sparql
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>       # strade
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>       # persone
+PREFIX ex:  <https://w3id.org/bologna/ontology#>      # proprietà custom
+```
+
+### Query di esempio
+
+**Contare le strade per genere:**
+```sparql
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+
+SELECT ?genere (COUNT(DISTINCT ?via) AS ?numero_strade)
+WHERE {
+  ?via a clv:Street ;
+       clv:isDedicatedTo ?persona .
+  ?persona cpv:sex ?genere .
+}
+GROUP BY ?genere
+```
+
+**Strade dedicate a donne con professione e quartiere:**
+```sparql
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
+
+SELECT DISTINCT ?nomeVia ?nomePersona ?professione ?quartiere
+WHERE {
+  ?via a clv:Street ;
+       clv:hasStreetName ?nomeVia ;
+       clv:isDedicatedTo ?persona .
+  OPTIONAL { ?via ex:quartiere ?quartiere }
+  ?persona cpv:sex "Female" ;
+           cpv:fullName ?nomePersona .
+  OPTIONAL { ?persona ex:professione ?professione }
+}
+ORDER BY ?nomeVia
+```
+
+Tutte le query documentate nel progetto sono disponibili nella pagina [Query SPARQL](https://lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH/sparql.html) del sito.
 
 ---
 
