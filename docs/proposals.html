@@ -39,6 +39,18 @@
     riguardano persone ancora in vita, decedute di recente, o con data di morte incerta.
   </div>
 
+  <div class="info-box" style="margin-top:1rem">
+    <strong>Formalizzazione RDF:</strong>
+    Tutte le candidature sono già state formalizzate come triple RDF nel file
+    <code>proposte_KG.ttl</code>, disponibile nel
+    <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH" target="_blank">repository GitHub</a>.
+    Il file è deliberatamente tenuto separato dal Knowledge Graph principale
+    (<code>bologna_KG_corretto.ttl</code>) perché le proposte non hanno ancora un nodo
+    <code>clv:Street</code> reale a cui collegarsi: una strada può entrare nel KG solo nel momento
+    in cui viene effettivamente istituita dal Comune. L'integrazione è quindi già pronta
+    sul piano semantico, in attesa che le intitolazioni diventino realtà.
+  </div>
+
   <div class="stat-grid" style="margin-bottom:2rem">
     <div class="stat-box"><div class="number" style="color:var(--green)">29</div><div class="label">Proposte attive</div></div>
     <div class="stat-box"><div class="number" style="color:var(--amber)">5</div><div class="label">Proposte future</div></div>
