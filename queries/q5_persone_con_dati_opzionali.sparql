@@ -12,6 +12,7 @@
 
 PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT DISTINCT ?nomePersona ?genere ?nomeVia1 ?nomeVia2
 WHERE {
@@ -20,7 +21,7 @@ WHERE {
         clv:isDedicatedTo ?persona .
   ?persona a cpv:Person ;
            cpv:fullName ?nomePersona ;
-           cpv:sex ?genere .
+           cpv:hasSex ?genere .
 
   OPTIONAL {
     ?via2 a clv:Street ;
@@ -29,7 +30,7 @@ WHERE {
     FILTER(?via2 != ?via1)
   }
 
-  FILTER(?genere = "Female" || ?genere = "Male")
+  FILTER(?genere = sex:F || ?genere = sex:M)
 }
 ORDER BY ?genere ?nomePersona
 LIMIT 200

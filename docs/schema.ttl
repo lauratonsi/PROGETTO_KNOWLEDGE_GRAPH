@@ -63,13 +63,20 @@ clv:hasStreetName
     rdfs:domain clv:Street ;
     rdfs:range  xsd:string .
 
-cpv:sex
-    a owl:DatatypeProperty ;
-    rdfs:label "classificazione di genere"@it ;
-    rdfs:label "gender classification"@en ;
+cpv:hasSex
+    a owl:ObjectProperty ;
+    rdfs:label "sesso"@it ;
+    rdfs:label "sex"@en ;
     rdfs:domain cpv:Person ;
-    rdfs:range  xsd:string ;
-    rdfs:comment "Valori: 'Male' (strada intitolata a uomo), 'Female' (intitolata a donna). Le strade non intitolate a persone identificabili sono escluse dal KG."@it .
+    rdfs:range  <https://w3id.org/italia/onto/CPV/Sex> ;
+    rdfs:comment "Collega la persona a un'istanza del vocabolario controllato CPV-AP_IT v0.8: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/M> per maschio, .../sex/F per femmina."@it .
+
+cpv:fullName
+    a owl:DatatypeProperty ;
+    rdfs:label "nome completo"@it ;
+    rdfs:label "full name"@en ;
+    rdfs:domain cpv:Person ;
+    rdfs:range  rdfs:Literal .
 
 ex:professione
     a owl:DatatypeProperty ;
@@ -86,14 +93,6 @@ ex:statoProposta
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
     rdfs:comment "Valori: 'attiva' (decesso >10 anni) o 'futura' (decesso <10 anni o persona in vita). Proprietà presente solo nelle istanze di proposte_KG.ttl, non nel KG principale."@it .
-
-# ── Annotation Properties (identificatori) ────────────────────────────────────
-
-cpv:fullName
-    a owl:AnnotationProperty ;
-    rdfs:label "nome completo"@it ;
-    rdfs:label "full name"@en ;
-    rdfs:domain cpv:Person .
 
 # ── Datatype Properties — metadati biografici ─────────────────────────────────
 

@@ -672,7 +672,7 @@ METHODOLOGY = page('Metodologia', '''
 &lt;https://w3id.org/bologna/resource/person/def456&gt;
     a cpv:Person ;
     cpv:fullName "Laura Bassi Veratti" ;
-    cpv:sex "Female" .</code></pre>
+    cpv:hasSex &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F&gt; .</code></pre>
 
   <p>Per le proposte di intitolazione, abbiamo esteso il vocabolario con una proprietà custom:</p>
   <pre class="code-block"><code>@prefix ex: &lt;https://w3id.org/bologna/ontology#&gt; .
@@ -680,7 +680,7 @@ METHODOLOGY = page('Metodologia', '''
 &lt;https://w3id.org/bologna/resource/person/...&gt;
     a cpv:Person ;
     cpv:fullName "Maria Dalle Donne" ;
-    cpv:sex "Female" ;
+    cpv:hasSex &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F&gt; ;
     ex:proposta "true" ;
     ex:statoProposta "attiva" .</code></pre>
 
@@ -781,6 +781,7 @@ Q6 = '''## Query 6 — Dati biografici: professione, data di nascita e morte per
 PREFIX clv:  <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv:  <https://w3id.org/italia/onto/CPV/>
 PREFIX ex:   <https://w3id.org/bologna/ontology#>
+PREFIX sex:  <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT DISTINCT ?nomeVia ?nomePersona ?genere ?professione ?dataNascita ?dataMorte ?luogoNascita
 WHERE {
@@ -788,7 +789,7 @@ WHERE {
            clv:hasStreetName ?nomeVia ;
            clv:isDedicatedTo ?persona .
   ?persona cpv:fullName ?nomePersona ;
-           cpv:sex      ?genere .
+           cpv:hasSex   ?genere .
   OPTIONAL { ?persona ex:professione   ?professione  }
   OPTIONAL { ?persona ex:dataNascita   ?dataNascita  }
   OPTIONAL { ?persona ex:dataMorte     ?dataMorte    }
@@ -801,12 +802,13 @@ LIMIT 20'''
 # ── SPARQL playground example queries ─────────────────────────────────────────
 _PLAY_Q1 = '''PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT ?genere (COUNT(DISTINCT ?via) AS ?numero)
 WHERE {
   ?via a clv:Street ;
        clv:isDedicatedTo ?persona .
-  ?persona cpv:sex ?genere .
+  ?persona cpv:hasSex ?genere .
 }
 GROUP BY ?genere
 ORDER BY DESC(?numero)'''
@@ -814,6 +816,7 @@ ORDER BY DESC(?numero)'''
 _PLAY_Q2 = '''PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
 PREFIX ex:  <https://w3id.org/bologna/ontology#>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT DISTINCT ?nomeVia ?nomePersona ?professione
 WHERE {
@@ -821,7 +824,7 @@ WHERE {
        clv:hasStreetName ?nomeVia ;
        clv:isDedicatedTo ?persona .
   ?persona cpv:fullName ?nomePersona ;
-           cpv:sex "Female" .
+           cpv:hasSex sex:F .
   OPTIONAL { ?persona ex:professione ?professione }
 }
 ORDER BY ?nomeVia
@@ -830,13 +833,14 @@ LIMIT 20'''
 _PLAY_Q3 = '''PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
 PREFIX ex:  <https://w3id.org/bologna/ontology#>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT DISTINCT ?nomePersona ?professione ?dataNascita ?dataMorte
 WHERE {
   ?via a clv:Street ;
        clv:isDedicatedTo ?persona .
   ?persona cpv:fullName ?nomePersona ;
-           cpv:sex "Female" .
+           cpv:hasSex sex:F .
   OPTIONAL { ?persona ex:professione ?professione }
   OPTIONAL { ?persona ex:dataNascita ?dataNascita }
   OPTIONAL { ?persona ex:dataMorte   ?dataMorte   }
@@ -896,7 +900,7 @@ SPARQL = page('Query SPARQL', f'''
     <tr><td>Female</td><td>66</td></tr>
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">Le 828 strade classificate come Toponimo non hanno un nodo <code>cpv:Person</code>
-  associato e non compaiono in questa query, che filtra solo i nodi con <code>cpv:sex</code>.</p>
+  associato e non compaiono in questa query, che filtra solo i nodi con <code>cpv:hasSex</code>.</p>
 
   <h2>Query 2 — Lista delle strade dedicate a donne</h2>
   <p><strong>Domanda:</strong> quali strade di Bologna sono intitolate a donne?<br>
@@ -1173,7 +1177,7 @@ LLM_PAGE = page('LLM & Prompt', '''
 &lt;https://w3id.org/bologna/resource/person/laura-bassi&gt;
     a cpv:Person ;
     cpv:fullName "Laura Bassi Veratti" ;
-    cpv:sex "Female" .</pre>
+    cpv:hasSex &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F&gt; .</pre>
   </div>
 
   <h2>Confronto tra modelli</h2>

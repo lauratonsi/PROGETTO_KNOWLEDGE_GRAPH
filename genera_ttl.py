@@ -83,7 +83,8 @@ with open(CSV_IN, encoding='utf-8') as f:
             lines.append(f'{person_uri}')
             lines.append(f'        rdf:type      cpv:Person ;')
             lines.append(f'        cpv:fullName  "{escape_literal(nome_pulitissimo)}" ;')
-            lines.append(f'        cpv:sex       "{genere}" .')
+            sex_uri = "https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/M" if genere == "Male" else "https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F"
+        lines.append(f'        cpv:hasSex    <{sex_uri}> .')
             lines.append('')
             persons_written.add(person_uri)
 

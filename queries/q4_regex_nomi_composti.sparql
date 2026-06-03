@@ -4,6 +4,7 @@
 
 PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT DISTINCT ?tipo ?nomeVia ?nomePersona
 WHERE {
@@ -23,7 +24,7 @@ WHERE {
          clv:hasStreetName ?nomeVia ;
          clv:isDedicatedTo ?persona .
     ?persona cpv:fullName ?nomePersona ;
-             cpv:sex "Female" .
+             cpv:hasSex sex:F .
     FILTER(REGEX(?nomePersona, "MARIA", "i"))
     BIND("Maria" AS ?tipo)
   }

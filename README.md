@@ -173,7 +173,7 @@ SELECT ?genere (COUNT(DISTINCT ?via) AS ?numero_strade)
 WHERE {
   ?via a clv:Street ;
        clv:isDedicatedTo ?persona .
-  ?persona cpv:sex ?genere .
+  ?persona cpv:hasSex ?genere .
 }
 GROUP BY ?genere
 ```
@@ -190,7 +190,7 @@ WHERE {
        clv:hasStreetName ?nomeVia ;
        clv:isDedicatedTo ?persona .
   OPTIONAL { ?via ex:quartiere ?quartiere }
-  ?persona cpv:sex "Female" ;
+  ?persona cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
            cpv:fullName ?nomePersona .
   OPTIONAL { ?persona ex:professione ?professione }
 }

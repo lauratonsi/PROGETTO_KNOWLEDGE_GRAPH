@@ -102,7 +102,7 @@
     (Core Person Vocabulary) — modella le persone fisiche e le loro caratteristiche anagrafiche.
     Nel KG: <code>cpv:Person</code> rappresenta il referente umano,
     <code>cpv:fullName</code> ne registra il nome completo,
-    <code>cpv:sex</code> contiene la classificazione di genere (Male / Female).</li>
+    <code>cpv:hasSex</code> collega la persona al vocabolario controllato del sesso (CPV-AP_IT v0.8).</li>
   </ul>
   <p>Il punto di contatto tra le due ontologie è la proprietà oggetto <code>clv:isDedicatedTo</code>:
   <strong>[clv:Street] → isDedicatedTo → [cpv:Person]</strong>.
@@ -124,7 +124,7 @@
 &lt;https://w3id.org/bologna/resource/person/19fbfe5...&gt;
     a cpv:Person ;
     cpv:fullName  "LAURA BASSI VERATTI" ;
-    cpv:sex       "Female" ;
+    cpv:hasSex    &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F&gt; ;
     ex:professione                 "Fisica, filosofa naturale" ;
     ex:dataNascita                 "29 ottobre 1711" ;
     ex:luogoNascita                "Bologna" ;
@@ -137,7 +137,7 @@
   <pre class="code-block"><code>&lt;https://w3id.org/bologna/resource/person/...&gt;
     a cpv:Person ;
     cpv:fullName "Maria Dalle Donne" ;
-    cpv:sex "Female" ;
+    cpv:hasSex &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F&gt; ;
     ex:professione "Medica, ginecologa, accademica" ;
     ex:macroCategoriaOccupazionale "Istruzione ed educazione" ;
     ex:dataNascita "12 luglio 1778" ;
@@ -164,7 +164,7 @@
       <tr><td style="padding:0.4rem 0.75rem"><code>ex:dataIstituzione</code></td><td>Street</td><td>bologna_KG_ready.csv</td><td>1.132</td></tr>
       <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:tipologiaLuogo</code></td><td>Street</td><td>aree verdi CSV</td><td>60</td></tr>
       <tr><td style="padding:0.4rem 0.75rem"><code>cpv:fullName</code></td><td>Person</td><td>stradario comunale</td><td>1.129</td></tr>
-      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>cpv:sex</code></td><td>Person</td><td>classificazione gruppo</td><td>1.129</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>cpv:hasSex</code></td><td>Person</td><td>classificazione gruppo</td><td>1.129</td></tr>
       <tr><td style="padding:0.4rem 0.75rem"><code>ex:professione</code></td><td>Person</td><td>Wikidata P106 + aree verdi</td><td>1.004</td></tr>
       <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:dataNascita / ex:luogoNascita</code></td><td>Person</td><td>Wikidata P569/P19</td><td>~1.001</td></tr>
       <tr><td style="padding:0.4rem 0.75rem"><code>ex:dataMorte / ex:luogoMorte</code></td><td>Person</td><td>Wikidata P570/P20</td><td>~1.001</td></tr>
@@ -250,11 +250,11 @@
 
       <rect x="616" y="120" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
       <text x="626" y="136" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">cpv:fullName</text>
-      <text x="908" y="136" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">annotation</text>
+      <text x="908" y="136" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">datatype</text>
 
       <rect x="616" y="148" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
-      <text x="626" y="164" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">cpv:sex</text>
-      <text x="908" y="164" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">Male · Female</text>
+      <text x="626" y="164" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">cpv:hasSex</text>
+      <text x="908" y="164" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">sex:M · sex:F</text>
 
       <line x1="616" y1="182" x2="914" y2="182" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
       <text x="616" y="198" font-size="9" fill="rgba(255,255,255,0.5)" font-family="sans-serif" font-weight="bold" letter-spacing="1">METADATI BIOGRAFICI (Wikidata)</text>

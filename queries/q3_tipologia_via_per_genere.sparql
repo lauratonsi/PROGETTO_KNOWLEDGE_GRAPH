@@ -8,6 +8,7 @@
 
 PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT DISTINCT ?tipologia ?nomeVia ?nomePersona
 WHERE {
@@ -16,7 +17,7 @@ WHERE {
          clv:hasStreetName ?nomeVia ;
          clv:isDedicatedTo ?persona .
     ?persona cpv:fullName ?nomePersona ;
-             cpv:sex "Female" .
+             cpv:hasSex sex:F .
     FILTER(STRSTARTS(?nomeVia, "VIA "))
     BIND("Via" AS ?tipologia)
   }
@@ -26,7 +27,7 @@ WHERE {
          clv:hasStreetName ?nomeVia ;
          clv:isDedicatedTo ?persona .
     ?persona cpv:fullName ?nomePersona ;
-             cpv:sex "Female" .
+             cpv:hasSex sex:F .
     FILTER(STRSTARTS(?nomeVia, "PIAZZA ") || STRSTARTS(?nomeVia, "PIAZZALE "))
     BIND("Piazza / Piazzale" AS ?tipologia)
   }

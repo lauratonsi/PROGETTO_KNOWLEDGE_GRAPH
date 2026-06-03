@@ -5,7 +5,7 @@
 <https://w3id.org/bologna/resource/person/bcc550638a59267a2584f4195872ce54>
     a cpv:Person ;
     cpv:fullName "Rina Monti (Cesarina Monti Stella)" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Biologa, zoologa, limnologa; prima donna professoressa ordinaria in Italia" ;
     ex:macroCategoriaOccupazionale "Scienze e medicina" ;
     ex:dataNascita "16 agosto 1871" ;
@@ -17,7 +17,7 @@
 <https://w3id.org/bologna/resource/person/2759b8f3325633312f2f0217f01ad298>
     a cpv:Person ;
     cpv:fullName "Margherita Hack" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Astrofisica, accademica, divulgatrice scientifica, attivista" ;
     ex:macroCategoriaOccupazionale "Scienze e medicina" ;
     ex:dataNascita "12 giugno 1922" ;
@@ -29,7 +29,7 @@
 <https://w3id.org/bologna/resource/person/b8646ec35fd93b509bf2d5b0e038108f>
     a cpv:Person ;
     cpv:fullName "Ada Buffulini" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Medico (radiologa), partigiana, organizzatrice della resistenza interna nel campo di Bolzano" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "28 settembre 1912" ;
@@ -41,7 +41,7 @@
 <https://w3id.org/bologna/resource/person/cb607b0bcb4c3269daa2a5291595a1e8>
     a cpv:Person ;
     cpv:fullName "Maria Dalle Donne" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Medica, ginecologa, accademica; Direttrice della Scuola di Ostetricia di Bologna" ;
     ex:macroCategoriaOccupazionale "Istruzione ed educazione" ;
     ex:dataNascita "12 luglio 1778" ;
@@ -53,7 +53,7 @@
 <https://w3id.org/bologna/resource/person/11b2a8c00b437dc116442598739462a4>
     a cpv:Person ;
     cpv:fullName "Alessandro Zijno (detta 'l'Ambigua')" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Attivista transfemminista e queer; fondatrice del Laboratorio Smaschieramenti – Atlantide di Bologna" ;
     ex:macroCategoriaOccupazionale "Sindacalismo e attivismo civile" ;
     ex:dataMorte "17 settembre 2011" ;
@@ -63,7 +63,7 @@
 <https://w3id.org/bologna/resource/person/5fd0a7b23771f8daca591638af0a2f71>
     a cpv:Person ;
     cpv:fullName "Dorotea Bocchi (detta Bucca)" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Professoressa di Medicina e Filosofia all'Università di Bologna" ;
     ex:macroCategoriaOccupazionale "Scienze e medicina" ;
     ex:dataNascita "ca. 1360" ;
@@ -75,7 +75,7 @@
 <https://w3id.org/bologna/resource/person/20b5da87edf8722fc4714b3d4847019f>
     a cpv:Person ;
     cpv:fullName "Giuseppina Cattani" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Batteriologa; prima donna con libera docenza in Patologia generale a Bologna" ;
     ex:macroCategoriaOccupazionale "Scienze e medicina" ;
     ex:dataNascita "26 maggio 1859" ;
@@ -87,7 +87,7 @@
 <https://w3id.org/bologna/resource/person/685f6cf4c21b6d35df2cf13b4c992b22>
     a cpv:Person ;
     cpv:fullName "Maria Bortolotti Casoni" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Ingegnera; prima donna iscritta all'Albo degli Ingegneri in Italia" ;
     ex:macroCategoriaOccupazionale "Scienze e medicina" ;
     ex:dataNascita "1880" ;
@@ -99,7 +99,7 @@
 <https://w3id.org/bologna/resource/person/365141709373830ab8b17cd7545070ac>
     a cpv:Person ;
     cpv:fullName "Gabriella Degli Esposti" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Partigiana, coordinatrice della Quarta Zona della Resistenza (nome di battaglia 'Balella')" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "1 agosto 1912" ;
@@ -111,7 +111,7 @@
 <https://w3id.org/bologna/resource/person/9ddcd55269ae369ca758d769f4fea3f7>
     a cpv:Person ;
     cpv:fullName "Ines Bedeschi" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Staffetta partigiana del CUMER (Comando Unificato Militare Emilia-Romagna), nome di battaglia 'Bruna'" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "31 agosto 1914" ;
@@ -123,7 +123,7 @@
 <https://w3id.org/bologna/resource/person/e12b05a585ca4e647b12d1d32f6c29f8>
     a cpv:Person ;
     cpv:fullName "Enrichetta Cabassa" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Staffetta partigiana del CUMER, sarta (nome di battaglia 'Silvia')" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "6 novembre 1916" ;
@@ -135,7 +135,7 @@
 <https://w3id.org/bologna/resource/person/a27524989a04254ceb2b3fc1a987badc>
     a cpv:Person ;
     cpv:fullName "Anna Maria Enriques Agnoletti" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Staffetta partigiana, paleografa, storica medievale" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "1907" ;
@@ -147,7 +147,7 @@
 <https://w3id.org/bologna/resource/person/1b9165d10eab795b5e112b462d486e0a>
     a cpv:Person ;
     cpv:fullName "Giovanna Zangrandi (Alma Bevilacqua)" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Scrittrice, partigiana, insegnante di scienze, alpinista" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "13 giugno 1910" ;
@@ -159,7 +159,7 @@
 <https://w3id.org/bologna/resource/person/685dd62a2689896b6ebe7eb8a56a7d24>
     a cpv:Person ;
     cpv:fullName "Ena Frazzoni" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Professoressa di inglese, partigiana, segretaria del CUMER (nome di battaglia 'Nicoletta')" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "13 dicembre 1917" ;
@@ -171,7 +171,7 @@
 <https://w3id.org/bologna/resource/person/45fd8795206f5b13f9ee688d83138e1f>
     a cpv:Person ;
     cpv:fullName "Ester Capponi" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Operaia, sindacalista CGIL, politica (PCI), dirigente UDI Bologna" ;
     ex:macroCategoriaOccupazionale "Sindacalismo e attivismo civile" ;
     ex:dataNascita "1890" ;
@@ -182,7 +182,7 @@
 <https://w3id.org/bologna/resource/person/0ebad483ae553c9bfe77fc25b8e6dbd9>
     a cpv:Person ;
     cpv:fullName "Lucrezia Orsina Vizzana" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Compositrice, organista, cantante (Barocco)" ;
     ex:macroCategoriaOccupazionale "Musica, teatro e cinema" ;
     ex:dataNascita "3 luglio 1590" ;
@@ -194,7 +194,7 @@
 <https://w3id.org/bologna/resource/person/26295ed1ba8830632ab67450730548cb>
     a cpv:Person ;
     cpv:fullName "Maria Brizzi Giorgi" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Pianista, compositrice, direttrice dell'Accademia Polimniaca di Bologna" ;
     ex:macroCategoriaOccupazionale "Musica, teatro e cinema" ;
     ex:dataNascita "7 agosto 1775" ;
@@ -206,7 +206,7 @@
 <https://w3id.org/bologna/resource/person/e687d3752b5f16ca8ad7ab41959c45b7>
     a cpv:Person ;
     cpv:fullName "Caterina de' Vigri (Santa Caterina da Bologna)" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Religiosa clarissa, pittrice miniaturista, musicista (viola), scrittrice spirituale, fondatrice del Corpus Domini" ;
     ex:macroCategoriaOccupazionale "Religione" ;
     ex:dataNascita "8 settembre 1413" ;
@@ -218,7 +218,7 @@
 <https://w3id.org/bologna/resource/person/8ece16ac7f166b2bde5ddfc01dae40a9>
     a cpv:Person ;
     cpv:fullName "Cornelia Rossi Martinetti" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Intellettuale, animatrice di salotto letterario europeo, scrittrice" ;
     ex:macroCategoriaOccupazionale "Letteratura e giornalismo" ;
     ex:dataNascita "20 gennaio 1771" ;
@@ -230,7 +230,7 @@
 <https://w3id.org/bologna/resource/person/778525e9dba0fcd49d2dcc9d30035bb9>
     a cpv:Person ;
     cpv:fullName "Teresa Carniani Malvezzi" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Scrittrice, poetessa, accademica" ;
     ex:macroCategoriaOccupazionale "Filosofia, storia e accademia" ;
     ex:dataNascita "28 marzo 1785" ;
@@ -242,7 +242,7 @@
 <https://w3id.org/bologna/resource/person/01c6538449f5a3d83886be1b7f576afd>
     a cpv:Person ;
     cpv:fullName "Odette Righi Boi" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Partigiana, maestra, pedagogista, scrittrice in dialetto bolognese" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "1925" ;
@@ -254,7 +254,7 @@
 <https://w3id.org/bologna/resource/person/e042d5a00dff45412317223da58007c5>
     a cpv:Person ;
     cpv:fullName "Flavia Madaschi" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Operaia (Majani, Ducati), sindacalista CGIL, presidente AGedO Bologna, attivista LGBTQ+" ;
     ex:macroCategoriaOccupazionale "Istruzione ed educazione" ;
     ex:dataNascita "14 novembre 1942" ;
@@ -266,7 +266,7 @@
 <https://w3id.org/bologna/resource/person/768d70a6938eb0ed85c13afc96634fbf>
     a cpv:Person ;
     cpv:fullName "Claudia Testoni" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Atleta (80m ostacoli, salto in lungo, velocità)" ;
     ex:macroCategoriaOccupazionale "Sport" ;
     ex:dataNascita "19 dicembre 1915" ;
@@ -278,7 +278,7 @@
 <https://w3id.org/bologna/resource/person/8776f2bdad5228d8f515b7a4ffbebbc1>
     a cpv:Person ;
     cpv:fullName "Nilde Iotti" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Politica (PCI), prima donna Presidente della Camera dei Deputati" ;
     ex:macroCategoriaOccupazionale "Politica e diritto" ;
     ex:dataNascita "26 aprile 1920" ;
@@ -290,7 +290,7 @@
 <https://w3id.org/bologna/resource/person/8d1b697405651daa806db86a52024c9f>
     a cpv:Person ;
     cpv:fullName "Lidia Poët" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Avvocata, prima donna iscritta all'Albo degli Avvocati in Italia" ;
     ex:macroCategoriaOccupazionale "Politica e diritto" ;
     ex:dataNascita "26 agosto 1855" ;
@@ -302,7 +302,7 @@
 <https://w3id.org/bologna/resource/person/b52bcab37435e976c8d1f510a2f7ac1f>
     a cpv:Person ;
     cpv:fullName "Lina Merlin" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Politica, Madre Costituente, prima donna eletta al Senato della Repubblica" ;
     ex:macroCategoriaOccupazionale "Politica e diritto" ;
     ex:dataNascita "15 ottobre 1887" ;
@@ -314,7 +314,7 @@
 <https://w3id.org/bologna/resource/person/f7062b610de5fe13b9a21c82918beb1e>
     a cpv:Person ;
     cpv:fullName "Camilla Ravera" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Politica, prima segretaria donna del PCI, prima senatrice a vita della Repubblica" ;
     ex:macroCategoriaOccupazionale "Politica e diritto" ;
     ex:dataNascita "18 giugno 1889" ;
@@ -326,7 +326,7 @@
 <https://w3id.org/bologna/resource/person/0e1b67cbbfadcf7d63f1ceb0f6e94934>
     a cpv:Person ;
     cpv:fullName "Carla Capponi" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Partigiana combattente, parlamentare (PCI)" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "7 dicembre 1918" ;
@@ -338,7 +338,7 @@
 <https://w3id.org/bologna/resource/person/111daa366bd737251ae0160cffa2f77c>
     a cpv:Person ;
     cpv:fullName "Maria Montessori" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Medica, pedagogista, fondatrice del Metodo Montessori" ;
     ex:macroCategoriaOccupazionale "Istruzione ed educazione" ;
     ex:dataNascita "31 agosto 1870" ;
@@ -350,7 +350,7 @@
 <https://w3id.org/bologna/resource/person/8167e7aa4e5b69e9acc5730a7d21ee02>
     a cpv:Person ;
     cpv:fullName "Lucy Salani" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Attivista trans, sopravvissuta al lager di Dachau, testimone" ;
     ex:macroCategoriaOccupazionale "Sindacalismo e attivismo civile" ;
     ex:dataNascita "12 agosto 1924" ;
@@ -362,7 +362,7 @@
 <https://w3id.org/bologna/resource/person/d5f4de5dd0441e0908b0b4390524205f>
     a cpv:Person ;
     cpv:fullName "Luki Massa" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Attivista lesbica, fondatrice del Tiaso di Bologna" ;
     ex:macroCategoriaOccupazionale "Sindacalismo e attivismo civile" ;
     ex:dataNascita "1962" ;
@@ -373,7 +373,7 @@
 <https://w3id.org/bologna/resource/person/ee1fc092251dc3ecd9591f6ed3e44320>
     a cpv:Person ;
     cpv:fullName "Tina Anselmi" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Partigiana, politica DC, prima donna ministro della Repubblica italiana" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "25 marzo 1927" ;
@@ -384,7 +384,7 @@
 <https://w3id.org/bologna/resource/person/447f86aa52a54bf9a9ad6b0d4834f93f>
     a cpv:Person ;
     cpv:fullName "Franca Viola" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Simbolo nazionale dei diritti delle donne (rifiutò il matrimonio riparatore, 1965)" ;
     ex:macroCategoriaOccupazionale "Sindacalismo e attivismo civile" ;
     ex:dataNascita "9 gennaio 1948" ;
@@ -394,7 +394,7 @@
 <https://w3id.org/bologna/resource/person/aa0ce8705e2ee5071730d9d740205329>
     a cpv:Person ;
     cpv:fullName "Germana Boldrini" ;
-    cpv:sex "Female" ;
+    cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
     ex:professione "Partigiana combattente (Battaglia di Porta Lame, Bologna, 7 novembre 1944)" ;
     ex:macroCategoriaOccupazionale "Resistenza e antifascismo" ;
     ex:dataNascita "ca. 1927" ;
