@@ -1,0 +1,12 @@
+# Override GitHub Linguist: docs/ non è documentazione generata ma il sito del progetto
+docs/*.html linguist-documentation=false linguist-detectable=true
+docs/*.css  linguist-documentation=false linguist-detectable=true
+
+# Riconosci SPARQL come linguaggio rilevabile
+*.sparql linguist-detectable=true
+
+# Turtle/RDF — cuore del Knowledge Graph
+*.ttl linguist-detectable=true
+
+# GeoJSON: formato dati, non un linguaggio — escludi dal conteggio
+*.geojson linguist-detectable=false
