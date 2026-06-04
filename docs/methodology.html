@@ -61,7 +61,7 @@
       per le proprietà strutturate) recuperando professione (P106),
       data/luogo di nascita (P569/P19) e data/luogo di morte (P570/P20),
       con verifica che l'entità sia un essere umano (P31 = Q5).
-      Copertura: <strong>1.001 persone (88,7%)</strong>. I dati confluiscono nel file <code>F_M DATE.xlsx</code>,
+      Copertura: <strong>943 persone (83,5%)</strong>. I dati confluiscono nel file <code>F_M DATE.xlsx</code>,
       che costituisce l'input dello step successivo di classificazione professionale.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
       Lo script <code>classifica_professioni.py</code> assegna una delle 13 macro-categorie
@@ -73,12 +73,12 @@
         <li><strong>Strade</strong>: <code>ex:quartiere</code>, <code>ex:geoPoint</code>, <code>ex:dataIstituzione</code>
             (da <em>bologna_KG_ready.csv</em>) e <code>ex:tipologiaLuogo</code>
             (da <em>le-aree-verdi-e-le-vie-di-bologna-dedicate-alle-donne.csv</em>, 60 match)</li>
-        <li><strong>Persone</strong>: <code>ex:macroCategoriaOccupazionale</code> su 1.036 persone
+        <li><strong>Persone</strong>: <code>ex:macroCategoriaOccupazionale</code> su 1.030 persone
             (da <em>classificazione_professioni.csv</em>); <code>ex:datiAnagrafici</code> su 60 donne
-            (da <em>le-aree-verdi</em>); <code>ex:professione</code> colmato per 3 donne non presenti
+            (da <em>le-aree-verdi</em>); <code>ex:professione</code> colmato per 8 donne non presenti
             in Wikidata.</li>
       </ul>
-      Il file TTL passa da ~18.363 a 18.486 righe (+4.545 triple di arricchimento).
+      Il file TTL passa da ~18.363 a 26.651 righe (+4.545 triple di arricchimento).
     </div></li>
     <li><div><strong>Proposte di intitolazione</strong><br>
       Il gruppo di ricerca ha identificato e documentato 34 candidature
@@ -286,7 +286,7 @@
       <text x="626" y="416" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">ex:statoProposta</text>
       <text x="908" y="416" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">attiva · futura</text>
 
-      <text x="616" y="474" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">1.129 persone · copertura Wikidata: 88,7%</text>
+      <text x="616" y="474" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">1.129 persone · copertura Wikidata: 83,5%</text>
       <text x="616" y="488" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">34 proposte (29 attive + 5 future)</text>
 
     </svg>
@@ -366,7 +366,7 @@
       <h3>Wikidata API</h3>
       <p>Recupero automatico di professioni e date biografiche per 1.129 persone tramite
       <a href="https://www.wikidata.org/w/api.php" target="_blank">wbsearchentities</a> e
-      <code>wbgetentities</code>. Copertura: 1.001 persone (88,7%).</p>
+      <code>wbgetentities</code>. Copertura: 943 persone (83,5%).</p>
     </div>
     <div class="card">
       <h3>SPARQL-Anything</h3>
@@ -391,10 +391,10 @@
   <h2>Copertura dell'arricchimento</h2>
   <p>Su <strong>1.129 persone</strong> presenti nel Knowledge Graph:</p>
   <ul>
-    <li><strong>1.001 (88,7%)</strong> arricchite via Wikidata con
+    <li><strong>943 (83,5%)</strong> arricchite via Wikidata con
     <code>ex:professione</code>, <code>ex:dataNascita</code>, <code>ex:luogoNascita</code>,
     <code>ex:dataMorte</code>, <code>ex:luogoMorte</code>.</li>
-    <li><strong>1.036 (91,8%)</strong> arricchite con <code>ex:macroCategoriaOccupazionale</code>
+    <li><strong>1.030 (91,2%)</strong> arricchite con <code>ex:macroCategoriaOccupazionale</code>
     (include tutte quelle con professione Wikidata + 35 aggiuntive).</li>
     <li><strong>60 donne</strong> arricchite con <code>ex:datiAnagrafici</code> e
     <code>ex:tipologiaLuogo</code> dal dataset "Aree verdi e vie dedicate alle donne".</li>
@@ -498,7 +498,7 @@
 
   <div class="info-box" style="font-family:monospace;font-size:0.9rem">
     <strong>Validation Report — 4 giugno 2026</strong><br>
-    Tool: pyshacl 0.31.0 · Data graph: bologna_KG_corretto.ttl (16.222 triple)<br>
+    Tool: pyshacl 0.31.0 · Data graph: bologna_KG_corretto.ttl (15.885 triple)<br>
     Shapes: StreetToponymShape (7 vincoli) + PersonShape (10 vincoli)<br><br>
     <strong style="color:#2e7d32">Conforms: True — 0 violazioni</strong>
   </div>

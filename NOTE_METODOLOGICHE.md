@@ -33,13 +33,13 @@ Per le circa 15 figure di rilevanza esclusivamente locale non documentate su Wik
 
 ### Copertura dell'arricchimento biografico
 
-Su **1.129 persone** presenti nel Knowledge Graph (strade intitolate a individui di genere Male o Female), **1.001 (88,7%)** sono state arricchite con le proprietà `ex:professione`, `ex:dataNascita`, `ex:luogoNascita`, `ex:dataMorte`, `ex:luogoMorte`. Le restanti **128 (11,3%)** non dispongono di dati biografici per le seguenti ragioni strutturali:
+Su **1.129 persone** presenti nel Knowledge Graph (strade intitolate a individui di genere Male o Female), **943 (83,5%)** sono state arricchite con le proprietà `ex:professione`, `ex:dataNascita`, `ex:luogoNascita`, `ex:dataMorte`, `ex:luogoMorte`. Le restanti **128 (11,3%)** non dispongono di dati biografici per le seguenti ragioni strutturali:
 
 - **Nome abbreviato nello stradario**: il TTL contiene il solo cognome o soprannome (es. `CAVOUR`, `DANTE`, `TINTORETTO`, `ROSSINI`) che non è stato possibile collegare automaticamente al nome completo nel foglio dati.
 - **Assenza di dati di partenza**: figure locali minori per cui né Wikidata né le fonti archivistiche consultate hanno restituito risultati.
 - **Collettivi e coppie**: intitolazioni a gruppi storici (es. `AMBROGIO E PIETRO LORENZETTI`, `FRATELLI CERVI`) che non corrispondono a singoli individui nel dataset biografico.
 
-Questa limitazione è documentata a fini di trasparenza metodologica e non inficia la validità dell'analisi complessiva, che si basa sull'88,7% della popolazione censita.
+Questa limitazione è documentata a fini di trasparenza metodologica e non inficia la validità dell'analisi complessiva, che si basa sull'83,5% della popolazione censita.
 
 --- 
 ## Quadro Normativo e Vincoli — Regolamento Toponomastico

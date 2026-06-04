@@ -38,7 +38,7 @@
   <div class="info-box">
     Il Knowledge Graph è disponibile come file Turtle nel repository:
     <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/bologna_KG_corretto.ttl" target="_blank">
-    bologna_KG_corretto.ttl</a> (18.486 righe, 16.222 triple dopo l'arricchimento).
+    bologna_KG_corretto.ttl</a> (26.651 righe, 15.885 triple dopo l'arricchimento).
     Per eseguire le query localmente: <code>python run_queries.py</code> (usa
     <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>).
   </div>
@@ -269,10 +269,10 @@
 
   <h2>Query 6 — Dati biografici di tutte le persone onorate</h2>
   <p><strong>Domanda:</strong> quali sono la professione, la data di nascita e la data di morte delle persone a cui Bologna ha dedicato una strada?
-  I dati provengono dall'arricchimento biografico via Wikidata (copertura 88,7% su 1.129 persone).<br>
+  I dati provengono dall'arricchimento biografico via Wikidata (copertura 83,5% su 1.129 persone).<br>
   <strong>Keyword:</strong> <code>OPTIONAL</code>, <code>SELECT DISTINCT</code>, <code>FILTER</code>, <code>BOUND</code>, <code>ORDER BY</code>, <code>LIMIT</code></p>
   <pre class="code-block"><code><span class="sc">## Query 6 — Dati biografici: professione, data di nascita e morte per tutte le persone</span>
-<span class="sc">## Mostra le proprietà <span class="sp">ex</span>: aggiunte tramite arricchimento Wikidata (88,7% copertura).</span>
+<span class="sc">## Mostra le proprietà <span class="sp">ex</span>: aggiunte tramite arricchimento Wikidata (83,5% copertura).</span>
 <span class="sc">## <span class="sk">OPTIONAL</span> perché non tutte le persone hanno dati completi.</span>
 <span class="sc">## Keyword: <span class="sk">OPTIONAL</span>, <span class="sk">SELECT</span> <span class="sk">DISTINCT</span>, <span class="sk">WHERE</span>, <span class="sk">FILTER</span>, <span class="sk">ORDER BY</span>, <span class="sk">LIMIT</span></span>
 <span class="sk">PREFIX</span> <span class="sp">clv</span>:  &lt;https://w3id.org/italia/onto/CLV/&gt;
@@ -294,7 +294,7 @@
 }
 <span class="sk">ORDER BY</span> <span class="sv">?nomePersona</span>
 <span class="sk">LIMIT</span> 20</code></pre>
-  <h4>Primi 5 risultati (su 1.001 persone con dati biografici):</h4>
+  <h4>Primi 5 risultati (su 943 persone con dati biografici):</h4>
   <div class="table-wrap"><table>
     <tr><th>?nomeVia</th><th>?nomePersona</th><th>?genere</th><th>?professione</th><th>?dataNascita</th><th>?dataMorte</th></tr>
     <tr><td>VIA ADA NEGRI</td><td><a href="https://it.wikipedia.org/wiki/Ada_Negri" target="_blank" rel="noopener">Ada Negri</a></td><td>Female</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>

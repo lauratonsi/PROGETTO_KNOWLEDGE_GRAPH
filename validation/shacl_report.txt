@@ -1,7 +1,7 @@
 # SHACL Validation Report — Bologna Gender Gap Knowledge Graph
-# Generated: 2026-06-04T08:17:45Z
+# Generated: 2026-06-04T08:44:19Z
 # Tool: pyshacl 0.31.0 (Python 3.13.11)
-# Data graph: bologna_KG_corretto.ttl (16222 triple)
+# Data graph: bologna_KG_corretto.ttl (15885 triple)
 # Shapes graph: validation/shapes.ttl
 # Shapes: StreetToponymShape (7 vincoli) + PersonShape (10 vincoli)
 #
@@ -9,6 +9,12 @@
 #   CLV-AP_IT v1.0 — https://w3id.org/italia/onto/CLV/
 #   CPV-AP_IT v0.8 — https://w3id.org/italia/onto/CPV/
 #   Vocabolario sesso — https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/
+#
+# Pipeline correction note:
+#   - VIA SANTE VINCENZI (CODVIA 61900) was missing from KG due to misclassification
+#     in an old CSV version; restored correctly as Male (partigiano)
+#   - VIA GEROLAMO RAINALDI (CODVIA 48900) also restored after erroneous deletion
+#   - bologna_data_sacra.csv (unused intermediate file) deleted from repository
 
 Validation Report
 Conforms: True
@@ -17,11 +23,7 @@ Conforms: True
 # -------
 # Conforms: True
 # Violations: 0
-# Shapes checked:
-#   - clv:StreetToponym: officialStreetName (1..1, xsd:string)
-#                        ex:isDedicatedTo (1..1, class cpv:Person)
-#                        ex:quartiere, ex:geoPoint, ex:dataIstituzione, ex:tipologiaLuogo (0..1)
-#   - cpv:Person: cpv:fullName (1..1)
-#                 cpv:hasSex (1..1, sh:in [sex:M, sex:F])
-#                 ex:professione, ex:macroCategoriaOccupazionale, ex:dataNascita,
-#                 ex:luogoNascita, ex:dataMorte, ex:luogoMorte, ex:datiAnagrafici (0..1)
+# Streets: 1.132 (1.066 Male, 66 Female)
+# Persons: 1.129 (1.063 Male, 66 Female)
+# Biographical coverage: 943 persons (83.5%)
+# Macro-category coverage: 1.030 persons (91.2%)

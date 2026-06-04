@@ -636,7 +636,7 @@ METHODOLOGY = page('Metodologia', '''
     <li><div><strong>Costruzione del Knowledge Graph</strong><br>
       Lo script <code>genera_ttl.py</code> (Python + <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>)
       legge il CSV classificato e genera il file <code>bologna_KG_corretto.ttl</code>
-      in formato Turtle (16.222 triple). Ogni strada è un nodo <code>clv:StreetToponym</code>;
+      in formato Turtle (15.885 triple). Ogni strada è un nodo <code>clv:StreetToponym</code>;
       le strade dedicate a persone sono collegate tramite <code>ex:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
     <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
       Per le ~470 persone identificate, lo script <code>wikidata_fetch.py</code> interroga
@@ -738,7 +738,7 @@ METHODOLOGY = page('Metodologia', '''
   </div>
 
   <h2>Copertura dell'arricchimento biografico</h2>
-  <p>Su <strong>1.129 persone</strong> presenti nel Knowledge Graph, <strong>1.001 (88,7%)</strong>
+  <p>Su <strong>1.129 persone</strong> presenti nel Knowledge Graph, <strong>943 (83,5%)</strong>
   sono state arricchite con le proprietà
   <code>ex:professione</code>, <code>ex:dataNascita</code>, <code>ex:luogoNascita</code>,
   <code>ex:dataMorte</code>, <code>ex:luogoMorte</code>.
@@ -775,7 +775,7 @@ with open(BASE / 'queries/q4_regex_nomi_composti.sparql', encoding='utf-8') as f
 with open(BASE / 'queries/q5_persone_con_dati_opzionali.sparql', encoding='utf-8') as f: Q5 = f.read()
 
 Q6 = '''## Query 6 — Dati biografici: professione, data di nascita e morte per tutte le persone
-## Mostra le proprietà ex: aggiunte tramite arricchimento Wikidata (88,7% copertura).
+## Mostra le proprietà ex: aggiunte tramite arricchimento Wikidata (83,5% copertura).
 ## OPTIONAL perché non tutte le persone hanno dati completi.
 ## Keyword: OPTIONAL, SELECT DISTINCT, WHERE, FILTER, ORDER BY, LIMIT
 PREFIX clv:  <https://w3id.org/italia/onto/CLV/>
@@ -860,7 +860,7 @@ SPARQL = page('Query SPARQL', f'''
 <div class="section">
   <h2>Interrogazione interattiva</h2>
   <p>Scrivi o modifica una query SPARQL ed eseguila direttamente nel browser sul Knowledge Graph di Bologna.
-  Il file <code>bologna_KG_corretto.ttl</code> (16.222 triple) viene caricato in memoria
+  Il file <code>bologna_KG_corretto.ttl</code> (15.885 triple) viene caricato in memoria
   tramite <a href="https://oxigraph.org/" target="_blank">Oxigraph</a>, un motore SPARQL&nbsp;1.1
   compilato in WebAssembly.</p>
   <p style="font-size:0.88rem;color:var(--text-muted)"><strong>Nota:</strong>
@@ -883,7 +883,7 @@ SPARQL = page('Query SPARQL', f'''
   <div class="info-box">
     Il Knowledge Graph è disponibile come file Turtle nel repository:
     <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/bologna_KG_corretto.ttl" target="_blank">
-    bologna_KG_corretto.ttl</a> (16.222 triple).
+    bologna_KG_corretto.ttl</a> (15.885 triple).
     Per eseguire le query localmente: <code>python run_queries.py</code> (usa
     <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>).
   </div>
@@ -973,10 +973,10 @@ SPARQL = page('Query SPARQL', f'''
 
   <h2>Query 6 — Dati biografici di tutte le persone onorate</h2>
   <p><strong>Domanda:</strong> quali sono la professione, la data di nascita e la data di morte delle persone a cui Bologna ha dedicato una strada?
-  I dati provengono dall'arricchimento biografico via Wikidata (copertura 88,7% su 1.129 persone).<br>
+  I dati provengono dall'arricchimento biografico via Wikidata (copertura 83,5% su 1.129 persone).<br>
   <strong>Keyword:</strong> <code>OPTIONAL</code>, <code>SELECT DISTINCT</code>, <code>FILTER</code>, <code>BOUND</code>, <code>ORDER BY</code>, <code>LIMIT</code></p>
   <pre class="code-block"><code>{sparql_highlight(Q6)}</code></pre>
-  <h4>Primi 5 risultati (su 1.001 persone con dati biografici):</h4>
+  <h4>Primi 5 risultati (su 943 persone con dati biografici):</h4>
   <div class="table-wrap"><table>
     <tr><th>?nomeVia</th><th>?nomePersona</th><th>?genere</th><th>?professione</th><th>?dataNascita</th><th>?dataMorte</th></tr>
     <tr><td>VIA ADA NEGRI</td><td>Ada Negri</td><td>Female</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
