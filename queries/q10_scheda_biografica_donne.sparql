@@ -1,0 +1,28 @@
+## Query 10 — Scheda completa: tutte le nuove proprietà per le donne onorate
+## Keywords: OPTIONAL, DISTINCT, FILTER, ORDER BY, LIMIT
+##
+## OPTIONAL gestisce la copertura parziale: datiAnagrafici e tipologiaLuogo
+## sono presenti solo per le 60 donne nel dataset "aree verdi".
+
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
+
+SELECT DISTINCT
+       ?nomeVia ?nomePersona ?tipologia ?quartiere
+       ?professione ?categoria ?datiAnagrafici
+WHERE {
+  ?via a clv:StreetToponym ;
+       clv:officialStreetName ?nomeVia ;
+       ex:isDedicatedTo ?persona ;
+       ex:quartiere ?quartiere .
+  ?persona cpv:fullName ?nomePersona ;
+           cpv:hasSex sex:F .
+  OPTIONAL { ?via     ex:tipologiaLuogo              ?tipologia      }
+  OPTIONAL { ?persona ex:professione                 ?professione    }
+  OPTIONAL { ?persona ex:macroCategoriaOccupazionale ?categoria      }
+  OPTIONAL { ?persona ex:datiAnagrafici              ?datiAnagrafici }
+}
+ORDER BY ?nomePersona
+LIMIT 20

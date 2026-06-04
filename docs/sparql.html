@@ -37,7 +37,7 @@
 <div class="section">
   <div class="info-box">
     Il Knowledge Graph è disponibile come file Turtle nel repository:
-    <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/bologna_KG_corretto.ttl" target="_blank">
+    <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/bologna_KG_corretto.ttl" target="_blank">
     bologna_KG_corretto.ttl</a> (26.651 righe, 15.885 triple dopo l'arricchimento).
     Per eseguire le query localmente: <code>python run_queries.py</code> (usa
     <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>).
@@ -56,13 +56,14 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sv">?genere</span> (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?via</span>) <span class="sk">AS</span> <span class="sv">?numero_strade</span>)
 <span class="sk">WHERE</span> {
   <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
        <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sk">a</span> <span class="sp">cpv</span>:Person ;
-           <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
+           <span class="sp">cpv</span>:hasSex <span class="sv">?genere</span> .
 }
 <span class="sk">GROUP BY</span> <span class="sv">?genere</span>
 <span class="sk">ORDER BY</span> <span class="sk">DESC</span>(<span class="sv">?numero_strade</span>)
@@ -70,8 +71,8 @@
   <h4>Risultati:</h4>
   <div class="table-wrap"><table>
     <tr><th>?genere</th><th>?numero_strade</th></tr>
-    <tr><td>Male</td><td>1065</td></tr>
-    <tr><td>Female</td><td>66</td></tr>
+    <tr><td>sex:M</td><td>1066</td></tr>
+    <tr><td>sex:F</td><td>66</td></tr>
   </table></div>
   <h2>Query 2 — Lista delle strade dedicate a donne</h2>
   <p><strong>Domanda:</strong> quali strade di Bologna sono intitolate a donne?<br>
@@ -85,6 +86,7 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span>
 <span class="sk">WHERE</span> {
@@ -93,8 +95,8 @@
        <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sk">a</span> <span class="sp">cpv</span>:Person ;
            <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
-           <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
-  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = &quot;Female&quot;)
+           <span class="sp">cpv</span>:hasSex <span class="sv">?genere</span> .
+  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = <span class="sp">sex</span>:F)
 }
 <span class="sk">ORDER BY</span> <span class="sv">?nomePersona</span>
 <span class="sk">LIMIT</span> 100
@@ -102,11 +104,11 @@
   <h4>Primi 5 risultati (su 66 totali):</h4>
   <div class="table-wrap"><table>
     <tr><th>?nomeVia</th><th>?nomePersona</th></tr>
-    <tr><td>LARGO MARIELE VENTRE</td><td>Maria Rachele Ventre</td></tr>
-    <tr><td>PIAZZA NILDE IOTTI</td><td><a href="https://it.wikipedia.org/wiki/Nilde_Iotti" target="_blank" rel="noopener">Nilde Iotti</a></td></tr>
     <tr><td>VIA ADA NEGRI</td><td><a href="https://it.wikipedia.org/wiki/Ada_Negri" target="_blank" rel="noopener">Ada Negri</a></td></tr>
     <tr><td>VIA ADELAIDE BORGHI MAMO</td><td>Adelaide Borghi Mamo</td></tr>
     <tr><td>VIA ADELAIDE RISTORI</td><td>Adelaide Ristori</td></tr>
+    <tr><td>PASSAGGIO ALFONSINA MORINI</td><td>Alfonsina Morini</td></tr>
+    <tr><td>VIA AMALIA BETTINI</td><td>Amalia Bettini</td></tr>
   </table></div>
 
   <h2>Query 3 — Tipologia delle strade femminili</h2>
@@ -124,6 +126,7 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?tipologia</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span>
 <span class="sk">WHERE</span> {
@@ -132,7 +135,7 @@
          <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
          <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
     <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
-             <span class="sp">cpv</span>:sex &quot;Female&quot; .
+             <span class="sp">cpv</span>:hasSex <span class="sp">sex</span>:F .
     <span class="sk">FILTER</span>(<span class="sk">STRSTARTS</span>(<span class="sv">?nomeVia</span>, &quot;VIA &quot;))
     <span class="sk">BIND</span>(&quot;Via&quot; <span class="sk">AS</span> <span class="sv">?tipologia</span>)
   }
@@ -142,7 +145,7 @@
          <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
          <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
     <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
-             <span class="sp">cpv</span>:sex &quot;Female&quot; .
+             <span class="sp">cpv</span>:hasSex <span class="sp">sex</span>:F .
     <span class="sk">FILTER</span>(<span class="sk">STRSTARTS</span>(<span class="sv">?nomeVia</span>, &quot;PIAZZA &quot;) || <span class="sk">STRSTARTS</span>(<span class="sv">?nomeVia</span>, &quot;PIAZZALE &quot;))
     <span class="sk">BIND</span>(&quot;Piazza / Piazzale&quot; <span class="sk">AS</span> <span class="sv">?tipologia</span>)
   }
@@ -152,11 +155,10 @@
   <h4>Risultati aggregati:</h4>
   <div class="table-wrap"><table>
     <tr><th>?tipologia</th><th>Conteggio</th></tr>
-    <tr><td>Via</td><td>45</td></tr>
-    <tr><td>Piazza / Piazzale</td><td>8</td></tr>
+    <tr><td>Via</td><td>38</td></tr>
+    <tr><td>Piazza / Piazzale</td><td>3</td></tr>
   </table></div>
-  <p style="font-size:0.88rem;color:var(--text-muted)">Le restanti intitolazioni femminili sono Largo, Passaggio, Rotonda, Vicolo.
-  Solo 8 donne hanno una piazza o un piazzale a loro nome.</p>
+  <p style="font-size:0.88rem;color:var(--text-muted)">Le restanti 25 strade femminili non coperte dalla query sono: 11 Passaggi, 11 Rotonde, 1 Largo, 1 Piazzetta e 1 Ponte. Solo 3 donne hanno un piazzale; nessuna piazza.</p>
 
   <h2>Query 4 — REGEX + UNION: strade "Fratelli" e donne con "Maria" nel nome</h2>
   <p><strong>Domanda:</strong> quante strade usano "FRATELLI" nel nome (cancellando grammaticalmente la presenza femminile)?
@@ -170,6 +172,7 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?tipo</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span>
 <span class="sk">WHERE</span> {
@@ -189,7 +192,7 @@
          <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
          <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
     <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
-             <span class="sp">cpv</span>:sex &quot;Female&quot; .
+             <span class="sp">cpv</span>:hasSex <span class="sp">sex</span>:F .
     <span class="sk">FILTER</span>(<span class="sk">REGEX</span>(<span class="sv">?nomePersona</span>, &quot;MARIA&quot;, &quot;i&quot;))
     <span class="sk">BIND</span>(&quot;Maria&quot; <span class="sk">AS</span> <span class="sv">?tipo</span>)
   }
@@ -229,13 +232,14 @@
 <span class="sc">## se esiste, viene mostrata; se non esiste, la riga appare ugualmente</span>
 <span class="sc">## (con <span class="sv">?nomeVia2</span> = non valorizzato).</span>
 <span class="sc">##</span>
-<span class="sc">## Questo pattern <span class="sk">OPTIONAL</span> è utile anche per query future quando</span>
-<span class="sc">## il KG verrà esteso con dati biografici (nascita, professione)</span>
-<span class="sc">## che non saranno disponibili per tutti i personaggi.</span>
+<span class="sc">## Questo pattern <span class="sk">OPTIONAL</span> è utile per gestire la copertura parziale:</span>
+<span class="sc">## i dati biografici (nascita, professione) sono già nel KG</span>
+<span class="sc">## ma non disponibili per tutti i personaggi (copertura 83,5%).</span>
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomePersona</span> <span class="sv">?genere</span> <span class="sv">?nomeVia1</span> <span class="sv">?nomeVia2</span>
 <span class="sk">WHERE</span> {
@@ -244,7 +248,7 @@
         <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sk">a</span> <span class="sp">cpv</span>:Person ;
            <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
-           <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
+           <span class="sp">cpv</span>:hasSex <span class="sv">?genere</span> .
 
   <span class="sk">OPTIONAL</span> {
     <span class="sv">?via2</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
@@ -253,7 +257,7 @@
     <span class="sk">FILTER</span>(<span class="sv">?via2</span> != <span class="sv">?via1</span>)
   }
 
-  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = &quot;Female&quot; || <span class="sv">?genere</span> = &quot;Male&quot;)
+  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = <span class="sp">sex</span>:F || <span class="sv">?genere</span> = <span class="sp">sex</span>:M)
 }
 <span class="sk">ORDER BY</span> <span class="sv">?genere</span> <span class="sv">?nomePersona</span>
 <span class="sk">LIMIT</span> 200
@@ -261,11 +265,11 @@
   <h4>Esempi di risultati:</h4>
   <div class="table-wrap"><table>
     <tr><th>?nomePersona</th><th>?genere</th><th>?nomeVia1</th><th>?nomeVia2</th></tr>
-    <tr><td><a href="https://it.wikipedia.org/wiki/Laura_Bassi" target="_blank" rel="noopener">Laura Bassi Veratti</a></td><td>Female</td><td>VIA LAURA BASSI</td><td>PIAZZA LAURA BASSI</td></tr>
-    <tr><td>Ondina Valla</td><td>Female</td><td>VIA ONDINA VALLA</td><td><em>(non valorizzato)</em></td></tr>
-    <tr><td><a href="https://it.wikipedia.org/wiki/Giuseppe_Garibaldi" target="_blank" rel="noopener">Giuseppe Garibaldi</a></td><td>Male</td><td>VIA GARIBALDI</td><td>PIAZZA GARIBALDI</td></tr>
+    <tr><td>Ada Negri</td><td>sex:F</td><td>VIA ADA NEGRI</td><td><em>(non valorizzato)</em></td></tr>
+    <tr><td>Ugo Bassi</td><td>sex:M</td><td>VIA UGO BASSI</td><td>GALLERIA UGO BASSI</td></tr>
+    <tr><td>Cavour</td><td>sex:M</td><td>GALLERIA CAVOUR</td><td>PIAZZA CAVOUR</td></tr>
   </table></div>
-  <p style="font-size:0.88rem;color:var(--text-muted)">Laura Bassi è l'unica donna con sia una via che una piazza a lei dedicata a Bologna.</p>
+  <p style="font-size:0.88rem;color:var(--text-muted)">Nessuna donna risulta dedicataria di più di una strada nel KG. Gli unici casi di dedica multipla sono maschili: Cavour, Ugo Bassi e Guglielmo Marconi hanno ciascuno due intitolazioni. OPTIONAL restituisce comunque tutte le donne, con <code>?nomeVia2</code> non valorizzato.</p>
 
   <h2>Query 6 — Dati biografici di tutte le persone onorate</h2>
   <p><strong>Domanda:</strong> quali sono la professione, la data di nascita e la data di morte delle persone a cui Bologna ha dedicato una strada?
@@ -278,6 +282,7 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>:  &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>:  &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:   &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span> <span class="sv">?genere</span> <span class="sv">?professione</span> <span class="sv">?dataNascita</span> <span class="sv">?dataMorte</span> <span class="sv">?luogoNascita</span>
 <span class="sk">WHERE</span> {
@@ -285,7 +290,7 @@
            <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
            <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
-           <span class="sp">cpv</span>:sex      <span class="sv">?genere</span> .
+           <span class="sp">cpv</span>:hasSex      <span class="sv">?genere</span> .
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:professione   <span class="sv">?professione</span>  }
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:dataNascita   <span class="sv">?dataNascita</span>  }
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:dataMorte     <span class="sv">?dataMorte</span>    }
@@ -297,11 +302,11 @@
   <h4>Primi 5 risultati (su 943 persone con dati biografici):</h4>
   <div class="table-wrap"><table>
     <tr><th>?nomeVia</th><th>?nomePersona</th><th>?genere</th><th>?professione</th><th>?dataNascita</th><th>?dataMorte</th></tr>
-    <tr><td>VIA ADA NEGRI</td><td><a href="https://it.wikipedia.org/wiki/Ada_Negri" target="_blank" rel="noopener">Ada Negri</a></td><td>Female</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
-    <tr><td>VIA ADELCHI SERENA</td><td>Adelchi Serena</td><td>Male</td><td>Politico</td><td>20 novembre 1895</td><td>19 dicembre 1970</td></tr>
-    <tr><td>VIA ADELFO BERGONZONI</td><td>Adelfo Bergonzoni</td><td>Male</td><td>Partigiano</td><td>—</td><td>1944</td></tr>
-    <tr><td>VIA LAURA BASSI</td><td><a href="https://it.wikipedia.org/wiki/Laura_Bassi" target="_blank" rel="noopener">Laura Bassi Veratti</a></td><td>Female</td><td>Fisica e filosofa naturale</td><td>31 ottobre 1711</td><td>20 febbraio 1778</td></tr>
-    <tr><td>PIAZZA NILDE IOTTI</td><td><a href="https://it.wikipedia.org/wiki/Nilde_Iotti" target="_blank" rel="noopener">Nilde Iotti</a></td><td>Female</td><td>Politica</td><td>26 aprile 1920</td><td>4 dicembre 1999</td></tr>
+    <tr><td>VIA ADA NEGRI</td><td><a href="https://it.wikipedia.org/wiki/Ada_Negri" target="_blank" rel="noopener">Ada Negri</a></td><td>sex:F</td><td>Scrittrice e poetessa</td><td>3 febbraio 1870</td><td>11 gennaio 1945</td></tr>
+    <tr><td>VIA ADELCHI SERENA</td><td>Adelchi Serena</td><td>sex:M</td><td>Politico</td><td>20 novembre 1895</td><td>19 dicembre 1970</td></tr>
+    <tr><td>VIA ADELFO BERGONZONI</td><td>Adelfo Bergonzoni</td><td>sex:M</td><td>Partigiano</td><td>—</td><td>1944</td></tr>
+    <tr><td>VIA LAURA BASSI VERATTI</td><td><a href="https://it.wikipedia.org/wiki/Laura_Bassi" target="_blank" rel="noopener">Laura Bassi Veratti</a></td><td>sex:F</td><td>Fisica e filosofa naturale</td><td>31 ottobre 1711</td><td>20 febbraio 1778</td></tr>
+    <tr><td>VIA IRMA BANDIERA</td><td>Irma Bandiera</td><td>sex:F</td><td>Partigiana</td><td>1915</td><td>1944</td></tr>
   </table></div>
   <p style="font-size:0.88rem;color:var(--text-muted)">OPTIONAL consente di restituire anche le persone con dati parziali. FILTER(BOUND(?professione)||BOUND(?dataNascita)) esclude solo i record completamente privi di dati (128 persone, 11,3%).</p>
 
@@ -316,6 +321,7 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sv">?quartiere</span> <span class="sv">?genere</span>
        (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?via</span>) <span class="sk">AS</span> <span class="sv">?numStrade</span>)
@@ -323,8 +329,8 @@
   <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
        <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> ;
        <span class="sp">ex</span>:quartiere <span class="sv">?quartiere</span> .
-  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
-  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = &quot;Female&quot; || <span class="sv">?genere</span> = &quot;Male&quot;)
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:hasSex <span class="sv">?genere</span> .
+  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = <span class="sp">sex</span>:F || <span class="sv">?genere</span> = <span class="sp">sex</span>:M)
 }
 <span class="sk">GROUP BY</span> <span class="sv">?quartiere</span> <span class="sv">?genere</span>
 <span class="sk">ORDER BY</span> <span class="sv">?quartiere</span> <span class="sv">?genere</span>
@@ -332,20 +338,20 @@
   <h4>Risultati (strade femminili per quartiere, ordinate per quartiere):</h4>
   <div class="table-wrap"><table>
     <tr><th>?quartiere</th><th>?genere</th><th>?numStrade</th></tr>
-    <tr><td>Borgo Panigale - Reno</td><td>Female</td><td>11</td></tr>
-    <tr><td>Borgo Panigale - Reno</td><td>Male</td><td>230</td></tr>
-    <tr><td>Navile</td><td>Female</td><td>8</td></tr>
-    <tr><td>Navile</td><td>Male</td><td>177</td></tr>
-    <tr><td>Porto - Saragozza</td><td>Female</td><td>7</td></tr>
-    <tr><td>Porto - Saragozza</td><td>Male</td><td>152</td></tr>
-    <tr><td>San Donato - San Vitale</td><td>Female</td><td>26</td></tr>
-    <tr><td>San Donato - San Vitale</td><td>Male</td><td>190</td></tr>
-    <tr><td>Santo Stefano</td><td>Female</td><td>10</td></tr>
-    <tr><td>Santo Stefano</td><td>Male</td><td>184</td></tr>
-    <tr><td>Savena</td><td>Female</td><td>4</td></tr>
-    <tr><td>Savena</td><td>Male</td><td>132</td></tr>
+    <tr><td>Borgo Panigale - Reno</td><td>sex:F</td><td>11</td></tr>
+    <tr><td>Borgo Panigale - Reno</td><td>sex:M</td><td>230</td></tr>
+    <tr><td>Navile</td><td>sex:F</td><td>8</td></tr>
+    <tr><td>Navile</td><td>sex:M</td><td>177</td></tr>
+    <tr><td>Porto - Saragozza</td><td>sex:F</td><td>7</td></tr>
+    <tr><td>Porto - Saragozza</td><td>sex:M</td><td>152</td></tr>
+    <tr><td>San Donato - San Vitale</td><td>sex:F</td><td>26</td></tr>
+    <tr><td>San Donato - San Vitale</td><td>sex:M</td><td>191</td></tr>
+    <tr><td>Santo Stefano</td><td>sex:F</td><td>10</td></tr>
+    <tr><td>Santo Stefano</td><td>sex:M</td><td>184</td></tr>
+    <tr><td>Savena</td><td>sex:F</td><td>4</td></tr>
+    <tr><td>Savena</td><td>sex:M</td><td>132</td></tr>
   </table></div>
-  <p style="font-size:0.88rem;color:var(--text-muted)">San Donato–San Vitale concentra il 39% delle strade femminili (26 su 66), ma rimane il quartiere con il divario assoluto più alto (190 maschili vs 26 femminili). In nessun quartiere la percentuale femminile supera il 12%.</p>
+  <p style="font-size:0.88rem;color:var(--text-muted)">San Donato–San Vitale concentra il 39% delle strade femminili (26 su 66), ma rimane il quartiere con il divario assoluto più alto (191 maschili vs 26 femminili). In nessun quartiere la percentuale femminile supera il 12%.</p>
 
   <h2>Query 8 — Macro-categorie occupazionali per genere</h2>
   <p><strong>Domanda:</strong> in quali ambiti professionali le donne sono onorate dalla toponomastica rispetto agli uomini?
@@ -358,15 +364,16 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sv">?genere</span> <span class="sv">?categoria</span>
        (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?persona</span>) <span class="sk">AS</span> <span class="sv">?persone</span>)
 <span class="sk">WHERE</span> {
   <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
        <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
-  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex <span class="sv">?genere</span> ;
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:hasSex <span class="sv">?genere</span> ;
            <span class="sp">ex</span>:macroCategoriaOccupazionale <span class="sv">?categoria</span> .
-  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = &quot;Female&quot; || <span class="sv">?genere</span> = &quot;Male&quot;)
+  <span class="sk">FILTER</span>(<span class="sv">?genere</span> = <span class="sp">sex</span>:F || <span class="sv">?genere</span> = <span class="sp">sex</span>:M)
 }
 <span class="sk">GROUP BY</span> <span class="sv">?genere</span> <span class="sv">?categoria</span>
 <span class="sk">ORDER BY</span> <span class="sv">?genere</span> <span class="sk">DESC</span>(<span class="sv">?persone</span>)
@@ -399,6 +406,7 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sv">?decennio</span>
        (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?via</span>) <span class="sk">AS</span> <span class="sv">?nuoveStrade</span>)
@@ -406,7 +414,7 @@
   <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
        <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> ;
        <span class="sp">ex</span>:dataIstituzione <span class="sv">?dataIst</span> .
-  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex &quot;Female&quot; .
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:hasSex <span class="sp">sex</span>:F .
   <span class="sk">BIND</span>(<span class="sk">CONCAT</span>(<span class="sk">SUBSTR</span>(<span class="sv">?dataIst</span>, 1, 3), &quot;0s&quot;) <span class="sk">AS</span> <span class="sv">?decennio</span>)
 }
 <span class="sk">GROUP BY</span> <span class="sv">?decennio</span>
@@ -434,6 +442,7 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span>
        <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span> <span class="sv">?tipologia</span> <span class="sv">?quartiere</span>
@@ -444,7 +453,7 @@
        <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> ;
        <span class="sp">ex</span>:quartiere <span class="sv">?quartiere</span> .
   <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
-           <span class="sp">cpv</span>:sex &quot;Female&quot; .
+           <span class="sp">cpv</span>:hasSex <span class="sp">sex</span>:F .
   <span class="sk">OPTIONAL</span> { <span class="sv">?via</span>     <span class="sp">ex</span>:tipologiaLuogo               <span class="sv">?tipologia</span>      }
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:professione                 <span class="sv">?professione</span>    }
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:macroCategoriaOccupazionale  <span class="sv">?categoria</span>      }
@@ -482,6 +491,7 @@
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: <span class="su">&lt;https://w3id.org/italia/onto/CLV/&gt;</span>
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: <span class="su">&lt;https://w3id.org/italia/onto/CPV/&gt;</span>
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  <span class="su">&lt;https://w3id.org/bologna/ontology#&gt;</span>
+<span class="sk">PREFIX</span> <span class="sp">sex</span>:  &lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/&gt;
 
 <span class="sk">CONSTRUCT</span> {
   <span class="sv">?strada</span>  <span class="sk">a</span>                              <span class="sp">clv</span>:StreetToponym ;
@@ -490,7 +500,7 @@
            <span class="sp">ex</span>:quartiere                    <span class="sv">?quartiere</span> .
   <span class="sv">?persona</span> <span class="sk">a</span>                              <span class="sp">cpv</span>:Person ;
            <span class="sp">cpv</span>:fullName                    <span class="sv">?nomePersona</span> ;
-           <span class="sp">cpv</span>:sex                         <span class="ss">"Female"</span> ;
+           <span class="sp">cpv</span>:hasSex                         <span class="sp">sex</span>:F ;
            <span class="sp">ex</span>:professione                  <span class="sv">?professione</span> ;
            <span class="sp">ex</span>:macroCategoriaOccupazionale  <span class="sv">?categoria</span> .
 }
@@ -498,12 +508,11 @@
   <span class="sv">?strada</span>  <span class="sk">a</span>              <span class="sp">clv</span>:StreetToponym ;
            <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
            <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
-  <span class="sv">?persona</span> <span class="sp">cpv</span>:sex      <span class="ss">"Female"</span> ;
+  <span class="sv">?persona</span> <span class="sp">cpv</span>:hasSex      <span class="sp">sex</span>:F ;
            <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> .
   <span class="sk">OPTIONAL</span> { <span class="sv">?strada</span>  <span class="sp">ex</span>:quartiere                   <span class="sv">?quartiere</span>  }
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:professione                 <span class="sv">?professione</span> }
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:macroCategoriaOccupazionale  <span class="sv">?categoria</span>  }
-  <span class="sk">FILTER</span> ( <span class="sp">cpv</span>:sex = <span class="ss">"Female"</span> )
 }
 <span class="sk">LIMIT</span> 5
 </code></pre>

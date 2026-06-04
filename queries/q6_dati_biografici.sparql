@@ -1,0 +1,26 @@
+## Query 6 — Dati biografici: professione, data di nascita e morte per tutte le persone
+## Keywords: OPTIONAL, SELECT DISTINCT, FILTER, BOUND, ORDER BY, LIMIT
+##
+## Mostra le proprietà ex: aggiunte tramite arricchimento Wikidata (83,5% copertura).
+## OPTIONAL perché non tutte le persone hanno dati completi.
+
+PREFIX clv:  <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv:  <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:   <https://w3id.org/bologna/ontology#>
+PREFIX sex:  <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
+
+SELECT DISTINCT ?nomeVia ?nomePersona ?genere ?professione ?dataNascita ?dataMorte ?luogoNascita
+WHERE {
+  ?strada  a clv:StreetToponym ;
+           clv:officialStreetName ?nomeVia ;
+           ex:isDedicatedTo ?persona .
+  ?persona cpv:fullName ?nomePersona ;
+           cpv:hasSex    ?genere .
+  OPTIONAL { ?persona ex:professione  ?professione  }
+  OPTIONAL { ?persona ex:dataNascita  ?dataNascita  }
+  OPTIONAL { ?persona ex:dataMorte    ?dataMorte    }
+  OPTIONAL { ?persona ex:luogoNascita ?luogoNascita }
+  FILTER ( BOUND(?professione) || BOUND(?dataNascita) )
+}
+ORDER BY ?nomePersona
+LIMIT 20

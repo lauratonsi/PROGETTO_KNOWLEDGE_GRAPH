@@ -1,0 +1,21 @@
+## Query 9 — Intitolazioni femminili per decennio
+## Keywords: BIND, SUBSTR, CONCAT, COUNT, DISTINCT, FILTER, GROUP BY, ORDER BY
+##
+## SUBSTR e CONCAT estraggono il decennio da ex:dataIstituzione (formato "YYYY-MM-DD").
+
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
+
+SELECT ?decennio
+       (COUNT(DISTINCT ?via) AS ?nuoveStrade)
+WHERE {
+  ?via a clv:StreetToponym ;
+       ex:isDedicatedTo ?persona ;
+       ex:dataIstituzione ?dataIst .
+  ?persona cpv:hasSex sex:F .
+  BIND(CONCAT(SUBSTR(STR(?dataIst), 1, 3), "0s") AS ?decennio)
+}
+GROUP BY ?decennio
+ORDER BY ?decennio

@@ -1,0 +1,33 @@
+## Query CONSTRUCT — Sotto-grafo delle strade femminili con dati biografici
+## Keywords: CONSTRUCT, WHERE, OPTIONAL, LIMIT
+##
+## Genera triple RDF per ogni strada intitolata a una donna.
+## OPTIONAL gestisce le proprietà non sempre presenti (professione, categoria).
+
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
+
+CONSTRUCT {
+  ?strada  a                             clv:StreetToponym ;
+           clv:officialStreetName        ?nomeVia ;
+           ex:isDedicatedTo             ?persona ;
+           ex:quartiere                 ?quartiere .
+  ?persona a                             cpv:Person ;
+           cpv:fullName                 ?nomePersona ;
+           cpv:hasSex                   sex:F ;
+           ex:professione               ?professione ;
+           ex:macroCategoriaOccupazionale ?categoria .
+}
+WHERE {
+  ?strada  a clv:StreetToponym ;
+           clv:officialStreetName ?nomeVia ;
+           ex:isDedicatedTo ?persona .
+  ?persona cpv:hasSex sex:F ;
+           cpv:fullName ?nomePersona .
+  OPTIONAL { ?strada  ex:quartiere                   ?quartiere   }
+  OPTIONAL { ?persona ex:professione                 ?professione }
+  OPTIONAL { ?persona ex:macroCategoriaOccupazionale ?categoria   }
+}
+LIMIT 5

@@ -6,9 +6,9 @@
 ## se esiste, viene mostrata; se non esiste, la riga appare ugualmente
 ## (con ?nomeVia2 = non valorizzato).
 ##
-## Questo pattern OPTIONAL è utile anche per query future quando
-## il KG verrà esteso con dati biografici (nascita, professione)
-## che non saranno disponibili per tutti i personaggi.
+## Questo pattern OPTIONAL è utile per gestire la copertura parziale:
+## i dati biografici (nascita, professione) sono già nel KG
+## ma non disponibili per tutti i personaggi (copertura 83,5%).
 
 PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>

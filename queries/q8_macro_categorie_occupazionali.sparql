@@ -1,0 +1,21 @@
+## Query 8 — Distribuzione delle macro-categorie occupazionali per genere
+## Keywords: OPTIONAL, DISTINCT, COUNT, FILTER, GROUP BY, ORDER BY
+##
+## ex:macroCategoriaOccupazionale aggrega le professioni in ambiti semantici.
+
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
+PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
+
+SELECT ?genere ?categoria
+       (COUNT(DISTINCT ?persona) AS ?persone)
+WHERE {
+  ?via a clv:StreetToponym ;
+       ex:isDedicatedTo ?persona .
+  ?persona cpv:hasSex ?genere ;
+           ex:macroCategoriaOccupazionale ?categoria .
+  FILTER(?genere = sex:F || ?genere = sex:M)
+}
+GROUP BY ?genere ?categoria
+ORDER BY ?genere DESC(?persone)
