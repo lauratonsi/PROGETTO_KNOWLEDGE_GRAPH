@@ -488,6 +488,34 @@
     <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/NOTE_METODOLOGICHE.md" target="_blank">NOTE_METODOLOGICHE.md</a>
     nel repository GitHub del progetto.
   </p>
+
+  <h2>Validazione SHACL del Knowledge Graph</h2>
+  <p>Il grafo è stato validato con <strong>pyshacl 0.31.0</strong> contro un file di shape constraints
+  (<a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/validation/shapes.ttl" target="_blank"><code>validation/shapes.ttl</code></a>)
+  che formalizza 17 vincoli strutturali su <code>clv:StreetToponym</code> e <code>cpv:Person</code>.
+  Il report completo è in
+  <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/validation/shacl_report.txt" target="_blank"><code>validation/shacl_report.txt</code></a>.</p>
+
+  <div class="info-box" style="font-family:monospace;font-size:0.9rem">
+    <strong>Validation Report — 4 giugno 2026</strong><br>
+    Tool: pyshacl 0.31.0 · Data graph: bologna_KG_corretto.ttl (16.222 triple)<br>
+    Shapes: StreetToponymShape (7 vincoli) + PersonShape (10 vincoli)<br><br>
+    <strong style="color:#2e7d32">Conforms: True — 0 violazioni</strong>
+  </div>
+
+  <p style="margin-top:1rem">I vincoli verificati includono:</p>
+  <ul>
+    <li>Ogni <code>clv:StreetToponym</code> ha esattamente un <code>clv:officialStreetName</code> (xsd:string) e un <code>ex:isDedicatedTo</code> che punta a una <code>cpv:Person</code></li>
+    <li>Le proprietà di arricchimento (<code>ex:quartiere</code>, <code>ex:geoPoint</code>, ecc.) appaiono al massimo una volta</li>
+    <li>Ogni <code>cpv:Person</code> ha esattamente un <code>cpv:fullName</code> e un <code>cpv:hasSex</code> il cui valore è <code>sex:M</code> o <code>sex:F</code> (vocabolario controllato CPV-AP_IT)</li>
+    <li>Le proprietà biografiche (<code>ex:professione</code>, <code>ex:dataNascita</code>, ecc.) appaiono al massimo una volta</li>
+  </ul>
+  <p style="font-size:0.88rem;color:var(--text-muted)">
+    La prima esecuzione ha rilevato 13 violazioni reali nella pipeline di arricchimento:
+    1 strada (CODVIA 48900) con due nomi conflittuali per un errore nel dato Open Data sorgente,
+    e 7 persone con <code>ex:professione</code> inserita due volte da fonti diverse.
+    Tutte le violazioni sono state corrette prima della validazione finale.
+  </p>
 </div>
 
 </main>
