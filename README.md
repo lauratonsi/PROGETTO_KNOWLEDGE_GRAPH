@@ -29,9 +29,10 @@ Output: `bologna_KG_ready.csv`
 python equita.py
 ```
 
-Applica sistematicamente le correzioni validate: declassa santi e nomi astratti femminili
-a Toponimo, recupera artisti con soprannome erroneamente classificati, corregge tre donne
-classificate Male (Artemisia Gentileschi, Properzia De Rossi, Bittisia Gozzadini).
+Applica le correzioni di classificazione validate: declassa santi e nomi astratti femminili
+a Toponimo, recupera artisti con soprannome (DANTE, CARAVAGGIO…) erroneamente classificati
+come Toponimo, corregge tre donne classificate Male (Artemisia Gentileschi, Properzia De Rossi,
+Bittisia Gozzadini).
 
 ---
 
@@ -44,15 +45,15 @@ Output: `bologna_KG_corretto.ttl`
 python genera_ttl.py
 ```
 
-Scrive le triple Turtle direttamente usando solo la libreria standard Python
-(`csv`, `hashlib`, `re`, `pathlib`). Replica la logica della query `trasforma_finale.sparql`
-usata nella fase iniziale con SPARQL-Anything, eliminando la dipendenza da Java.
+Genera le triple Turtle base con sola libreria standard Python (`csv`, `hashlib`, `re`):
+`clv:StreetToponym`, `clv:officialStreetName`, `ex:isDedicatedTo`, `cpv:Person`, `cpv:fullName`,
+`cpv:hasSex`. Output: 1.132 strade (1.066 Male, 66 Female) e 1.129 persone uniche.
 
 ---
 
-### 3. Arricchimento biografico via Wikidata (`wikidata_fetch.py`)
+### 3a. Recupero dati biografici da Wikidata (`wikidata_fetch.py`)
 
-Input: `bologna_KG_corretto.ttl` (lista persone) + API Wikidata  
+Input: `bologna_KG_ready.csv` + API Wikidata  
 Output: `F_M DATE.xlsx`
 
 ```bash
@@ -60,8 +61,24 @@ python wikidata_fetch.py
 ```
 
 Interroga `wbsearchentities` + `wbgetentities` per 1.129 persone recuperando
-professione (P106), data/luogo di nascita (P569/P19), data/luogo di morte (P570/P20).
-Copertura: 943 persone (83,5%).
+professione (P106), data/luogo di nascita (P569/P19), data/luogo di morte (P570/P20),
+con verifica umano (P31 = Q5). Copertura: 943 persone (83,5%). I non trovati sono
+in `wikidata_notfound.txt`.
+
+---
+
+### 3b. Integrazione dati biografici nel KG (`bio_ttl.py`)
+
+Input: `F_M DATE.xlsx` + `bologna_KG_ready.csv`  
+Output: `bologna_KG_corretto.ttl` (aggiornato in-place)
+
+```bash
+python bio_ttl.py
+```
+
+Legge i dati biografici da `F_M DATE.xlsx` e aggiunge al TTL le triple
+`ex:professione`, `ex:dataNascita`, `ex:luogoNascita`, `ex:dataMorte`, `ex:luogoMorte`
+per ciascuna persona corrispondente nel KG.
 
 ---
 
@@ -74,8 +91,9 @@ Output: `classificazione_professioni.csv`
 python classifica_professioni.py
 ```
 
-Assegna una macro-categoria occupazionale a ciascuna delle 1.192 persone classificate
-tramite matching su parole chiave nelle professioni Wikidata.
+Assegna una delle 13 macro-categorie occupazionali a ciascuna delle 1.163 persone
+classificate (1.063 uomini storici + 66 donne storiche + 34 proposte) tramite matching
+su parole chiave nelle professioni Wikidata.
 
 ---
 
@@ -89,9 +107,12 @@ Output: `bologna_KG_corretto.ttl` (aggiornato in-place)
 python arricchimento_kg.py
 ```
 
-Aggiunge a `clv:StreetToponym`: `ex:quartiere`, `ex:geoPoint`, `ex:dataIstituzione`, `ex:tipologiaLuogo`.  
-Aggiunge a `cpv:Person`: `ex:macroCategoriaOccupazionale`, `ex:datiAnagrafici`, `ex:professione` (completamento).  
-Il TTL risultante conta 26.651 righe (15.885 triple RDF).
+Aggiunge a `clv:StreetToponym`: `ex:quartiere`, `ex:geoPoint`, `ex:dataIstituzione`,
+`ex:tipologiaLuogo` (60 strade femminili dal dataset aree verdi).  
+Aggiunge a `cpv:Person`: `ex:macroCategoriaOccupazionale` (1.030 persone),
+`ex:datiAnagrafici` (60 donne), `ex:professione` (completamento per 8 donne
+non presenti su Wikidata).  
+Il TTL risultante conta 26.651 righe e 15.885 triple RDF.
 
 ---
 
@@ -104,6 +125,7 @@ Il TTL risultante conta 26.651 righe (15.885 triple RDF).
 | `cross_check.py` / `detailed_match.py` | Verifica incrociata classificazioni |
 | `run_queries.py` | Esegue query SPARQL sul KG localmente |
 | `build_site.py` | Utility per il build del sito |
+| `bio_ttl.py` | Step 3b della pipeline: integra i dati F_M DATE.xlsx nel TTL come triple biografiche |
 | `P106.py` | Prototipo iniziale: estrazione P106 via SPARQL-Anything (non nella pipeline finale) |
 
 ---

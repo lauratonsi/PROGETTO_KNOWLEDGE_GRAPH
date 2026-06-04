@@ -54,7 +54,7 @@
       con SPARQL-Anything. Ogni strada è un nodo <code>clv:StreetToponym</code>;
       le strade dedicate a persone sono collegate tramite <code>ex:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.
       Output: <code>bologna_KG_corretto.ttl</code>.</div></li>
-    <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
+    <li><div><strong>Recupero dati biografici da Wikidata (<code>wikidata_fetch.py</code>)</strong><br>
       Per le 1.129 persone identificate nel KG, uno script Python interroga
       l'API JSON di Wikidata
       (<code>wbsearchentities</code> per la ricerca testuale + <code>wbgetentities</code>
@@ -62,7 +62,12 @@
       data/luogo di nascita (P569/P19) e data/luogo di morte (P570/P20),
       con verifica che l'entità sia un essere umano (P31 = Q5).
       Copertura: <strong>943 persone (83,5%)</strong>. I dati confluiscono nel file <code>F_M DATE.xlsx</code>,
-      che costituisce l'input dello step successivo di classificazione professionale.</div></li>
+    <li><div><strong>Integrazione dati biografici nel KG (<code>bio_ttl.py</code>)</strong><br>
+      Legge <code>F_M DATE.xlsx</code> e aggiunge al TTL le triple biografiche per ogni persona
+      corrispondente: <code>ex:professione</code>, <code>ex:dataNascita</code>,
+      <code>ex:luogoNascita</code>, <code>ex:dataMorte</code>, <code>ex:luogoMorte</code>.
+      Deve precedere <code>arricchimento_kg.py</code> in modo che la colmatura da aree verdi
+      si attivi solo per le persone senza dati Wikidata.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
       Lo script <code>classifica_professioni.py</code> assegna una delle 13 macro-categorie
       a ciascuna delle 1.163 persone classificate (1.063 uomini + 66 donne storiche + 34 proposte),
@@ -166,9 +171,9 @@
       <tr><td style="padding:0.4rem 0.75rem"><code>cpv:fullName</code></td><td>Person</td><td>stradario comunale</td><td>1.129</td></tr>
       <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>cpv:hasSex</code></td><td>Person</td><td>classificazione gruppo</td><td>1.129</td></tr>
       <tr><td style="padding:0.4rem 0.75rem"><code>ex:professione</code></td><td>Person</td><td>Wikidata P106 + aree verdi</td><td>1.004</td></tr>
-      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:dataNascita / ex:luogoNascita</code></td><td>Person</td><td>Wikidata P569/P19</td><td>~1.001</td></tr>
-      <tr><td style="padding:0.4rem 0.75rem"><code>ex:dataMorte / ex:luogoMorte</code></td><td>Person</td><td>Wikidata P570/P20</td><td>~1.001</td></tr>
-      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:macroCategoriaOccupazionale</code></td><td>Person</td><td>classificazione_professioni.csv</td><td>1.036</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:dataNascita / ex:luogoNascita</code></td><td>Person</td><td>Wikidata P569/P19</td><td>~943</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:dataMorte / ex:luogoMorte</code></td><td>Person</td><td>Wikidata P570/P20</td><td>~943</td></tr>
+      <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:macroCategoriaOccupazionale</code></td><td>Person</td><td>classificazione_professioni.csv</td><td>1.030</td></tr>
       <tr><td style="padding:0.4rem 0.75rem"><code>ex:datiAnagrafici</code></td><td>Person</td><td>aree verdi CSV</td><td>60</td></tr>
       <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:statoProposta</code></td><td>Person</td><td>gruppo di ricerca</td><td>34</td></tr>
     </tbody>
@@ -398,7 +403,7 @@
     (include tutte quelle con professione Wikidata + 35 aggiuntive).</li>
     <li><strong>60 donne</strong> arricchite con <code>ex:datiAnagrafici</code> e
     <code>ex:tipologiaLuogo</code> dal dataset "Aree verdi e vie dedicate alle donne".</li>
-    <li><strong>3 donne</strong> con <code>ex:professione</code> colmata dalla stessa fonte
+    <li><strong>8 donne</strong> con <code>ex:professione</code> colmata dalla stessa fonte
     (non presenti su Wikidata).</li>
   </ul>
   <p>Le restanti <strong>128 persone (11,3%)</strong> non dispongono di dati biografici per ragioni strutturali:</p>
