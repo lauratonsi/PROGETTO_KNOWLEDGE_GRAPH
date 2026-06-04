@@ -33,13 +33,13 @@ Per le circa 15 figure di rilevanza esclusivamente locale non documentate su Wik
 
 ### Copertura dell'arricchimento biografico
 
-Su **1.129 persone** presenti nel Knowledge Graph (strade intitolate a individui di genere Male o Female), **943 (83,5%)** sono state arricchite con le proprietà `ex:professione`, `ex:dataNascita`, `ex:luogoNascita`, `ex:dataMorte`, `ex:luogoMorte`. Le restanti **128 (11,3%)** non dispongono di dati biografici per le seguenti ragioni strutturali:
+Su **1.129 persone** presenti nel Knowledge Graph (strade intitolate a individui di genere Male o Female), **943 (83,5%)** sono state arricchite con le proprietà `ex:professione`, `ex:dataNascita`, `ex:luogoNascita`, `ex:dataMorte`, `ex:luogoMorte`. Le restanti **186 (16,5%)** non dispongono di dati biografici Wikidata per le seguenti ragioni strutturali:
 
 - **Nome abbreviato nello stradario**: il TTL contiene il solo cognome o soprannome (es. `CAVOUR`, `DANTE`, `TINTORETTO`, `ROSSINI`) che non è stato possibile collegare automaticamente al nome completo nel foglio dati.
 - **Assenza di dati di partenza**: figure locali minori per cui né Wikidata né le fonti archivistiche consultate hanno restituito risultati.
 - **Collettivi e coppie**: intitolazioni a gruppi storici (es. `AMBROGIO E PIETRO LORENZETTI`, `FRATELLI CERVI`) che non corrispondono a singoli individui nel dataset biografico.
 
-Questa limitazione è documentata a fini di trasparenza metodologica e non inficia la validità dell'analisi complessiva, che si basa sull'83,5% della popolazione censita.
+Una parte di queste 186 persone dispone comunque di `ex:macroCategoriaOccupazionale` (assegnata per nome) o, per le donne, di `ex:datiAnagrafici` dal dataset "Aree verdi". Questa limitazione è documentata a fini di trasparenza metodologica e non inficia la validità dell'analisi complessiva, che si basa sull'83,5% della popolazione censita.
 
 --- 
 ## Quadro Normativo e Vincoli — Regolamento Toponomastico
@@ -169,8 +169,8 @@ In una seconda fase di arricchimento, il Knowledge Graph è stato esteso con nuo
 ### Nuove proprietà su `cpv:Person`
 
 - **`ex:macroCategoriaOccupazionale`** — categoria semantica della professione, assegnata tramite matching su parole chiave sul campo `ex:professione`. 13 valori: `"Arte visiva e architettura"` · `"Filosofia, storia e accademia"` · `"Istruzione ed educazione"` · `"Letteratura e giornalismo"` · `"Musica, teatro e cinema"` · `"Patrioti, militari ed esploratori"` · `"Politica e diritto"` · `"Religione"` · `"Resistenza e antifascismo"` · `"Scienze e medicina"` · `"Sindacalismo e attivismo civile"` · `"Sport"` · `"Altro / istituzionale"`. Aggiunto a 1.030 persone.
-- **`ex:datiAnagrafici`** — stringa sintetica con luogo e anno di nascita e di morte (es. `"Bologna, 1711 - Parigi, 1782"`). Estratto dal campo `DATI ANAGRAFICI` del dataset "Aree verdi e vie dedicate alle donne". Presente solo per le persone di genere Female con un match nel dataset (60 persone).
-- **`ex:professione`** (colmatura) — per 8 persone di genere Female non documentate su Wikidata e quindi prive di `ex:professione` nella fase di arricchimento biografico, il campo è stato colmato con il valore `CLASSIFICAZIONE` del dataset "Aree verdi e vie dedicate alle donne".
+- **`ex:datiAnagrafici`** — stringa sintetica con luogo e anno di nascita e di morte (es. `"Bologna, 1711 - Parigi, 1782"`). Estratto dal campo `DATI ANAGRAFICI` del dataset "Aree verdi e vie dedicate alle donne". Presente solo per le persone di genere Female con un match nel dataset (59 persone; le 7 senza match includono le tre figure riclassificate da Male — Artemisia Gentileschi, Properzia De Rossi, Bittisia Gozzadini — assenti dal dataset femminile originale).
+- **`ex:professione`** (colmatura) — per le persone di genere Female non documentate su Wikidata e quindi prive di `ex:professione` nella fase di arricchimento biografico, il campo è stato colmato con il valore `CLASSIFICAZIONE` del dataset "Aree verdi e vie dedicate alle donne", portando la copertura femminile a 64 su 66 (restano prive solo Properzia De Rossi e Bittisia Gozzadini).
 
 ### Script e riproducibilità
 

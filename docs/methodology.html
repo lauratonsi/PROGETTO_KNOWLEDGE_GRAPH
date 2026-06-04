@@ -35,8 +35,8 @@
   <ol class="step-list">
     <li><div><strong>Acquisizione dati</strong><br>
       Download degli <a href="https://opendata.comune.bologna.it/" target="_blank">Open Data del Comune di Bologna</a>:
-      il dataset degli archi stradali (<em>rifter_arcstra</em>, 1.960 record) e il dataset
-      "Vie dedicate alle donne" (157 record). I dati sono in formato CSV.</div></li>
+      il dataset degli archi stradali (<em>rifter_arcstra</em>, 8.030 archi ridotti a 1.960 vie uniche
+      per nome) e il dataset "Vie dedicate alle donne" (157 record). I dati sono in formato CSV.</div></li>
     <li><div><strong>Classificazione di genere</strong><br>
       Per ogni strada è stato identificato il referente (persona, luogo, concetto) e assegnata
       la categoria <em>Male</em>, <em>Female</em> o <em>Toponimo</em>.
@@ -70,8 +70,9 @@
       si attivi solo per le persone senza dati Wikidata.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
       Lo script <code>classifica_professioni.py</code> assegna una delle 13 macro-categorie
-      a ciascuna delle 1.163 persone classificate (1.063 uomini + 66 donne storiche + 34 proposte),
-      usando il matching per parole chiave sulle professioni Wikidata.</div></li>
+      a ciascuna delle 1.192 voci della lista biografica curata (1.091 figure maschili + 67 femminili
+      storiche da <code>F_M DATE.xlsx</code> + 34 proposte), usando il matching per parole chiave
+      sulle professioni. Nel KG la categoria risulta poi propagata alle 1.030 persone con corrispondenza.</div></li>
     <li><div><strong>Arricchimento topografico e semantico</strong><br>
       Lo script <code>arricchimento_kg.py</code> estende il KG con nuove proprietà estratte da tre fonti:
       <ul style="margin-top:0.5rem">
@@ -79,11 +80,12 @@
             (da <em>bologna_KG_ready.csv</em>) e <code>ex:tipologiaLuogo</code>
             (da <em>le-aree-verdi-e-le-vie-di-bologna-dedicate-alle-donne.csv</em>, 60 match)</li>
         <li><strong>Persone</strong>: <code>ex:macroCategoriaOccupazionale</code> su 1.030 persone
-            (da <em>classificazione_professioni.csv</em>); <code>ex:datiAnagrafici</code> su 60 donne
-            (da <em>le-aree-verdi</em>); <code>ex:professione</code> colmato per 8 donne non presenti
+            (da <em>classificazione_professioni.csv</em>); <code>ex:datiAnagrafici</code> su 59 donne
+            (da <em>le-aree-verdi</em>); <code>ex:professione</code> colmato per le donne non presenti
             in Wikidata.</li>
       </ul>
-      Il file TTL passa da ~18.363 a 26.651 righe (+4.545 triple di arricchimento).
+      Il KG finale conta 26.651 righe e 15.885 triple, di cui ~6.780 base (strada–persona)
+      e ~9.100 aggiunte dall'arricchimento topografico, biografico e semantico.
     </div></li>
     <li><div><strong>Proposte di intitolazione</strong><br>
       Il gruppo di ricerca ha identificato e documentato 34 candidature
@@ -100,7 +102,7 @@
   <ul>
     <li><a href="https://w3id.org/italia/onto/CLV/" target="_blank"><strong>CLV</strong></a>
     (Core Location Vocabulary) — modella luoghi e urbanistica.
-    Nel KG: <code>clv:StreetToponym</code> identifica ogni arco stradale,
+    Nel KG: <code>clv:StreetToponym</code> identifica ogni via (il nome di strada, non l'arco fisico),
     <code>clv:officialStreetName</code> ne registra il nome ufficiale,
     <code>ex:isDedicatedTo</code> collega la strada alla persona onorata.</li>
     <li><a href="https://w3id.org/italia/onto/CPV/" target="_blank"><strong>CPV</strong></a>
@@ -170,11 +172,11 @@
       <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:tipologiaLuogo</code></td><td>Street</td><td>aree verdi CSV</td><td>60</td></tr>
       <tr><td style="padding:0.4rem 0.75rem"><code>cpv:fullName</code></td><td>Person</td><td>stradario comunale</td><td>1.129</td></tr>
       <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>cpv:hasSex</code></td><td>Person</td><td>classificazione gruppo</td><td>1.129</td></tr>
-      <tr><td style="padding:0.4rem 0.75rem"><code>ex:professione</code></td><td>Person</td><td>Wikidata P106 + aree verdi</td><td>1.004</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:professione</code></td><td>Person</td><td>Wikidata P106 + aree verdi</td><td>943</td></tr>
       <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:dataNascita / ex:luogoNascita</code></td><td>Person</td><td>Wikidata P569/P19</td><td>~943</td></tr>
       <tr><td style="padding:0.4rem 0.75rem"><code>ex:dataMorte / ex:luogoMorte</code></td><td>Person</td><td>Wikidata P570/P20</td><td>~943</td></tr>
       <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:macroCategoriaOccupazionale</code></td><td>Person</td><td>classificazione_professioni.csv</td><td>1.030</td></tr>
-      <tr><td style="padding:0.4rem 0.75rem"><code>ex:datiAnagrafici</code></td><td>Person</td><td>aree verdi CSV</td><td>60</td></tr>
+      <tr><td style="padding:0.4rem 0.75rem"><code>ex:datiAnagrafici</code></td><td>Person</td><td>aree verdi CSV</td><td>59</td></tr>
       <tr style="background:#f9f9f9"><td style="padding:0.4rem 0.75rem"><code>ex:statoProposta</code></td><td>Person</td><td>gruppo di ricerca</td><td>34</td></tr>
     </tbody>
   </table>
@@ -233,8 +235,8 @@
       <text x="46" y="304" font-size="11" fill="#a8d8ff" font-family="Consolas,Monaco,monospace">ex:tipologiaLuogo</text>
       <text x="328" y="304" font-size="9" fill="rgba(255,255,255,0.45)" font-family="sans-serif" text-anchor="end">60 strade</text>
 
-      <text x="36" y="336" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">1.960 istanze · 1.132 con isDedicatedTo</text>
-      <text x="36" y="350" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">tipologiaLuogo: solo 60 strade femminili</text>
+      <text x="36" y="336" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">1.132 istanze · tutte con isDedicatedTo</text>
+      <text x="36" y="350" font-size="9.5" fill="rgba(255,255,255,0.45)" font-family="sans-serif">tipologiaLuogo: 60 strade (59 F + Marincola)</text>
 
       <!-- ══ Freccia ex:isDedicatedTo ══ -->
       <line x1="350" y1="260" x2="597" y2="260" stroke="#1b3a6b" stroke-width="2.5" marker-end="url(#arrowhead-obj)"/>
@@ -282,7 +284,7 @@
 
       <rect x="616" y="344" width="298" height="24" rx="4" fill="rgba(255,255,255,0.12)"/>
       <text x="626" y="360" font-size="11" fill="#ffb3cc" font-family="Consolas,Monaco,monospace">ex:datiAnagrafici</text>
-      <text x="908" y="360" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">60 donne</text>
+      <text x="908" y="360" font-size="9" fill="rgba(255,255,255,0.4)" font-family="sans-serif" text-anchor="end">59 donne</text>
 
       <line x1="616" y1="378" x2="914" y2="378" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
       <text x="616" y="394" font-size="9" fill="rgba(255,255,255,0.5)" font-family="sans-serif" font-weight="bold" letter-spacing="1">PROPOSTE DI INTITOLAZIONE</text>
@@ -297,10 +299,10 @@
     </svg>
 
     <div class="kg-diagram-legend">
-      <span class="kg-legend-item kg-legend-street">clv:StreetToponym — 1.960 istanze</span>
+      <span class="kg-legend-item kg-legend-street">clv:StreetToponym — 1.132 istanze</span>
       <span class="kg-legend-item kg-legend-person">cpv:Person — 1.129 istanze</span>
       <span class="kg-legend-item kg-legend-arrow">ex:isDedicatedTo — 1.132 triple (ObjectProperty)</span>
-      <span class="kg-legend-item" style="color:var(--text-muted)">16 proprietà totali (15 dato + 1 annotazione)</span>
+      <span class="kg-legend-item" style="color:var(--text-muted)">16 proprietà totali (14 dato + 2 oggetto: isDedicatedTo, hasSex)</span>
     </div>
   </div><!-- /.kg-diagram-wrap -->
 
@@ -400,13 +402,14 @@
     <code>ex:professione</code>, <code>ex:dataNascita</code>, <code>ex:luogoNascita</code>,
     <code>ex:dataMorte</code>, <code>ex:luogoMorte</code>.</li>
     <li><strong>1.030 (91,2%)</strong> arricchite con <code>ex:macroCategoriaOccupazionale</code>
-    (include tutte quelle con professione Wikidata + 35 aggiuntive).</li>
-    <li><strong>60 donne</strong> arricchite con <code>ex:datiAnagrafici</code> e
-    <code>ex:tipologiaLuogo</code> dal dataset "Aree verdi e vie dedicate alle donne".</li>
-    <li><strong>8 donne</strong> con <code>ex:professione</code> colmata dalla stessa fonte
-    (non presenti su Wikidata).</li>
+    (936 in comune con la professione Wikidata + 94 assegnate per corrispondenza di nome).</li>
+    <li><strong>59 donne</strong> arricchite con <code>ex:datiAnagrafici</code> e
+    <code>ex:tipologiaLuogo</code> dal dataset "Aree verdi e vie dedicate alle donne"
+    (60 strade con <code>ex:tipologiaLuogo</code>, incluso il Passaggio Fratelli Marincola classificato Male).</li>
+    <li><strong>64 donne</strong> su 66 con <code>ex:professione</code>, in parte colmata da questa fonte
+    per chi non era su Wikidata.</li>
   </ul>
-  <p>Le restanti <strong>128 persone (11,3%)</strong> non dispongono di dati biografici per ragioni strutturali:</p>
+  <p>Le restanti <strong>186 persone (16,5%)</strong> non dispongono di dati biografici Wikidata per ragioni strutturali:</p>
   <ul>
     <li><strong>Nome abbreviato nello stradario</strong>: solo cognome o soprannome
     (es. <code>CAVOUR</code>, <code>DANTE</code>, <code>TINTORETTO</code>) non collegabile automaticamente.</li>
@@ -516,7 +519,7 @@
     <li>Le proprietà biografiche (<code>ex:professione</code>, <code>ex:dataNascita</code>, ecc.) appaiono al massimo una volta</li>
   </ul>
   <p style="font-size:0.88rem;color:var(--text-muted)">
-    La prima esecuzione ha rilevato 13 violazioni reali nella pipeline di arricchimento:
+    La prima esecuzione ha rilevato 8 violazioni reali nella pipeline di arricchimento:
     1 strada (CODVIA 48900) con due nomi conflittuali per un errore nel dato Open Data sorgente,
     e 7 persone con <code>ex:professione</code> inserita due volte da fonti diverse.
     Tutte le violazioni sono state corrette prima della validazione finale.

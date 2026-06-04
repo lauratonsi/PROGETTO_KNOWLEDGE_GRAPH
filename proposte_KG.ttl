@@ -308,7 +308,7 @@
     ex:dataNascita "15 ottobre 1887" ;
     ex:luogoNascita "Pozzonovo (PD)" ;
     ex:dataMorte "16 agosto 1979" ;
-    ex:luogoMorte "Milano" ;
+    ex:luogoMorte "Padova" ;
     ex:statoProposta "attiva" .
 
 <https://w3id.org/bologna/resource/person/f7062b610de5fe13b9a21c82918beb1e>

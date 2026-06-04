@@ -1,7 +1,8 @@
 # Gender Gap nella Toponomastica di Bologna — Knowledge Graph
 
 Knowledge Graph RDF per analizzare il divario di genere nelle intitolazioni stradali di Bologna.
-Su 1.960 strade censite, solo 66 (5,8%) sono dedicate a donne.
+Delle 1.960 vie censite, 1.132 sono intitolate a persone identificate: di queste solo 66 (5,8%)
+sono dedicate a donne (3,4% sul totale delle vie).
 
 Sito del progetto: <https://lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH/>
 
@@ -91,9 +92,10 @@ Output: `classificazione_professioni.csv`
 python classifica_professioni.py
 ```
 
-Assegna una delle 13 macro-categorie occupazionali a ciascuna delle 1.163 persone
-classificate (1.063 uomini storici + 66 donne storiche + 34 proposte) tramite matching
-su parole chiave nelle professioni Wikidata.
+Assegna una delle 13 macro-categorie occupazionali a ciascuna delle 1.192 voci della lista
+biografica curata (1.091 figure maschili + 67 femminili storiche da `F_M DATE.xlsx` + 34 proposte)
+tramite matching su parole chiave nelle professioni. Nel KG la categoria risulta poi assegnata
+a 1.030 persone con corrispondenza.
 
 ---
 
@@ -108,10 +110,11 @@ python arricchimento_kg.py
 ```
 
 Aggiunge a `clv:StreetToponym`: `ex:quartiere`, `ex:geoPoint`, `ex:dataIstituzione`,
-`ex:tipologiaLuogo` (60 strade femminili dal dataset aree verdi).  
+`ex:tipologiaLuogo` (60 strade dal dataset aree verdi: 59 femminili + il Passaggio Fratelli
+Marincola classificato Male).  
 Aggiunge a `cpv:Person`: `ex:macroCategoriaOccupazionale` (1.030 persone),
-`ex:datiAnagrafici` (60 donne), `ex:professione` (completamento per 8 donne
-non presenti su Wikidata).  
+`ex:datiAnagrafici` (59 donne), `ex:professione` (completamento per le donne
+non presenti su Wikidata, copertura femminile 64/66).  
 Il TTL risultante conta 26.651 righe e 15.885 triple RDF.
 
 ---
