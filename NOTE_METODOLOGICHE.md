@@ -7,7 +7,7 @@ Il dataset utilizzato in questo progetto è stato scaricato dal portale open dat
 
 L'analisi strutturale si basa sull'integrazione dell'elenco degli archi stradali con i riferimenti spaziali di origine e destinazione disponibili nel dataset dei Nodi stradali; l'unione di queste componenti consente la modellazione del grafo stradale integrale del Comune di Bologna in formato CSV ([Open Data Comune di Bologna - Archi Stradali](https://opendata.comune.bologna.it/explore/dataset/rifter_arcstra_li/information/)). Questo framework è stato successivamente confrontato e integrato con il dataset "Le aree verdi, piazze e vie di Bologna dedicate alle donne", anch'esso in formato CSV, che raccoglie la mappatura geografica dei toponimi femminili e le relative schede biografiche ([Open Data Comune di Bologna - Vie dedicate alle donne](https://opendata.comune.bologna.it/explore/dataset/le-aree-verdi-e-le-vie-di-bologna-dedicate-alle-donne/information/?disjunctive.quartiere&disjunctive.tipologia&disjunctive.tipo&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJ0cmVlbWFwIiwiZnVuYyI6IkNPVU5UIiwic2NpZW50aWZpY0Rpc3BsYXkiOnRydWUsImNvbG9yIjoicmFuZ2UtY3VzdG9tIiwicG9zaXRpb24iOiJjZW50ZXIifV0sInhBeGlzIjoidGlwb2xvZ2lhIiwibWF4cG9pbnRzIjpudWxsLCJ0aW1lc2NhbGUiOiIiLCJzb3J0IjoiIiwic2VyaWVzQnJlYWtkb3duIjoiIiwic2VyaWVzQnJlYWtkb3duVGltZXNjYWxlIjoiIiwiY29uZmlnIjp7ImRhdGFzZXQiOiJsZS1hcmVlLXZlcmRpLWUtbGUtdmllLWRpLWJvbG9nbmEtZGVkaWNhdGUtYWxsZS1kb25uZSIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUucXVhcnRpZXJlIjp0cnVlLCJkaXNqdW5jdGl2ZS50aXBvbG9naWEiOnRydWUsImRpc2p1bmN0aXZlLnRpcG8iOnRydWV9fX1dLCJkaXNwbGF5TGVnZW5kIjp0cnVlLCJhbGlnbk1vbnRoIjp0cnVlLCJ0aW1lc2NhbGUiOiIifQ%3D%3D)). 
 
-Poiché lo stradario comunale di base non include nativamente una classificazione di genere — elemento invece fondamentale per quantificare e studiare il *gender gap* toponomastico all'interno dello spazio urbano —, il gruppo di ricerca ha provveduto a una categorizzazione sistematica di ciascuna intitolazione. Questa operazione di arricchimento semantico è stata condotta attraverso l'ausilio di modelli linguistici avanzati (DeepSeek, Gemini, ChatGPT e Claude). Tutte le attribuzioni finali e le scelte tassonomiche descritte nel presente documento costituiscono decisioni metodologiche assunte e validate sotto l'esclusiva responsabilità del gruppo di ricerca.
+Poiché lo stradario comunale di base non include nativamente una classificazione di genere — elemento invece fondamentale per quantificare e studiare il *gender gap* toponomastico all'interno dello spazio urbano —, il gruppo di ricerca ha provveduto a una categorizzazione sistematica di ciascuna intitolazione. Questa operazione di arricchimento semantico è stata condotta attraverso l'ausilio di modelli linguistici avanzati (DeepSeek, Gemini, ChatGPT, Claude e Copilot). Tutte le attribuzioni finali e le scelte tassonomiche descritte nel presente documento costituiscono decisioni metodologiche assunte e validate sotto l'esclusiva responsabilità del gruppo di ricerca.
 
 ---
 
@@ -161,20 +161,25 @@ In una seconda fase di arricchimento, il Knowledge Graph è stato esteso con nuo
 
 ### Nuove proprietà su `clv:StreetToponym`
 
-- **`ex:quartiere`** — nome del quartiere bolognese in cui ricade la strada (es. `"Savena"`, `"Porto - Saragozza"`). Presente per tutte le 1.131 strade Male e Female.
+- **`ex:quartiere`** — nome del quartiere bolognese in cui ricade la strada (es. `"Savena"`, `"Porto - Saragozza"`). Presente per tutte le 1.132 strade Male e Female.
 - **`ex:geoPoint`** — coordinate WGS84 del centroide della strada, formato `"lat, lon"` (es. `"44.483592003952296, 11.367738980601088"`). Abilita query e visualizzazioni geospaziali.
 - **`ex:dataIstituzione`** — data di istituzione ufficiale dell'intitolazione in formato ISO 8601 (es. `"1991-10-21"`). Permette analisi storiche sull'evoluzione temporale delle intitolazioni.
 - **`ex:tipologiaLuogo`** — tipo di luogo toponomastico (`"Via"`, `"Largo"`, `"Piazza"`, `"Passaggio"`, `"Rotonda"`, `"Parco"`, `"Giardino"`, ecc.). Estratto solo per i luoghi presenti nel dataset "Aree verdi e vie dedicate alle donne" (59 match su 66 luoghi femminili).
 
 ### Nuove proprietà su `cpv:Person`
 
-- **`ex:macroCategoriaOccupazionale`** — categoria semantica della professione, assegnata tramite matching su parole chiave sul campo `ex:professione`. Valori possibili: `"Arte visiva e architettura"`, `"Scienze e medicina"`, `"Politica e diritto"`, `"Musica, teatro e cinema"`, `"Letteratura e giornalismo"`, `"Filosofia, storia e accademia"`, `"Patrioti, militari ed esploratori"`, `"Religione"`, `"Altro / istituzionale"`. Aggiunto a 1.030 persone.
-- **`ex:datiAnagrafici`** — stringa sintetica con luogo e anno di nascita e di morte (es. `"Bologna, 1711 - Parigi, 1782"`). Estratto dal campo `DATI ANAGRAFICI` del dataset "Aree verdi e vie dedicate alle donne". Presente solo per le persone di genere Female con un match nel dataset (59 persone).
-- **`ex:professione`** (colmatura) — per 3 persone di genere Female non documentate su Wikidata e quindi prive di `ex:professione` nella fase di arricchimento biografico, il campo è stato colmato con il valore `CLASSIFICAZIONE` del dataset "Aree verdi e vie dedicate alle donne".
+- **`ex:macroCategoriaOccupazionale`** — categoria semantica della professione, assegnata tramite matching su parole chiave sul campo `ex:professione`. 13 valori: `"Arte visiva e architettura"` · `"Filosofia, storia e accademia"` · `"Istruzione ed educazione"` · `"Letteratura e giornalismo"` · `"Musica, teatro e cinema"` · `"Patrioti, militari ed esploratori"` · `"Politica e diritto"` · `"Religione"` · `"Resistenza e antifascismo"` · `"Scienze e medicina"` · `"Sindacalismo e attivismo civile"` · `"Sport"` · `"Altro / istituzionale"`. Aggiunto a 1.030 persone.
+- **`ex:datiAnagrafici`** — stringa sintetica con luogo e anno di nascita e di morte (es. `"Bologna, 1711 - Parigi, 1782"`). Estratto dal campo `DATI ANAGRAFICI` del dataset "Aree verdi e vie dedicate alle donne". Presente solo per le persone di genere Female con un match nel dataset (60 persone).
+- **`ex:professione`** (colmatura) — per 8 persone di genere Female non documentate su Wikidata e quindi prive di `ex:professione` nella fase di arricchimento biografico, il campo è stato colmato con il valore `CLASSIFICAZIONE` del dataset "Aree verdi e vie dedicate alle donne".
 
 ### Script e riproducibilità
 
-L'arricchimento è stato eseguito dallo script `arricchimento_kg.py` (Python 3, nessuna dipendenza esterna). Il file `bologna_KG_corretto.ttl` viene aggiornato in modo additivo: le nuove triple vengono aggiunte in coda al file senza modificare il contenuto preesistente. Il formato Turtle permette la presenza di blocchi multipli per lo stesso soggetto, che vengono uniti da qualunque parser RDF conforme alla specifica.
+La pipeline di arricchimento si compone di due script eseguiti in sequenza:
+
+1. **`bio_ttl.py`** — legge `F_M DATE.xlsx` e aggiunge al TTL i dati biografici Wikidata (`ex:professione`, `ex:dataNascita`, `ex:luogoNascita`, `ex:dataMorte`, `ex:luogoMorte`) per ciascuna persona corrispondente nel KG. Deve essere eseguito prima di `arricchimento_kg.py` affinché la colmatura da aree verdi si attivi solo per le persone effettivamente prive di dati.
+2. **`arricchimento_kg.py`** — aggiunge le proprietà topografiche e semantiche residue (quartiere, coordinate, macro-categoria, datiAnagrafici, colmatura professione).
+
+Il file `bologna_KG_corretto.ttl` viene aggiornato in modo additivo da entrambi gli script: le nuove triple vengono aggiunte in coda senza modificare il contenuto preesistente. Il formato Turtle permette la presenza di blocchi multipli per lo stesso soggetto, che vengono uniti da qualunque parser RDF conforme alla specifica.
 
 ---
 
