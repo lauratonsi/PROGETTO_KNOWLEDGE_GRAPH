@@ -64,8 +64,8 @@
       Copertura: <strong>1.001 persone (88,7%)</strong>. I dati confluiscono nel file <code>F_M DATE.xlsx</code>,
       che costituisce l'input dello step successivo di classificazione professionale.</div></li>
     <li><div><strong>Classificazione professionale</strong><br>
-      Lo script <code>classifica_professioni.py</code> assegna una delle 12 macro-categorie
-      a ciascuna delle 1.191 persone classificate (1.091 uomini + 66 donne storiche + 34 proposte),
+      Lo script <code>classifica_professioni.py</code> assegna una delle 13 macro-categorie
+      a ciascuna delle 1.163 persone classificate (1.063 uomini + 66 donne storiche + 34 proposte),
       usando il matching per parole chiave sulle professioni Wikidata.</div></li>
     <li><div><strong>Arricchimento topografico e semantico</strong><br>
       Lo script <code>arricchimento_kg.py</code> estende il KG con nuove proprietà estratte da tre fonti:
@@ -344,9 +344,10 @@
   La proprietà <code>ex:macroCategoriaOccupazionale</code> è quindi una <strong>tassonomia Bologna-specifica</strong>,
   non standard, dichiarata esplicitamente come tale nel namespace custom e documentata nel
   <code>rdfs:comment</code> di <code>docs/schema.ttl</code>.
-  9 valori: Arte visiva e architettura · Filosofia, storia e accademia · Letteratura e giornalismo ·
-  Musica, teatro e cinema · Patrioti, militari ed esploratori · Politica e diritto · Religione ·
-  Scienze e medicina · Altro/istituzionale.</p>
+  13 valori: Arte visiva e architettura · Filosofia, storia e accademia · Istruzione ed educazione ·
+  Letteratura e giornalismo · Musica, teatro e cinema · Patrioti, militari ed esploratori ·
+  Politica e diritto · Religione · Resistenza e antifascismo · Scienze e medicina ·
+  Sindacalismo e attivismo civile · Sport · Altro / istituzionale.</p>
 
   <h2>Strumenti utilizzati</h2>
   <div class="card-grid">
@@ -359,7 +360,7 @@
     <div class="card">
       <h3>openpyxl</h3>
       <p>Lettura e scrittura del file <code>F_M DATE.xlsx</code> con i dati biografici
-      delle 1.160 persone censite.</p>
+      delle 1.129 persone storiche censite.</p>
     </div>
     <div class="card">
       <h3>Wikidata API</h3>

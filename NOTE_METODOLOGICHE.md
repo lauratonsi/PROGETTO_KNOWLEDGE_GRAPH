@@ -143,7 +143,7 @@ Ontopia/schema.gov.it **non fornisce classificazioni per professioni o occupazio
 
 L'unica classificazione italiana autorevole per le professioni è la **CP 2011 ISTAT** (adattamento italiano di ISCO-08), progettata però per occupazioni contemporanee e inapplicabile a figure storiche come "Patriota risorgimentale", "Pittrice fiamminga del '600" o "Compositore barocco". Queste categorie non esistono nell'ISCO-08.
 
-La proprietà `ex:macroCategoriaOccupazionale` è quindi una **tassonomia Bologna-specifica non standard**, dichiarata esplicitamente come tale nel namespace custom `ex:` e documentata nel `rdfs:comment` di `docs/schema.ttl`. I 9 valori adottati sono stati definiti dal gruppo di ricerca per l'analisi storico-culturale del gender gap nella toponomastica: `Arte visiva e architettura` · `Filosofia, storia e accademia` · `Letteratura e giornalismo` · `Musica, teatro e cinema` · `Patrioti, militari ed esploratori` · `Politica e diritto` · `Religione` · `Scienze e medicina` · `Altro / istituzionale`.
+La proprietà `ex:macroCategoriaOccupazionale` è quindi una **tassonomia Bologna-specifica non standard**, dichiarata esplicitamente come tale nel namespace custom `ex:` e documentata nel `rdfs:comment` di `docs/schema.ttl`. I 13 valori adottati sono stati definiti dal gruppo di ricerca per l'analisi storico-culturale del gender gap nella toponomastica: `Arte visiva e architettura` · `Filosofia, storia e accademia` · `Istruzione ed educazione` · `Letteratura e giornalismo` · `Musica, teatro e cinema` · `Patrioti, militari ed esploratori` · `Politica e diritto` · `Religione` · `Resistenza e antifascismo` · `Scienze e medicina` · `Sindacalismo e attivismo civile` · `Sport` · `Altro / istituzionale`.
 
 ---
 
