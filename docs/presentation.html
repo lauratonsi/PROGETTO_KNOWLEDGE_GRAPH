@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gender Gap Toponomastica Bologna — Presentazione GEPID 2024–25</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+
+  <style>
+    /* ── Palette identica al sito ── */
+    :root {
+      --prim:   #8b1a4a;
+      --priml:  #c45c82;
+      --blue:   #1b3a6b;
+      --green:  #1a6b3a;
+      --amber:  #b5650a;
+      --tx:     #1a1a1a;
+      --txm:    #5a5a5a;
+      --bg:     #f8f6f2;
+      --white:  #ffffff;
+      --brd:    #ddd8d0;
+      --nav:    #1a1a2e;
+      --rad:    8px;
+      --sh:     0 2px 12px rgba(0,0,0,.08);
+    }
+
+    /* ── Override Reveal.js ── */
+    .reveal { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .reveal .slides section {
+      padding: 28px 44px 20px;
+      box-sizing: border-box;
+      text-align: left;
+      height: 100%;
+      overflow: hidden;
+    }
+    .reveal h1 { font-family: Georgia, serif; font-size: 1.9em; line-height: 1.2; }
+    .reveal h2 {
+      font-family: Georgia, serif; font-size: 1.22em;
+      color: var(--prim); border-bottom: 2px solid var(--brd);
+      padding-bottom: 6px; margin-bottom: 14px; margin-top: 0;
+    }
+    .reveal h3 { font-size: .92em; color: var(--nav); margin: 12px 0 6px; font-family: Georgia,serif; }
+    .reveal p  { font-size: .78em; line-height: 1.6; margin-bottom: .5em; }
+    .reveal li { font-size: .78em; line-height: 1.65; }
+    .reveal a  { color: var(--prim); }
+    .reveal ul { margin-left: 1.2em; }
+
+    /* ── COVER ── */
+    .cover-title { font-family: Georgia,serif; font-size: 1.75em; color: #fff; line-height: 1.25; margin-bottom: .2em; }
+    .cover-sub   { color: rgba(255,255,255,.7); font-size: .85em; margin-bottom: 1em; letter-spacing: .03em; }
+    .cover-badge {
+      display: inline-block; background: var(--prim); padding: .35em 1.8em;
+      border-radius: 50px; font-size: 2.4em; font-weight: 700; color: #fff;
+      margin: .3em 0;
+    }
+    .cover-badge small { font-size: .36em; font-weight: 400; opacity: .85; display: block; }
+    .cover-link {
+      display: inline-block; margin-top: .9em; padding: .45em 1.6em;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35);
+      border-radius: 30px; color: #fff !important; text-decoration: none;
+      font-size: .78em; letter-spacing: .03em; transition: background .15s;
+    }
+    .cover-link:hover { background: rgba(255,255,255,.22); }
+    .cover-authors { margin-top: 1.3em; font-size: .72em; color: rgba(255,255,255,.55); }
+
+    /* ── LAYOUT ── */
+    .cols  { display: grid; grid-template-columns: 1fr 1fr;     gap: 20px; align-items: start; }
+    .cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; align-items: start; }
+
+    /* ── STAT BOXES ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 10px 0; }
+    .stat-box  { background: var(--white); border-radius: var(--rad); padding: 14px 10px; text-align: center; box-shadow: var(--sh); }
+    .stat-box .n { font-size: 2em; font-weight: 700; line-height: 1; }
+    .stat-box .l { font-size: .7em; color: var(--txm); margin-top: 4px; }
+    .stat-m .n { color: var(--blue); }
+    .stat-f .n { color: var(--prim); }
+    .stat-r .n { color: var(--txm); }
+
+    /* ── HIGHLIGHT BOXES ── */
+    .hl  { background: #fff0f5; border-left: 4px solid var(--prim); padding: 9px 12px; border-radius: 0 var(--rad) var(--rad) 0; margin: 6px 0; font-size: .76em; line-height: 1.55; }
+    .hlb { background: #eef2fb; border-left-color: var(--blue); }
+    .hlg { background: #eaf5ee; border-left-color: var(--green); }
+    .hla { background: #fff8ec; border-left-color: var(--amber); }
+
+    /* ── TAGS ── */
+    .tag  { display: inline-block; padding: .18em .6em; border-radius: 12px; font-size: .68em; font-weight: 600; margin: .12em; }
+    .t-r  { background: #fce4ec; color: var(--prim); }
+    .t-b  { background: #e8edf8; color: var(--blue); }
+    .t-g  { background: #d4edda; color: var(--green); }
+    .t-a  { background: #fff3cd; color: var(--amber); }
+    .t-gr { background: #eee;    color: #555; }
+
+    /* ── BAR ROWS ── */
+    .bar-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: .72em; }
+    .b-lbl   { width: 11.5em; text-align: right; flex-shrink: 0; line-height: 1.3; }
+    .b-track { flex: 1; background: #ede8e0; border-radius: 3px; height: 9px; }
+    .b-fill  { height: 9px; border-radius: 3px; }
+    .b-m  { background: var(--blue); }
+    .b-f  { background: var(--priml); }
+    .b-val { width: 3.5em; font-weight: 700; }
+
+    /* ── SLIDE-TABLE ── */
+    .stbl { width: 100%; border-collapse: collapse; font-size: .72em; }
+    .stbl th { background: var(--nav); color: #fff; padding: 5px 9px; text-align: left; font-weight: 600; }
+    .stbl td { padding: 4px 9px; border-bottom: 1px solid var(--brd); }
+    .stbl tr:nth-child(even) td { background: #f5f3ef; }
+
+    /* ── PROP GRID (schema) ── */
+    .prop-col  { background: var(--white); border-radius: var(--rad); padding: 10px 12px; box-shadow: var(--sh); }
+    .prop-col h4 { font-size: .78em; color: var(--blue); margin: 0 0 6px; font-family: monospace; font-weight: 700; }
+    .prop-col.pink h4 { color: var(--prim); }
+    .prop-item { font-family: monospace; font-size: .68em; color: var(--txm); line-height: 1.7; }
+    .prop-item span { font-weight: 600; color: var(--tx); }
+
+    /* ── PROPOSAL CARDS ── */
+    .prop-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .pcard { background: var(--white); border-radius: var(--rad); padding: 10px 12px; box-shadow: var(--sh); border-top: 3px solid var(--prim); }
+    .pcard h4 { font-size: .78em; color: var(--prim); margin: 0 0 4px; font-family: Georgia,serif; }
+    .pcard p  { font-size: .68em; color: var(--txm); margin: 0; line-height: 1.5; }
+    .pcard.cr { border-top-color: #c0392b; } .pcard.cr h4 { color: #c0392b; }
+    .pcard.cb { border-top-color: var(--blue); } .pcard.cb h4 { color: var(--blue); }
+    .pcard.cg { border-top-color: var(--green); } .pcard.cg h4 { color: var(--green); }
+    .pcard.ca { border-top-color: var(--amber); } .pcard.ca h4 { color: var(--amber); }
+
+    /* ── PIPELINE ── */
+    .pipeline { display: flex; align-items: center; gap: 0; margin: 10px 0; }
+    .pstep { flex: 1; background: var(--white); border-radius: var(--rad); padding: 10px 8px; text-align: center; box-shadow: var(--sh); border-top: 3px solid var(--blue); }
+    .pstep .sn { font-size: 1.4em; font-weight: 700; color: var(--blue); }
+    .pstep .st { font-size: .64em; color: var(--txm); margin-top: 2px; line-height: 1.4; }
+    .parr { font-size: 1.2em; color: #bbb; padding: 0 4px; flex-shrink: 0; }
+
+    /* ── QUERY LIST ── */
+    .q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; margin: 8px 0; }
+    .q-item { display: flex; align-items: baseline; gap: 7px; font-size: .74em; }
+    .q-num  { background: var(--blue); color: #fff; border-radius: 4px; padding: 1px 5px; font-size: .82em; font-weight: 700; flex-shrink: 0; font-family: monospace; }
+    .q-con  { background: var(--prim); }
+
+    /* ── FINALE ── */
+    .fin-link {
+      display: inline-block; margin: 10px auto; padding: 12px 36px;
+      background: var(--prim); color: #fff !important; border-radius: 30px;
+      font-size: .88em; text-decoration: none; font-weight: 600; text-align: center;
+    }
+
+    /* ── UTILS ── */
+    .tc  { text-align: center; }
+    .sm  { font-size: .68em; color: var(--txm); }
+    .mt6 { margin-top: 6px; }
+    .mt10{ margin-top: 10px; }
+    .bold{ font-weight: 700; }
+    .red { color: #c0392b; font-weight: 700; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ════════════════════════════════════════
+     SLIDE 1 — COVER
+════════════════════════════════════════ -->
+<section data-background-color="#1a1a2e" style="text-align:center;">
+  <div style="max-width:820px; margin:0 auto; padding-top:30px;">
+    <p style="color:rgba(255,255,255,.45); font-size:.72em; letter-spacing:.1em; text-transform:uppercase; margin-bottom:.5em;">
+      GEPID 2024–25 · Università di Bologna
+    </p>
+    <h1 class="cover-title">
+      Gender Gap nella Toponomastica di Bologna
+    </h1>
+    <p class="cover-sub">Un Knowledge Graph per misurare la memoria pubblica</p>
+
+    <div class="cover-badge">
+      5,8%
+      <small>delle strade intitolate a persone porta un nome femminile</small>
+    </div>
+
+    <br>
+    <a class="cover-link"
+       href="https://lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH/" target="_blank">
+      &#128279; lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH
+    </a>
+
+    <div class="cover-authors">
+      Laura Tonsi · Susanna Cioni
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 2 — IL PROBLEMA SOCIALE
+════════════════════════════════════════ -->
+<section>
+  <h2>Il problema: la toponomastica come memoria pubblica</h2>
+  <div class="cols">
+
+    <div>
+      <p>I nomi delle strade <strong>costruiscono la memoria collettiva</strong> di una città.
+      Chi viene ricordato — e chi no — riflette scelte culturali e politiche stratificate nel tempo.</p>
+
+      <div class="hl">
+        La toponomastica italiana è <strong>storicamente dominata da figure maschili</strong>:
+        militari, politici, religiosi, uomini di cultura. Le donne, anche quando storicamente
+        rilevanti, sono <strong>sistematicamente sottorappresentate nello spazio pubblico</strong>.
+      </div>
+
+      <div class="hlb mt6">
+        Non si tratta di un'omissione casuale, ma del risultato di <strong>secoli di scelte
+        istituzionali</strong> che questo progetto rende visibili e misurabili per la prima volta
+        tramite un Knowledge Graph.
+      </div>
+
+      <p class="mt6">
+        Bologna non fa eccezione: su <strong>1.960 vie</strong> uniche, la quota femminile
+        è drammaticamente bassa — e non uniforme tra i quartieri.
+      </p>
+    </div>
+
+    <div>
+      <div class="stat-grid">
+        <div class="stat-box stat-m">
+          <div class="n">1.960</div>
+          <div class="l">vie di Bologna analizzate</div>
+        </div>
+        <div class="stat-box stat-f">
+          <div class="n">66</div>
+          <div class="l">strade femminili (5,8%)</div>
+        </div>
+        <div class="stat-box stat-r">
+          <div class="n">16:1</div>
+          <div class="l">rapporto M : F</div>
+        </div>
+      </div>
+
+      <div class="hl mt6">
+        Delle 1.960 vie, <strong>1.132</strong> sono intitolate a persone identificate.
+        Di queste: <strong style="color:var(--blue)">1.066 a uomini</strong> e
+        solo <strong style="color:var(--prim)">66 a donne</strong>.
+        Le restanti 828 sono toponomastica geografica o istituzionale.
+      </div>
+
+      <div class="hlb mt6">
+        <strong>Perché Bologna?</strong> Dati aperti disponibili (Comune di Bologna OpenData),
+        città con storia partigiana e istituzionale forte — eppure il gap persiste.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 3 — IL KNOWLEDGE GRAPH: SCHEMA
+════════════════════════════════════════ -->
+<section>
+  <h2>Il Knowledge Graph: struttura ontologica</h2>
+
+  <!-- SVG: nodi principali + arco isDedicatedTo -->
+  <svg viewBox="0 0 960 110" style="width:100%;max-height:110px;display:block;margin-bottom:10px;"
+       xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="a" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0,8 3,0 6" fill="#4a6fa5"/>
+      </marker>
+    </defs>
+    <!-- StreetToponym -->
+    <ellipse cx="185" cy="55" rx="130" ry="42" fill="#1b3a6b" stroke="#3a6ab5" stroke-width="2"/>
+    <text x="185" y="46" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold" font-family="monospace">clv:</text>
+    <text x="185" y="59" text-anchor="middle" font-size="11" fill="#a0c4ff" font-family="monospace">StreetToponym</text>
+    <text x="185" y="72" text-anchor="middle" font-size="9.5" fill="#5a84b0" font-family="monospace">1.132 istanze · CLV-AP_IT v1.0</text>
+    <!-- Arrow left segment -->
+    <line x1="315" y1="55" x2="410" y2="55" stroke="#4a6fa5" stroke-width="2.5" marker-end="url(#a)"/>
+    <!-- isDedicatedTo bubble -->
+    <ellipse cx="370" cy="42" rx="0" ry="0" fill="none"/>
+    <text x="362" y="47" text-anchor="middle" font-size="9" fill="#4a6fa5" font-family="monospace">ex:isDedicatedTo</text>
+    <!-- Arrow right segment -->
+    <line x1="550" y1="55" x2="645" y2="55" stroke="#4a6fa5" stroke-width="2.5" marker-end="url(#a)"/>
+    <!-- Person -->
+    <ellipse cx="775" cy="55" rx="130" ry="42" fill="#8b1a4a" stroke="#c45c82" stroke-width="2"/>
+    <text x="775" y="46" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold" font-family="monospace">cpv:</text>
+    <text x="775" y="59" text-anchor="middle" font-size="11" fill="#ffb0cc" font-family="monospace">Person</text>
+    <text x="775" y="72" text-anchor="middle" font-size="9.5" fill="#b06080" font-family="monospace">1.129 istanze · CPV-AP_IT v0.8 + ex:</text>
+    <!-- Namespace note -->
+    <text x="480" y="102" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">
+      Namespace custom: ex: &lt;https://w3id.org/bologna/ontology#&gt; · 15.885 triple · 26.651 righe TTL · SHACL Conforms: True
+    </text>
+  </svg>
+
+  <!-- Proprietà in due colonne -->
+  <div class="cols">
+    <div class="prop-col">
+      <h4>clv:StreetToponym — proprietà</h4>
+      <div class="prop-item"><span>clv:officialStreetName</span> &nbsp;xsd:string · nome ufficiale via</div>
+      <div class="prop-item"><span>ex:isDedicatedTo</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ cpv:Person (oggetto)</div>
+      <div class="prop-item"><span>ex:quartiere</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xsd:string · 1.132 strade</div>
+      <div class="prop-item"><span>ex:geoPoint</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xsd:string · lat/lon WGS84</div>
+      <div class="prop-item"><span>ex:dataIstituzione</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xsd:date · data delibera</div>
+      <div class="prop-item"><span>ex:tipologiaLuogo</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Via | Piazza | Passaggio | ...</div>
+    </div>
+    <div class="prop-col pink">
+      <h4>cpv:Person — proprietà</h4>
+      <div class="prop-item"><span>cpv:fullName</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xsd:string · nome completo</div>
+      <div class="prop-item"><span>cpv:hasSex</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sex:F | sex:M · da CPV-AP_IT</div>
+      <div class="prop-item"><span>ex:professione</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xsd:string · Wikidata P106 · 943</div>
+      <div class="prop-item"><span>ex:dataNascita / dataMorte</span> &nbsp;xsd:date · Wikidata P569/P570</div>
+      <div class="prop-item"><span>ex:luogoNascita / luogoMorte</span> Wikidata P19/P20</div>
+      <div class="prop-item"><span>ex:macroCategoriaOccupazionale</span> 13 categorie · 1.030 persone</div>
+      <div class="prop-item"><span>ex:datiAnagrafici</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xsd:string · fonte open data · 59</div>
+    </div>
+  </div>
+
+  <div class="cols mt6" style="gap:10px;">
+    <p class="sm"><strong>Pipeline:</strong> OpenData Bologna (8.030 archi → 1.960 vie uniche) → RDF/Turtle → Wikidata API (83,5% persone arricchite) → LLM macroCat</p>
+    <p class="sm"><strong>Query SPARQL:</strong> 11 query + 1 CONSTRUCT eseguite su KG locale via rdflib (Python). 5 LLM testati con 3 tecniche (zero-shot, few-shot, CoT).</p>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 4 — CHI SONO LE 66 DONNE?
+════════════════════════════════════════ -->
+<section>
+  <h2>Chi sono le 66 donne onorate da Bologna?</h2>
+  <div class="cols">
+
+    <div>
+      <h3>Distribuzione per categoria occupazionale</h3>
+
+      <div class="bar-row">
+        <span class="b-lbl">Musica/teatro/cinema</span>
+        <div class="b-track"><div class="b-fill b-f" style="width:73%"></div></div>
+        <span class="b-val" style="color:var(--priml)">29,3%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-lbl">Letteratura/giornalismo</span>
+        <div class="b-track"><div class="b-fill b-f" style="width:30%"></div></div>
+        <span class="b-val" style="color:var(--priml)">12,1%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-lbl">Arte visiva/architettura</span>
+        <div class="b-track"><div class="b-fill b-f" style="width:26%"></div></div>
+        <span class="b-val" style="color:var(--priml)">10,3%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-lbl">Istruzione ed educazione</span>
+        <div class="b-track"><div class="b-fill b-f" style="width:26%"></div></div>
+        <span class="b-val" style="color:var(--priml)">10,3%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-lbl">Sport / Religione / Politica</span>
+        <div class="b-track"><div class="b-fill b-f" style="width:17%"></div></div>
+        <span class="b-val" style="color:var(--priml)">6,9% ×3</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-lbl bold" style="color:#c0392b">Scienze e medicina</span>
+        <div class="b-track"><div class="b-fill b-f" style="width:0%"></div></div>
+        <span class="b-val red">0%</span>
+      </div>
+
+      <div class="hl mt6">
+        <strong>Bias nelle categorie ricordate:</strong> artiste e letteratrici sì —
+        scienziate, filosofe, accademiche quasi assenti. Eppure Bologna ospita la più
+        antica università del mondo.
+      </div>
+    </div>
+
+    <div>
+      <h3>Distribuzione per quartiere</h3>
+      <table class="stbl">
+        <thead>
+          <tr><th>Quartiere</th><th>Strade F</th><th>% del tot. F</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>San Donato–San Vitale</td><td>26</td><td>39%</td></tr>
+          <tr><td>Borgo Panigale–Reno</td><td>11</td><td>17%</td></tr>
+          <tr><td>Santo Stefano</td><td>10</td><td>15%</td></tr>
+          <tr><td>Navile</td><td>8</td><td>12%</td></tr>
+          <tr><td>Porto–Saragozza</td><td>7</td><td>11%</td></tr>
+          <tr><td>Savena</td><td>4</td><td>6%</td></tr>
+        </tbody>
+      </table>
+
+      <div class="hlb mt6">
+        Il quartiere con più strade femminili (<strong>San Donato–San Vitale</strong>) è quello
+        di espansione urbana recente e di estrazione più popolare. I quartieri storici e benestanti
+        (Porto–Saragozza) sono i più squilibrati.
+      </div>
+
+      <div class="hl mt6">
+        <strong>Evoluzione storica:</strong> picco negli anni '90 (29 nuove strade F), poi
+        stagnazione. Ripresa nel 2020–2024 (13 strade). Il trend non è costante.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 5 — IL GAP "INVISIBILE"
+════════════════════════════════════════ -->
+<section>
+  <h2>Il gender gap "invisibile": dove sono le donne</h2>
+  <div class="cols">
+
+    <div>
+      <h3>Tipologia delle 66 strade femminili</h3>
+      <table class="stbl">
+        <thead><tr><th>Tipologia</th><th>Donne (F)</th><th>Uomini (M)</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><strong>Via</strong></td><td>38</td><td>896</td><td></td></tr>
+          <tr>
+            <td>Passaggio</td>
+            <td style="color:var(--prim);font-weight:700;">11 ✓</td>
+            <td>10</td>
+            <td class="sm" style="color:var(--prim)">F &gt; M</td>
+          </tr>
+          <tr><td>Rotonda</td><td>11</td><td>39</td><td></td></tr>
+          <tr><td>Piazza / Piazzale</td><td>3</td><td>53+</td><td></td></tr>
+          <tr><td>Largo / Piazzetta / Ponte</td><td>3</td><td>14+</td><td></td></tr>
+        </tbody>
+      </table>
+
+      <div class="hl mt6">
+        <strong>Il Passaggio</strong> è l'unica tipologia in cui F ≥ M (11 vs 10) —
+        ma è anche la più marginale urbanisticamente. Solo <strong>3 piazze</strong>
+        su 56 totali portano un nome femminile.
+      </div>
+
+      <p class="sm mt6">La tipologia "Passaggio" assegnata alla figura femminile non è
+      casuale: riflette la tendenza a intitolare gli spazi di minor rilievo ai nomi femminili.</p>
+    </div>
+
+    <div>
+      <h3>Risultati dalle 11 query SPARQL</h3>
+
+      <div class="q-grid">
+        <div class="q-item"><span class="q-num">Q1</span> Conteggio strade per genere</div>
+        <div class="q-item"><span class="q-num">Q2</span> Lista strade dedicate a donne</div>
+        <div class="q-item"><span class="q-num">Q3</span> Tipologia strade femminili</div>
+        <div class="q-item"><span class="q-num">Q4</span> REGEX: "Fratelli" e "Maria"</div>
+        <div class="q-item"><span class="q-num">Q5</span> OPTIONAL: più strade × persona</div>
+        <div class="q-item"><span class="q-num">Q6</span> Dati biografici persone onorate</div>
+        <div class="q-item"><span class="q-num">Q7</span> Gender gap per quartiere</div>
+        <div class="q-item"><span class="q-num">Q8</span> MacroCat occupazionale × genere</div>
+        <div class="q-item"><span class="q-num">Q9</span> Evoluzione storica intitolazioni F</div>
+        <div class="q-item"><span class="q-num">Q10</span> Scheda biografica donne</div>
+        <div class="q-item"><span class="q-num q-con">C</span> CONSTRUCT triple strade F</div>
+      </div>
+
+      <div class="hlb mt6">
+        <strong>Q4 — il gap nascosto:</strong> 9 strade usano "Fratelli" (plurale maschile che
+        occulta eventuali sorelle). 4 strade portano un nome femminile con "Maria" —
+        identificate via REGEX + UNION.
+      </div>
+
+      <div class="hlg mt6">
+        <strong>CONSTRUCT:</strong> genera triple RDF per le 60 strade femminili
+        (59 F + Marincola), pronte per l'integrazione in triplestore esterni.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 6 — LE 34 PROPOSTE
+════════════════════════════════════════ -->
+<section>
+  <h2>Le 34 proposte: restituire memoria pubblica alle donne</h2>
+
+  <p style="font-size:.76em; margin-bottom:8px;">
+    Tre criteri di selezione:
+    <span class="tag t-b">legame diretto con Bologna</span>
+    <span class="tag t-r">rilevanza storica/culturale documentata</span>
+    <span class="tag t-gr">nessuna intitolazione significativa già esistente</span>
+    — formalizzate in RDF (<code style="font-size:.9em">proposte_KG.ttl</code>, 331 triple, stessa ontologia del KG)
+  </p>
+
+  <div class="prop-grid">
+    <div class="pcard cr">
+      <h4>Irma Bandiera "Mimma"</h4>
+      <p>Partigiana bolognese, medaglia d'oro al V.M. Uccisa a Bologna nel 1944.<br>
+      <span class="tag t-gr" style="font-size:.65em;">Resistenza</span></p>
+    </div>
+    <div class="pcard cb">
+      <h4>Laura Bassi</h4>
+      <p>Prima donna docente universitaria in Europa (UniBo, 1732). Fisica sperimentale.<br>
+      <span class="tag t-gr" style="font-size:.65em;">Scienze e medicina</span></p>
+    </div>
+    <div class="pcard cb">
+      <h4>Clelia Grillo Borromeo</h4>
+      <p>Fisica e matematica, ammessa all'Accademia delle Scienze di Bologna (1731).<br>
+      <span class="tag t-gr" style="font-size:.65em;">Scienze e medicina</span></p>
+    </div>
+    <div class="pcard ca">
+      <h4>Lina Merlin</h4>
+      <p>Senatrice, legge 75/1958 (abolizione case chiuse). Nata a Villabarba, attiva a Bologna.<br>
+      <span class="tag t-gr" style="font-size:.65em;">Politica/istituzionale</span></p>
+    </div>
+    <div class="pcard ca">
+      <h4>Leonilde "Nilde" Iotti</h4>
+      <p>Prima donna presidente della Camera dei Deputati (1979–1992). Partigiana emiliana.<br>
+      <span class="tag t-gr" style="font-size:.65em;">Politica/istituzionale</span></p>
+    </div>
+    <div class="pcard cg">
+      <h4>Ilaria Alpi</h4>
+      <p>Giornalista RAI, uccisa a Mogadiscio nel 1994. Formazione a Bologna.<br>
+      <span class="tag t-gr" style="font-size:.65em;">Letteratura e giornalismo</span></p>
+    </div>
+  </div>
+
+  <div class="cols mt6">
+    <div>
+      <p class="sm">
+        <strong>Per categoria (34 proposte):</strong>
+        Resistenza 32,4% · Scienze/medicina 14,7% · Sindacalismo 14,7% ·
+        Arte 8,8% · Letteratura 5,9% · Istruzione 5,9% · Politica 5,9% · Altro 11,7%
+      </p>
+    </div>
+    <div>
+      <p class="sm">
+        <span class="tag t-r">&#9733; Già con Giardino a Bologna</span>
+        <strong>Maria Montessori</strong> (2018), <strong>Virginia Cattani</strong> (2023),
+        <strong>Virginia Frazzoni</strong> (2023) — proponiamo una <strong>via o piazza
+        di maggiore rilievo urbanistico</strong>.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 7 — IMPATTO E OPEN DATA
+════════════════════════════════════════ -->
+<section>
+  <h2>Impatto e prospettive: open data per la cittadinanza</h2>
+  <div class="cols">
+
+    <div>
+      <div class="hl">
+        <strong>Un KG aperto e riutilizzabile.</strong> Tutto il codice, i dati e le query sono
+        pubblici. Chiunque può rieseguire l'analisi, aggiornare il KG con nuove delibere comunali
+        o estendere il modello ad altre città italiane.
+      </div>
+
+      <div class="hlb mt6">
+        <strong>Linked Open Data.</strong> Il KG è collegato a <strong>Wikidata</strong>
+        (943 entità arricchite, P106/P569/P570/P19/P20), compatibile con gli standard
+        <strong>AgID/Ontopia</strong> (CLV-AP_IT v1.0, CPV-AP_IT v0.8) e pronto per
+        l'integrazione con OpenData Bologna e il Linked Open Data italiano.
+      </div>
+
+      <div class="hlg mt6">
+        <strong>Trasparenza e riproducibilità.</strong> Ogni proposta è formalizzata in RDF
+        con criteri espliciti, fonti Wikipedia/Wikidata e motivazioni documentate.
+        Non una lista soggettiva, ma un corpus verificabile.
+      </div>
+    </div>
+
+    <div>
+      <div class="hl" style="background:#fff8ec; border-left-color:var(--amber)">
+        <strong>La toponomastica come atto politico.</strong> Ogni intitolazione è una scelta:
+        chi ricordare, dove, con quale peso urbanistico. Il 5,8% non è un dato neutro —
+        è il risultato di decenni di scelte che questo progetto rende misurabili e contestabili.
+      </div>
+
+      <div class="hlb mt6">
+        <strong>Scalabilità.</strong> La pipeline è replicabile per qualsiasi comune italiano
+        con dati aperti disponibili. Il modello ontologico (CLV + CPV + ex:) è progettato
+        per essere esteso e aggiornato nel tempo.
+      </div>
+
+      <div class="mt6">
+        <span class="tag t-b">Knowledge Graph</span>
+        <span class="tag t-b">SPARQL · rdflib</span>
+        <span class="tag t-r">LLM (5 modelli)</span>
+        <span class="tag t-gr">Wikidata LOD</span>
+        <span class="tag t-g">OpenData Bologna</span>
+        <span class="tag t-a">Ontopia/AgID</span>
+        <span class="tag t-b">SHACL validation</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     SLIDE 8 — CONCLUSIONI
+════════════════════════════════════════ -->
+<section>
+  <h2>Conclusioni</h2>
+  <div class="cols" style="align-items:center; gap:30px;">
+
+    <div>
+      <ul style="font-size:.82em; line-height:2;">
+        <li>
+          <strong>1.960 vie</strong> di Bologna analizzate con un Knowledge Graph
+          LOD-compatibile (15.885 triple, SHACL: 0 violazioni)
+        </li>
+        <li>
+          Solo il <strong>5,8%</strong> delle strade intitolate a persone porta un nome
+          femminile — un divario <em>misurabile, storico e modificabile</em>
+        </li>
+        <li>
+          Il gap non è omogeneo: varia per <strong>quartiere, tipologia e categoria
+          occupazionale</strong> e si può interrogare con SPARQL
+        </li>
+        <li>
+          <strong>34 proposte</strong> formalizzate in RDF — trasparenti, documentate,
+          pronte per la consultazione pubblica e l'iter comunale
+        </li>
+        <li>
+          Il KG è <strong>vivo e aggiornabile</strong>: ogni nuova delibera del Comune
+          di Bologna può essere integrata nel grafo
+        </li>
+      </ul>
+    </div>
+
+    <div class="tc">
+      <p class="sm" style="margin-bottom:6px;">Esplora il progetto completo:</p>
+      <a class="fin-link"
+         href="https://lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH/" target="_blank">
+        &#128279;&nbsp; lauratonsi.github.io/<br>PROGETTO_KNOWLEDGE_GRAPH
+      </a>
+      <p class="sm mt6">
+        Home · Il Tema · Metodologia · Query SPARQL<br>
+        LLM &amp; Prompt · Risultati · Proposte
+      </p>
+      <p style="margin-top:20px; font-size:.7em; color:var(--txm);">
+        Laura Tonsi · Susanna Cioni<br>
+        GEPID 2024–25 · Università di Bologna
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+</div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    width:  1200,
+    height: 700,
+    margin: 0.03,
+    minScale: 0.15,
+    maxScale: 2.5,
+    controls: true,
+    controlsTutorial: false,
+    controlsLayout: 'bottom-right',
+    progress: true,
+    center: false,
+    hash: true,
+    transition: 'fade',
+    backgroundTransition: 'fade',
+    transitionSpeed: 'fast',
+    slideNumber: 'c/t',
+    keyboard: true,
+    overview: true,
+    touch: true,
+  });
+</script>
+</body>
+</html>
