@@ -2,7 +2,7 @@
 arricchimento_kg.py
 Arricchisce bologna_KG_corretto.ttl con nuove proprietà estratte dai CSV.
 
-Aggiunge a clv:Street:
+Aggiunge a clv:StreetToponym:
   ex:quartiere          – nome del quartiere
   ex:geoPoint           – coordinate WGS84 del centroide (lat, lon)
   ex:dataIstituzione    – data di istituzione ufficiale della via

@@ -12,21 +12,22 @@
 
 PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
 PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT DISTINCT ?nomePersona ?genere ?nomeVia1 ?nomeVia2
 WHERE {
-  ?via1 a clv:Street ;
-        clv:hasStreetName ?nomeVia1 ;
-        clv:isDedicatedTo ?persona .
+  ?via1 a clv:StreetToponym ;
+        clv:officialStreetName ?nomeVia1 ;
+        ex:isDedicatedTo ?persona .
   ?persona a cpv:Person ;
            cpv:fullName ?nomePersona ;
            cpv:hasSex ?genere .
 
   OPTIONAL {
-    ?via2 a clv:Street ;
-          clv:hasStreetName ?nomeVia2 ;
-          clv:isDedicatedTo ?persona .
+    ?via2 a clv:StreetToponym ;
+          clv:officialStreetName ?nomeVia2 ;
+          ex:isDedicatedTo ?persona .
     FILTER(?via2 != ?via1)
   }
 

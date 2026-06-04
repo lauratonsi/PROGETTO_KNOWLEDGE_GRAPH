@@ -6,12 +6,13 @@
 
 PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
 PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT ?genere (COUNT(DISTINCT ?via) AS ?numero_strade)
 WHERE {
-  ?via a clv:Street ;
-       clv:isDedicatedTo ?persona .
+  ?via a clv:StreetToponym ;
+       ex:isDedicatedTo ?persona .
   ?persona a cpv:Person ;
            cpv:hasSex ?genere .
 }

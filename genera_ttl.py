@@ -44,6 +44,7 @@ def escape_literal(s):
 lines = [
     '@prefix clv: <https://w3id.org/italia/onto/CLV/> .',
     '@prefix cpv: <https://w3id.org/italia/onto/CPV/> .',
+    '@prefix ex:  <https://w3id.org/bologna/ontology#> .',
     '@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .',
     '',
 ]
@@ -73,9 +74,9 @@ with open(CSV_IN, encoding='utf-8') as f:
 
         # Street triples
         lines.append(f'{via_uri}')
-        lines.append(f'        rdf:type           clv:Street ;')
-        lines.append(f'        clv:hasStreetName  "{escape_literal(nome_via)}" ;')
-        lines.append(f'        clv:isDedicatedTo  {person_uri} .')
+        lines.append(f'        rdf:type                clv:StreetToponym ;')
+        lines.append(f'        clv:officialStreetName  "{escape_literal(nome_via)}" ;')
+        lines.append(f'        ex:isDedicatedTo        {person_uri} .')
         lines.append('')
 
         # Person triples (write once per unique person)

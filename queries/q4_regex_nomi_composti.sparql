@@ -4,15 +4,16 @@
 
 PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
 PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 SELECT DISTINCT ?tipo ?nomeVia ?nomePersona
 WHERE {
   {
     ## 4a — Strade con "FRATELLI": il maschile grammaticale oscura la presenza femminile
-    ?via a clv:Street ;
-         clv:hasStreetName ?nomeVia ;
-         clv:isDedicatedTo ?persona .
+    ?via a clv:StreetToponym ;
+         clv:officialStreetName ?nomeVia ;
+         ex:isDedicatedTo ?persona .
     ?persona cpv:fullName ?nomePersona .
     FILTER(REGEX(?nomeVia, "FRATELLI", "i"))
     BIND("Fratelli" AS ?tipo)
@@ -20,9 +21,9 @@ WHERE {
   UNION
   {
     ## 4b — Donne onorate con "MARIA" nel nome
-    ?via a clv:Street ;
-         clv:hasStreetName ?nomeVia ;
-         clv:isDedicatedTo ?persona .
+    ?via a clv:StreetToponym ;
+         clv:officialStreetName ?nomeVia ;
+         ex:isDedicatedTo ?persona .
     ?persona cpv:fullName ?nomePersona ;
              cpv:hasSex sex:F .
     FILTER(REGEX(?nomePersona, "MARIA", "i"))

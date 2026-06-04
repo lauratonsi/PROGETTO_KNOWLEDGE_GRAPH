@@ -109,6 +109,44 @@ L'analisi del gender gap nella toponomastica è inevitabilmente condizionata dal
 
 ---
 
+## Decisioni ontologiche e conformità agli standard Ontopia (giugno 2026)
+
+### 1. Conformità CLV-AP_IT v1.0
+
+Il Knowledge Graph usa i nomi di classe e proprietà ufficiali di CLV-AP_IT v1.0, verificati direttamente su [schema.gov.it/lodview/onto/CLV](https://schema.gov.it/lodview/onto/CLV) il 4 giugno 2026:
+
+| Termine usato nel KG | Alternativa scartata | Motivo |
+|---|---|---|
+| `clv:StreetToponym` | `clv:Street` | `clv:Street` non esiste in CLV-AP_IT: un tool RDF che dereferenzia `https://w3id.org/italia/onto/CLV/Street` riceve HTTP 404 |
+| `clv:officialStreetName` | `clv:hasStreetName` | `clv:hasStreetName` non esiste in CLV-AP_IT |
+| `ex:isDedicatedTo` | `clv:isDedicatedTo` | CLV-AP_IT non definisce alcuna proprietà per la relazione persona-luogo; la "dedicazione" è un concetto specifico di questo progetto e appartiene al namespace custom `ex:` |
+
+La proprietà `ex:isDedicatedTo` è dichiarata nel namespace `ex: <https://w3id.org/bologna/ontology#>`, comune a tutte le proprietà custom del progetto.
+
+### 2. cpv:hasSex invece di cpv:hasGender
+
+CPV v0.8 (marzo 2023) ha introdotto due proprietà distinte:
+- `cpv:hasSex` — sesso biologico, collegato al vocabolario controllato `classifications-for-people/sex` (valori: `sex/M`, `sex/F`)
+- `cpv:hasGender` — identità di genere socio-culturale, introdotta per distinguere il genere dal sesso biologico
+
+Il progetto usa `cpv:hasSex` e non `cpv:hasGender` per la seguente ragione tecnica: il vocabolario controllato corrispondente per `cpv:hasGender` (`https://w3id.org/italia/controlled-vocabulary/classifications-for-people/gender`) **non è ancora pubblicato** da Ontopia — la risorsa restituisce HTTP 404 (verificato il 4 giugno 2026). Usare `cpv:hasGender` senza un vocabolario a cui puntare renderebbe il KG non dereferenziabile come Linked Open Data.
+
+Il vocabolario per `cpv:hasSex` è invece pienamente disponibile e stabile. Questa scelta sarà rivista quando Ontopia pubblicherà il vocabolario gender.
+
+### 3. ex:macroCategoriaOccupazionale — tassonomia custom Bologna
+
+Ontopia/schema.gov.it **non fornisce classificazioni per professioni o occupazioni**. Verifica effettuata il 4 giugno 2026:
+
+- **CPV** (Core Person Vocabulary) — 23 object property, 16 data property: modella nome, data di nascita/morte, sesso, titolo, livello di istruzione, residenza, parentela. Nessuna proprietà relativa a professione, occupazione o ruolo lavorativo.
+- **RO** (Roles Ontology) — modella `Role` e `TimeIndexedRole` in modo astratto. Nessuna specializzazione occupazionale.
+- **VocabolariControllati/classifications-for-people** — contiene: education-level, marital-status, parental-relationship, person-title, registry-office types, sex. Nessuna classificazione delle professioni.
+
+L'unica classificazione italiana autorevole per le professioni è la **CP 2011 ISTAT** (adattamento italiano di ISCO-08), progettata però per occupazioni contemporanee e inapplicabile a figure storiche come "Patriota risorgimentale", "Pittrice fiamminga del '600" o "Compositore barocco". Queste categorie non esistono nell'ISCO-08.
+
+La proprietà `ex:macroCategoriaOccupazionale` è quindi una **tassonomia Bologna-specifica non standard**, dichiarata esplicitamente come tale nel namespace custom `ex:` e documentata nel `rdfs:comment` di `docs/schema.ttl`. I 9 valori adottati sono stati definiti dal gruppo di ricerca per l'analisi storico-culturale del gender gap nella toponomastica: `Arte visiva e architettura` · `Filosofia, storia e accademia` · `Letteratura e giornalismo` · `Musica, teatro e cinema` · `Patrioti, militari ed esploratori` · `Politica e diritto` · `Religione` · `Scienze e medicina` · `Altro / istituzionale`.
+
+---
+
 ## Arricchimento topografico e semantico del Knowledge Graph (maggio 2026)
 
 In una seconda fase di arricchimento, il Knowledge Graph è stato esteso con nuove proprietà estratte da due ulteriori dataset open data del Comune di Bologna e dal file di classificazione professionale prodotto internamente al progetto.
@@ -121,7 +159,7 @@ In una seconda fase di arricchimento, il Knowledge Graph è stato esteso con nuo
 | **le-aree-verdi-e-le-vie-di-bologna-dedicate-alle-donne.csv** | `ex:tipologiaLuogo`, `ex:datiAnagrafici`, `ex:professione` (colmatura) |
 | **classificazione_professioni.csv** (prodotto internamente) | `ex:macroCategoriaOccupazionale` |
 
-### Nuove proprietà su `clv:Street`
+### Nuove proprietà su `clv:StreetToponym`
 
 - **`ex:quartiere`** — nome del quartiere bolognese in cui ricade la strada (es. `"Savena"`, `"Porto - Saragozza"`). Presente per tutte le 1.131 strade Male e Female.
 - **`ex:geoPoint`** — coordinate WGS84 del centroide della strada, formato `"lat, lon"` (es. `"44.483592003952296, 11.367738980601088"`). Abilita query e visualizzazioni geospaziali.

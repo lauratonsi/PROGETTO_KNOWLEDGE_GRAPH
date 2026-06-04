@@ -89,7 +89,7 @@ Output: `bologna_KG_corretto.ttl` (aggiornato in-place)
 python arricchimento_kg.py
 ```
 
-Aggiunge a `clv:Street`: `ex:quartiere`, `ex:geoPoint`, `ex:dataIstituzione`, `ex:tipologiaLuogo`.  
+Aggiunge a `clv:StreetToponym`: `ex:quartiere`, `ex:geoPoint`, `ex:dataIstituzione`, `ex:tipologiaLuogo`.  
 Aggiunge a `cpv:Person`: `ex:macroCategoriaOccupazionale`, `ex:datiAnagrafici`, `ex:professione` (completamento).  
 Il TTL risultante conta 27.251 righe (16.244 triple RDF).
 
@@ -149,7 +149,7 @@ pip install rdflib
 from rdflib import Graph
 g = Graph()
 g.parse("bologna_KG_corretto.ttl", format="turtle")
-results = g.query("SELECT ?via WHERE { ?via a <https://w3id.org/italia/onto/CLV/Street> } LIMIT 10")
+results = g.query("SELECT ?via WHERE { ?via a <https://w3id.org/italia/onto/CLV/StreetToponym> } LIMIT 10")
 for row in results:
     print(row)
 ```
@@ -157,9 +157,9 @@ for row in results:
 ### Prefissi principali
 
 ```sparql
-PREFIX clv: <https://w3id.org/italia/onto/CLV/>       # strade
-PREFIX cpv: <https://w3id.org/italia/onto/CPV/>       # persone
-PREFIX ex:  <https://w3id.org/bologna/ontology#>      # proprietà custom
+PREFIX clv: <https://w3id.org/italia/onto/CLV/>       # strade (classe: clv:StreetToponym)
+PREFIX cpv: <https://w3id.org/italia/onto/CPV/>       # persone (classe: cpv:Person)
+PREFIX ex:  <https://w3id.org/bologna/ontology#>      # proprietà custom Bologna
 ```
 
 ### Query di esempio
@@ -171,8 +171,8 @@ PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
 
 SELECT ?genere (COUNT(DISTINCT ?via) AS ?numero_strade)
 WHERE {
-  ?via a clv:Street ;
-       clv:isDedicatedTo ?persona .
+  ?via a clv:StreetToponym ;
+       ex:isDedicatedTo ?persona .
   ?persona cpv:hasSex ?genere .
 }
 GROUP BY ?genere
@@ -186,9 +186,9 @@ PREFIX ex:  <https://w3id.org/bologna/ontology#>
 
 SELECT DISTINCT ?nomeVia ?nomePersona ?professione ?quartiere
 WHERE {
-  ?via a clv:Street ;
-       clv:hasStreetName ?nomeVia ;
-       clv:isDedicatedTo ?persona .
+  ?via a clv:StreetToponym ;
+       clv:officialStreetName ?nomeVia ;
+       ex:isDedicatedTo ?persona .
   OPTIONAL { ?via ex:quartiere ?quartiere }
   ?persona cpv:hasSex <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/F> ;
            cpv:fullName ?nomePersona .

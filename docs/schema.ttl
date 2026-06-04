@@ -26,17 +26,17 @@
     <http://purl.org/dc/terms/source> <https://www.wikidata.org/> ;
     <http://purl.org/dc/terms/license> <https://creativecommons.org/licenses/by/4.0/> ;
     <http://purl.org/dc/terms/rights> "CC BY 4.0 — Attribuzione richiesta" ;
-    <http://www.w3.org/2002/07/owl#versionInfo> "1.1 — arricchimento topografico e semantico" ;
+    <http://www.w3.org/2002/07/owl#versionInfo> "1.2 — conformità CLV-AP_IT v1.0 (clv:StreetToponym, clv:officialStreetName, ex:isDedicatedTo)" ;
     <http://xmlns.com/foaf/0.1/homepage> <https://lauratonsi.github.io/PROGETTO_KNOWLEDGE_GRAPH/> ;
     <http://xmlns.com/foaf/0.1/page> <https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH> .
 
 # ── Classes ───────────────────────────────────────────────────────────────────
 
-clv:Street
+clv:StreetToponym
     a owl:Class ;
-    rdfs:label "Strada"@it ;
-    rdfs:label "Street"@en ;
-    rdfs:comment "Arco stradale del grafo viario bolognese (via, piazza, viale, passaggio, largo, rotonda, parco, giardino, ecc.). Ogni istanza corrisponde a un CODVIA univoco degli Open Data comunali. Le strade possono avere proprietà di arricchimento: quartiere, coordinate geografiche, data di istituzione, tipologia luogo."@it .
+    rdfs:label "Toponimo Stradale"@it ;
+    rdfs:label "Street Toponym"@en ;
+    rdfs:comment "Nome ufficiale assegnato a un arco stradale del grafo viario bolognese (via, piazza, viale, passaggio, largo, rotonda, parco, giardino, ecc.). Ogni istanza corrisponde a un CODVIA univoco degli Open Data comunali. Le istanze possono avere proprietà di arricchimento: quartiere, coordinate geografiche, data di istituzione, tipologia luogo. Conforme a CLV-AP_IT v1.0 (verificato su schema.gov.it/lodview/onto/CLV)."@it .
 
 cpv:Person
     a owl:Class ;
@@ -46,30 +46,31 @@ cpv:Person
 
 # ── Object Property ───────────────────────────────────────────────────────────
 
-clv:isDedicatedTo
+ex:isDedicatedTo
     a owl:ObjectProperty ;
     rdfs:label "è dedicata a"@it ;
     rdfs:label "is dedicated to"@en ;
-    rdfs:domain clv:Street ;
+    rdfs:domain clv:StreetToponym ;
     rdfs:range  cpv:Person ;
-    rdfs:comment "Collega una strada alla persona a cui è intitolata. Presente solo per strade di genere Male o Female — i Toponimi non hanno questo collegamento."@it .
+    rdfs:comment "PROPRIETÀ CUSTOM Bologna (estensione al namespace ex:). CLV-AP_IT v1.0 non definisce alcuna proprietà per la relazione persona-luogo (verifica: schema.gov.it/lodview/onto/CLV). Collega un toponimo stradale alla persona a cui è intitolato. Presente solo per strade di genere Male o Female — i Toponimi senza riferimento a persona non hanno questo collegamento."@it .
 
 # ── Datatype Properties (rilevanti per l'analisi) ─────────────────────────────
 
-clv:hasStreetName
+clv:officialStreetName
     a owl:DatatypeProperty ;
-    rdfs:label "nome della strada"@it ;
-    rdfs:label "street name"@en ;
-    rdfs:domain clv:Street ;
-    rdfs:range  xsd:string .
+    rdfs:label "nome ufficiale della strada"@it ;
+    rdfs:label "official street name"@en ;
+    rdfs:domain clv:StreetToponym ;
+    rdfs:range  xsd:string ;
+    rdfs:comment "Nome ufficiale del toponimo stradale. Conforme a CLV-AP_IT v1.0."@it .
 
 cpv:hasSex
     a owl:ObjectProperty ;
-    rdfs:label "sesso"@it ;
+    rdfs:label "sesso biologico"@it ;
     rdfs:label "sex"@en ;
     rdfs:domain cpv:Person ;
     rdfs:range  <https://w3id.org/italia/onto/CPV/Sex> ;
-    rdfs:comment "Collega la persona a un'istanza del vocabolario controllato CPV-AP_IT v0.8: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/M> per maschio, .../sex/F per femmina."@it .
+    rdfs:comment "Collega la persona a un'istanza del vocabolario controllato CPV-AP_IT: sex/M o sex/F. NOTA METODOLOGICA: CPV v0.8 (marzo 2023) ha introdotto anche cpv:hasGender, distinto da cpv:hasSex, per modellare l'identità di genere socio-culturale. Abbiamo scelto cpv:hasSex perché il vocabolario controllato corrispondente per cpv:hasGender (classifications-for-people/gender) non è ancora pubblicato su schema.gov.it (risposta HTTP 404 verificata il 4 giugno 2026). Usare cpv:hasGender senza vocabolario controllato renderebbe il KG non dereferenziabile. La scelta sarà rivista quando Ontopia pubblicherà il vocabolario."@it .
 
 cpv:fullName
     a owl:DatatypeProperty ;
@@ -134,7 +135,7 @@ ex:quartiere
     a owl:DatatypeProperty ;
     rdfs:label "quartiere"@it ;
     rdfs:label "district"@en ;
-    rdfs:domain clv:Street ;
+    rdfs:domain clv:StreetToponym ;
     rdfs:range  xsd:string ;
     rdfs:comment "Nome del quartiere bolognese in cui ricade la strada."@it .
 
@@ -142,7 +143,7 @@ ex:geoPoint
     a owl:DatatypeProperty ;
     rdfs:label "geo point"@it ;
     rdfs:label "geo point"@en ;
-    rdfs:domain clv:Street ;
+    rdfs:domain clv:StreetToponym ;
     rdfs:range  xsd:string ;
     rdfs:comment "Coordinate WGS84 del centroide della strada (lat, lon), estratte dal dataset Open Data Comune di Bologna."@it .
 
@@ -150,7 +151,7 @@ ex:dataIstituzione
     a owl:DatatypeProperty ;
     rdfs:label "data di istituzione"@it ;
     rdfs:label "institution date"@en ;
-    rdfs:domain clv:Street ;
+    rdfs:domain clv:StreetToponym ;
     rdfs:range  xsd:string ;
     rdfs:comment "Data di istituzione ufficiale dell'intitolazione, formato ISO 8601 (es. '1991-10-21')."@it .
 
@@ -158,7 +159,7 @@ ex:tipologiaLuogo
     a owl:DatatypeProperty ;
     rdfs:label "tipologia del luogo"@it ;
     rdfs:label "place type"@en ;
-    rdfs:domain clv:Street ;
+    rdfs:domain clv:StreetToponym ;
     rdfs:range  xsd:string ;
     rdfs:comment "Tipo di luogo toponomastico (Via, Largo, Piazza, Passaggio, Rotonda, Parco, Giardino, ecc.). Presente solo per i luoghi dedicati a donne, estratto dal dataset 'Aree verdi e vie dedicate alle donne'."@it .
 
@@ -170,7 +171,7 @@ ex:macroCategoriaOccupazionale
     rdfs:label "occupational macro category"@en ;
     rdfs:domain cpv:Person ;
     rdfs:range  xsd:string ;
-    rdfs:comment "Categoria semantica della professione, assegnata tramite matching su parole chiave. 9 valori: Arte visiva e architettura · Filosofia, storia e accademia · Letteratura e giornalismo · Musica, teatro e cinema · Patrioti, militari ed esploratori · Politica e diritto · Religione · Scienze e medicina · Altro/istituzionale."@it .
+    rdfs:comment "PROPRIETÀ CUSTOM Bologna — tassonomia storico-culturale non standard. NOTA METODOLOGICA: Ontopia/schema.gov.it non fornisce alcuna classificazione per professioni o occupazioni (verificato il 4 giugno 2026: CPV ha 23 object property e 16 data property, nessuna relativa a professione; VocabolariControllati/classifications-for-people include solo education-level, marital-status, parental-relationship, person-title, registry-office types, sex). La CP 2011 ISTAT (adattamento italiano di ISCO-08) modella occupazioni contemporanee e non si applica a figure storiche (es. 'Patriota risorgimentale', 'Pittrice fiamminga'). Tassonomia Bologna-specifica con 9 valori: Arte visiva e architettura · Filosofia, storia e accademia · Letteratura e giornalismo · Musica, teatro e cinema · Patrioti, militari ed esploratori · Politica e diritto · Religione · Scienze e medicina · Altro/istituzionale."@it .
 
 ex:datiAnagrafici
     a owl:DatatypeProperty ;

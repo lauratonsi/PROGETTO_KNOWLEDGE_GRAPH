@@ -636,8 +636,8 @@ METHODOLOGY = page('Metodologia', '''
     <li><div><strong>Costruzione del Knowledge Graph</strong><br>
       Lo script <code>genera_ttl.py</code> (Python + <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>)
       legge il CSV classificato e genera il file <code>bologna_KG_corretto.ttl</code>
-      in formato Turtle (11.696 triple). Ogni strada è un nodo <code>clv:Street</code>;
-      le strade dedicate a persone sono collegate tramite <code>clv:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
+      in formato Turtle (11.696 triple). Ogni strada è un nodo <code>clv:StreetToponym</code>;
+      le strade dedicate a persone sono collegate tramite <code>ex:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
     <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
       Per le ~470 persone identificate, lo script <code>wikidata_fetch.py</code> interroga
       l'<a href="https://www.wikidata.org/w/api.php" target="_blank">API JSON di Wikidata</a>
@@ -665,9 +665,9 @@ METHODOLOGY = page('Metodologia', '''
 
   <p>Esempio di triple per una strada femminile:</p>
   <pre class="code-block"><code>&lt;https://w3id.org/bologna/resource/street/abc123&gt;
-    a clv:Street ;
-    clv:hasStreetName "VIA LAURA BASSI" ;
-    clv:isDedicatedTo &lt;https://w3id.org/bologna/resource/person/def456&gt; .
+    a clv:StreetToponym ;
+    clv:officialStreetName "VIA LAURA BASSI" ;
+    ex:isDedicatedTo &lt;https://w3id.org/bologna/resource/person/def456&gt; .
 
 &lt;https://w3id.org/bologna/resource/person/def456&gt;
     a cpv:Person ;
@@ -785,9 +785,9 @@ PREFIX sex:  <https://w3id.org/italia/controlled-vocabulary/classifications-for-
 
 SELECT DISTINCT ?nomeVia ?nomePersona ?genere ?professione ?dataNascita ?dataMorte ?luogoNascita
 WHERE {
-  ?strada  a clv:Street ;
-           clv:hasStreetName ?nomeVia ;
-           clv:isDedicatedTo ?persona .
+  ?strada  a clv:StreetToponym ;
+           clv:officialStreetName ?nomeVia ;
+           ex:isDedicatedTo ?persona .
   ?persona cpv:fullName ?nomePersona ;
            cpv:hasSex   ?genere .
   OPTIONAL { ?persona ex:professione   ?professione  }
@@ -806,8 +806,8 @@ PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-p
 
 SELECT ?genere (COUNT(DISTINCT ?via) AS ?numero)
 WHERE {
-  ?via a clv:Street ;
-       clv:isDedicatedTo ?persona .
+  ?via a clv:StreetToponym ;
+       ex:isDedicatedTo ?persona .
   ?persona cpv:hasSex ?genere .
 }
 GROUP BY ?genere
@@ -820,9 +820,9 @@ PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-p
 
 SELECT DISTINCT ?nomeVia ?nomePersona ?professione
 WHERE {
-  ?via a clv:Street ;
-       clv:hasStreetName ?nomeVia ;
-       clv:isDedicatedTo ?persona .
+  ?via a clv:StreetToponym ;
+       clv:officialStreetName ?nomeVia ;
+       ex:isDedicatedTo ?persona .
   ?persona cpv:fullName ?nomePersona ;
            cpv:hasSex sex:F .
   OPTIONAL { ?persona ex:professione ?professione }
@@ -837,8 +837,8 @@ PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-p
 
 SELECT DISTINCT ?nomePersona ?professione ?dataNascita ?dataMorte
 WHERE {
-  ?via a clv:Street ;
-       clv:isDedicatedTo ?persona .
+  ?via a clv:StreetToponym ;
+       ex:isDedicatedTo ?persona .
   ?persona cpv:fullName ?nomePersona ;
            cpv:hasSex sex:F .
   OPTIONAL { ?persona ex:professione ?professione }
@@ -1170,9 +1170,9 @@ LLM_PAGE = page('LLM & Prompt', '''
 @prefix cpv: &lt;https://w3id.org/italia/onto/CPV/&gt; .
 
 &lt;https://w3id.org/bologna/resource/street/via-laura-bassi&gt;
-    a clv:Street ;
-    clv:hasStreetName "VIA LAURA BASSI" ;
-    clv:isDedicatedTo &lt;https://w3id.org/bologna/resource/person/laura-bassi&gt; .
+    a clv:StreetToponym ;
+    clv:officialStreetName "VIA LAURA BASSI" ;
+    ex:isDedicatedTo &lt;https://w3id.org/bologna/resource/person/laura-bassi&gt; .
 
 &lt;https://w3id.org/bologna/resource/person/laura-bassi&gt;
     a cpv:Person ;

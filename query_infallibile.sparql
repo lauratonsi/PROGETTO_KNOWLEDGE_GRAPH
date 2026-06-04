@@ -3,12 +3,13 @@ PREFIX xyz: <http://sparql.xyz/facade-x/data/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX clv: <https://w3id.org/italia/onto/CLV/>
 PREFIX cpv: <https://w3id.org/italia/onto/CPV/>
+PREFIX ex:  <https://w3id.org/bologna/ontology#>
 PREFIX sex: <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/>
 
 CONSTRUCT {
-  ?viaURI a clv:Street ;
-          clv:hasStreetName ?nomeIntero ;
-          clv:isDedicatedTo ?personaURI .
+  ?viaURI a clv:StreetToponym ;
+          clv:officialStreetName ?nomeIntero ;
+          ex:isDedicatedTo ?personaURI .
 
   ?personaURI a cpv:Person ;
               cpv:fullName ?nomePulitissimo ;
