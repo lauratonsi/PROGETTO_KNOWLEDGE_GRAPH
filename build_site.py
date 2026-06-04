@@ -636,7 +636,7 @@ METHODOLOGY = page('Metodologia', '''
     <li><div><strong>Costruzione del Knowledge Graph</strong><br>
       Lo script <code>genera_ttl.py</code> (Python + <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>)
       legge il CSV classificato e genera il file <code>bologna_KG_corretto.ttl</code>
-      in formato Turtle (11.696 triple). Ogni strada è un nodo <code>clv:StreetToponym</code>;
+      in formato Turtle (16.244 triple). Ogni strada è un nodo <code>clv:StreetToponym</code>;
       le strade dedicate a persone sono collegate tramite <code>ex:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
     <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
       Per le ~470 persone identificate, lo script <code>wikidata_fetch.py</code> interroga
@@ -695,8 +695,8 @@ METHODOLOGY = page('Metodologia', '''
       Apri lo schema in WebVOWL &rarr;
     </a>
     <p class="webvowl-note">WebVOWL carica <code>schema.ttl</code> da GitHub Pages e mostra le classi
-    (<em>Street</em>, <em>Person</em>), la proprietà oggetto <em>isDedicatedTo</em> e le proprietà dato
-    (<em>hasStreetName</em>, <em>sex</em>, <em>fullName</em>, <em>proposta</em>, <em>statoProposta</em>)
+    (<em>StreetToponym</em>, <em>Person</em>), la proprietà oggetto <em>isDedicatedTo</em> e le proprietà dato
+    (<em>officialStreetName</em>, <em>sex</em>, <em>fullName</em>, <em>proposta</em>, <em>statoProposta</em>)
     come grafo interattivo navigabile.</p>
   </div>
 

@@ -55,11 +55,12 @@
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
 
 <span class="sk">SELECT</span> <span class="sv">?genere</span> (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?via</span>) <span class="sk">AS</span> <span class="sv">?numero_strade</span>)
 <span class="sk">WHERE</span> {
-  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+       <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sk">a</span> <span class="sp">cpv</span>:Person ;
            <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
 }
@@ -83,12 +84,13 @@
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span>
 <span class="sk">WHERE</span> {
-  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-       <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+       <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
+       <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sk">a</span> <span class="sp">cpv</span>:Person ;
            <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
            <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
@@ -121,13 +123,14 @@
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?tipologia</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span>
 <span class="sk">WHERE</span> {
   {
-    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-         <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-         <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+         <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
+         <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
     <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
              <span class="sp">cpv</span>:sex &quot;Female&quot; .
     <span class="sk">FILTER</span>(<span class="sk">STRSTARTS</span>(<span class="sv">?nomeVia</span>, &quot;VIA &quot;))
@@ -135,9 +138,9 @@
   }
   <span class="sk">UNION</span>
   {
-    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-         <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-         <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+         <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
+         <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
     <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
              <span class="sp">cpv</span>:sex &quot;Female&quot; .
     <span class="sk">FILTER</span>(<span class="sk">STRSTARTS</span>(<span class="sv">?nomeVia</span>, &quot;PIAZZA &quot;) || <span class="sk">STRSTARTS</span>(<span class="sv">?nomeVia</span>, &quot;PIAZZALE &quot;))
@@ -166,14 +169,15 @@
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?tipo</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span>
 <span class="sk">WHERE</span> {
   {
     <span class="sc">## 4a — Strade con &quot;FRATELLI&quot;: il maschile grammaticale oscura la presenza femminile</span>
-    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-         <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-         <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+         <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
+         <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
     <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> .
     <span class="sk">FILTER</span>(<span class="sk">REGEX</span>(<span class="sv">?nomeVia</span>, &quot;FRATELLI&quot;, &quot;i&quot;))
     <span class="sk">BIND</span>(&quot;Fratelli&quot; <span class="sk">AS</span> <span class="sv">?tipo</span>)
@@ -181,9 +185,9 @@
   <span class="sk">UNION</span>
   {
     <span class="sc">## 4b — Donne onorate con &quot;MARIA&quot; nel nome</span>
-    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-         <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-         <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+    <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+         <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
+         <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
     <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
              <span class="sp">cpv</span>:sex &quot;Female&quot; .
     <span class="sk">FILTER</span>(<span class="sk">REGEX</span>(<span class="sv">?nomePersona</span>, &quot;MARIA&quot;, &quot;i&quot;))
@@ -231,20 +235,21 @@
 
 <span class="sk">PREFIX</span> <span class="sp">clv</span>: &lt;https://w3id.org/italia/onto/CLV/&gt;
 <span class="sk">PREFIX</span> <span class="sp">cpv</span>: &lt;https://w3id.org/italia/onto/CPV/&gt;
+<span class="sk">PREFIX</span> <span class="sp">ex</span>:  &lt;https://w3id.org/bologna/ontology#&gt;
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomePersona</span> <span class="sv">?genere</span> <span class="sv">?nomeVia1</span> <span class="sv">?nomeVia2</span>
 <span class="sk">WHERE</span> {
-  <span class="sv">?via1</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-        <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia1</span> ;
-        <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+  <span class="sv">?via1</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+        <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia1</span> ;
+        <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sk">a</span> <span class="sp">cpv</span>:Person ;
            <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
            <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
 
   <span class="sk">OPTIONAL</span> {
-    <span class="sv">?via2</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-          <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia2</span> ;
-          <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+    <span class="sv">?via2</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+          <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia2</span> ;
+          <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
     <span class="sk">FILTER</span>(<span class="sv">?via2</span> != <span class="sv">?via1</span>)
   }
 
@@ -276,9 +281,9 @@
 
 <span class="sk">SELECT</span> <span class="sk">DISTINCT</span> <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span> <span class="sv">?genere</span> <span class="sv">?professione</span> <span class="sv">?dataNascita</span> <span class="sv">?dataMorte</span> <span class="sv">?luogoNascita</span>
 <span class="sk">WHERE</span> {
-  <span class="sv">?strada</span>  <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-           <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-           <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+  <span class="sv">?strada</span>  <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+           <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
+           <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
            <span class="sp">cpv</span>:sex      <span class="sv">?genere</span> .
   <span class="sk">OPTIONAL</span> { <span class="sv">?persona</span> <span class="sp">ex</span>:professione   <span class="sv">?professione</span>  }
@@ -315,8 +320,8 @@
 <span class="sk">SELECT</span> <span class="sv">?quartiere</span> <span class="sv">?genere</span>
        (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?via</span>) <span class="sk">AS</span> <span class="sv">?numStrade</span>)
 <span class="sk">WHERE</span> {
-  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> ;
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+       <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> ;
        <span class="sp">ex</span>:quartiere <span class="sv">?quartiere</span> .
   <span class="sv">?persona</span> <span class="sp">cpv</span>:sex <span class="sv">?genere</span> .
   <span class="sk">FILTER</span>(<span class="sv">?genere</span> = &quot;Female&quot; || <span class="sv">?genere</span> = &quot;Male&quot;)
@@ -357,8 +362,8 @@
 <span class="sk">SELECT</span> <span class="sv">?genere</span> <span class="sv">?categoria</span>
        (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?persona</span>) <span class="sk">AS</span> <span class="sv">?persone</span>)
 <span class="sk">WHERE</span> {
-  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+       <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sp">cpv</span>:sex <span class="sv">?genere</span> ;
            <span class="sp">ex</span>:macroCategoriaOccupazionale <span class="sv">?categoria</span> .
   <span class="sk">FILTER</span>(<span class="sv">?genere</span> = &quot;Female&quot; || <span class="sv">?genere</span> = &quot;Male&quot;)
@@ -398,8 +403,8 @@
 <span class="sk">SELECT</span> <span class="sv">?decennio</span>
        (<span class="sk">COUNT</span>(<span class="sk">DISTINCT</span> <span class="sv">?via</span>) <span class="sk">AS</span> <span class="sv">?nuoveStrade</span>)
 <span class="sk">WHERE</span> {
-  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> ;
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+       <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> ;
        <span class="sp">ex</span>:dataIstituzione <span class="sv">?dataIst</span> .
   <span class="sv">?persona</span> <span class="sp">cpv</span>:sex &quot;Female&quot; .
   <span class="sk">BIND</span>(<span class="sk">CONCAT</span>(<span class="sk">SUBSTR</span>(<span class="sv">?dataIst</span>, 1, 3), &quot;0s&quot;) <span class="sk">AS</span> <span class="sv">?decennio</span>)
@@ -434,9 +439,9 @@
        <span class="sv">?nomeVia</span> <span class="sv">?nomePersona</span> <span class="sv">?tipologia</span> <span class="sv">?quartiere</span>
        <span class="sv">?professione</span> <span class="sv">?categoria</span> <span class="sv">?datiAnagrafici</span>
 <span class="sk">WHERE</span> {
-  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:Street ;
-       <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-       <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> ;
+  <span class="sv">?via</span> <span class="sk">a</span> <span class="sp">clv</span>:StreetToponym ;
+       <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
+       <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> ;
        <span class="sp">ex</span>:quartiere <span class="sv">?quartiere</span> .
   <span class="sv">?persona</span> <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> ;
            <span class="sp">cpv</span>:sex &quot;Female&quot; .
@@ -479,9 +484,9 @@
 <span class="sk">PREFIX</span> <span class="sp">ex</span>:  <span class="su">&lt;https://w3id.org/bologna/ontology#&gt;</span>
 
 <span class="sk">CONSTRUCT</span> {
-  <span class="sv">?strada</span>  <span class="sk">a</span>                              <span class="sp">clv</span>:Street ;
-           <span class="sp">clv</span>:hasStreetName               <span class="sv">?nomeVia</span> ;
-           <span class="sp">clv</span>:isDedicatedTo               <span class="sv">?persona</span> ;
+  <span class="sv">?strada</span>  <span class="sk">a</span>                              <span class="sp">clv</span>:StreetToponym ;
+           <span class="sp">clv</span>:officialStreetName               <span class="sv">?nomeVia</span> ;
+           <span class="sp">ex</span>:isDedicatedTo               <span class="sv">?persona</span> ;
            <span class="sp">ex</span>:quartiere                    <span class="sv">?quartiere</span> .
   <span class="sv">?persona</span> <span class="sk">a</span>                              <span class="sp">cpv</span>:Person ;
            <span class="sp">cpv</span>:fullName                    <span class="sv">?nomePersona</span> ;
@@ -490,9 +495,9 @@
            <span class="sp">ex</span>:macroCategoriaOccupazionale  <span class="sv">?categoria</span> .
 }
 <span class="sk">WHERE</span> {
-  <span class="sv">?strada</span>  <span class="sk">a</span>              <span class="sp">clv</span>:Street ;
-           <span class="sp">clv</span>:hasStreetName <span class="sv">?nomeVia</span> ;
-           <span class="sp">clv</span>:isDedicatedTo <span class="sv">?persona</span> .
+  <span class="sv">?strada</span>  <span class="sk">a</span>              <span class="sp">clv</span>:StreetToponym ;
+           <span class="sp">clv</span>:officialStreetName <span class="sv">?nomeVia</span> ;
+           <span class="sp">ex</span>:isDedicatedTo <span class="sv">?persona</span> .
   <span class="sv">?persona</span> <span class="sp">cpv</span>:sex      <span class="ss">"Female"</span> ;
            <span class="sp">cpv</span>:fullName <span class="sv">?nomePersona</span> .
   <span class="sk">OPTIONAL</span> { <span class="sv">?strada</span>  <span class="sp">ex</span>:quartiere                   <span class="sv">?quartiere</span>  }
