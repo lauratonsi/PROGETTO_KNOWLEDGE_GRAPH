@@ -113,7 +113,7 @@ L'analisi del gender gap nella toponomastica è inevitabilmente condizionata dal
 
 ### 1. Conformità CLV-AP_IT v1.0
 
-Il Knowledge Graph usa i nomi di classe e proprietà ufficiali di CLV-AP_IT v1.0, verificati direttamente su [schema.gov.it/lodview/onto/CLV](https://schema.gov.it/lodview/onto/CLV) il 4 giugno 2026:
+Il Knowledge Graph usa i nomi di classe e proprietà ufficiali di CLV-AP_IT v1.0, verificati direttamente su [schema.gov.it/lodview/onto/CLV](https://schema.gov.it/lodview/onto/CLV) il maggio-giugno 2026:
 
 | Termine usato nel KG | Alternativa scartata | Motivo |
 |---|---|---|
@@ -129,13 +129,13 @@ CPV v0.8 (marzo 2023) ha introdotto due proprietà distinte:
 - `cpv:hasSex` — sesso biologico, collegato al vocabolario controllato `classifications-for-people/sex` (valori: `sex/M`, `sex/F`)
 - `cpv:hasGender` — identità di genere socio-culturale, introdotta per distinguere il genere dal sesso biologico
 
-Il progetto usa `cpv:hasSex` e non `cpv:hasGender` per la seguente ragione tecnica: il vocabolario controllato corrispondente per `cpv:hasGender` (`https://w3id.org/italia/controlled-vocabulary/classifications-for-people/gender`) **non è ancora pubblicato** da Ontopia — la risorsa restituisce HTTP 404 (verificato il 4 giugno 2026). Usare `cpv:hasGender` senza un vocabolario a cui puntare renderebbe il KG non dereferenziabile come Linked Open Data.
+Il progetto usa `cpv:hasSex` e non `cpv:hasGender` per la seguente ragione tecnica: il vocabolario controllato corrispondente per `cpv:hasGender` (`https://w3id.org/italia/controlled-vocabulary/classifications-for-people/gender`) **non è ancora pubblicato** da Ontopia — la risorsa restituisce HTTP 404 (verificato il maggio-giugno 2026). Usare `cpv:hasGender` senza un vocabolario a cui puntare renderebbe il KG non dereferenziabile come Linked Open Data.
 
 Il vocabolario per `cpv:hasSex` è invece pienamente disponibile e stabile. Questa scelta sarà rivista quando Ontopia pubblicherà il vocabolario gender.
 
 ### 3. ex:macroCategoriaOccupazionale — tassonomia custom Bologna
 
-Ontopia/schema.gov.it **non fornisce classificazioni per professioni o occupazioni**. Verifica effettuata il 4 giugno 2026:
+Ontopia/schema.gov.it **non fornisce classificazioni per professioni o occupazioni**. Verifica effettuata il maggio-giugno 2026:
 
 - **CPV** (Core Person Vocabulary) — 23 object property, 16 data property: modella nome, data di nascita/morte, sesso, titolo, livello di istruzione, residenza, parentela. Nessuna proprietà relativa a professione, occupazione o ruolo lavorativo.
 - **RO** (Roles Ontology) — modella `Role` e `TimeIndexedRole` in modo astratto. Nessuna specializzazione occupazionale.

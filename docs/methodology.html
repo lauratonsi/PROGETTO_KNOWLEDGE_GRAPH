@@ -319,7 +319,7 @@
 
   <h2>Decisioni ontologiche e conformità CLV-AP_IT</h2>
   <p>Le scelte di vocabolario sono state verificate direttamente sulle ontologie ufficiali pubblicate su
-  <a href="https://schema.gov.it" target="_blank" rel="noopener">schema.gov.it</a> (Ontopia/AgID) il 4 giugno 2026.
+  <a href="https://schema.gov.it" target="_blank" rel="noopener">schema.gov.it</a> (Ontopia/AgID) il maggio-giugno 2026.
   Di seguito le tre decisioni principali con le relative motivazioni.</p>
 
   <h3>1. Conformità CLV-AP_IT v1.0: clv:StreetToponym, clv:officialStreetName, ex:isDedicatedTo</h3>
@@ -333,13 +333,13 @@
   <h3>2. cpv:hasSex invece di cpv:hasGender</h3>
   <p>CPV v0.8 (marzo 2023) ha introdotto due proprietà distinte: <code>cpv:hasSex</code> per il sesso biologico e <code>cpv:hasGender</code> per l'identità di genere socio-culturale. Il progetto usa <code>cpv:hasSex</code> perché il <strong>vocabolario controllato corrispondente per <code>cpv:hasGender</code></strong>
   (<code>classifications-for-people/gender</code>) <strong>non è ancora pubblicato</strong> su schema.gov.it
-  (risposta HTTP 404 verificata il 4 giugno 2026). Usare <code>cpv:hasGender</code> senza un vocabolario a cui puntare renderebbe il KG non dereferenziabile come Linked Open Data.
+  (risposta HTTP 404 verificata il maggio-giugno 2026). Usare <code>cpv:hasGender</code> senza un vocabolario a cui puntare renderebbe il KG non dereferenziabile come Linked Open Data.
   Il vocabolario per <code>cpv:hasSex</code> è invece pienamente disponibile:
   <code>&lt;https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/M&gt;</code> e
   <code>.../sex/F</code>. <em>Questa scelta sarà rivista quando Ontopia pubblicherà il vocabolario gender.</em></p>
 
   <h3>3. ex:macroCategoriaOccupazionale — tassonomia custom Bologna</h3>
-  <p>Ontopia non fornisce classificazioni per professioni o occupazioni. Verifica effettuata (4 giugno 2026):</p>
+  <p>Ontopia non fornisce classificazioni per professioni o occupazioni. Verifica effettuata (maggio-giugno 2026):</p>
   <ul>
     <li><strong>CPV</strong> — 23 object property e 16 data property: nessuna riguarda professione, occupazione o ruolo lavorativo.</li>
     <li><strong>RO</strong> (Roles Ontology) — modella <code>Role</code> e <code>TimeIndexedRole</code> in modo astratto, senza specializzazione occupazionale.</li>
@@ -505,7 +505,7 @@
   <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/main/validation/shacl_report.txt" target="_blank"><code>validation/shacl_report.txt</code></a>.</p>
 
   <div class="info-box" style="font-family:monospace;font-size:0.9rem">
-    <strong>Validation Report — 4 giugno 2026</strong><br>
+    <strong>Validation Report — maggio-giugno 2026</strong><br>
     Tool: pyshacl 0.31.0 · Data graph: bologna_KG_corretto.ttl (15.885 triple)<br>
     Shapes: StreetToponymShape (7 vincoli) + PersonShape (10 vincoli)<br><br>
     <strong style="color:#2e7d32">Conforms: True — 0 violazioni</strong>
