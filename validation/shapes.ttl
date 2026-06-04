@@ -1,0 +1,138 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix clv:  <https://w3id.org/italia/onto/CLV/> .
+@prefix cpv:  <https://w3id.org/italia/onto/CPV/> .
+@prefix ex:   <https://w3id.org/bologna/ontology#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix sex:  <https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SHAPE 1 — clv:StreetToponym
+# Ogni istanza deve avere: nome ufficiale (1), collegamento a Person (1).
+# Proprietà di arricchimento opzionali con vincolo di unicità.
+# ─────────────────────────────────────────────────────────────────────────────
+
+ex:StreetToponymShape
+    a sh:NodeShape ;
+    sh:targetClass clv:StreetToponym ;
+    rdfs:label "Vincoli su clv:StreetToponym"@it ;
+
+    sh:property [
+        sh:path clv:officialStreetName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Ogni clv:StreetToponym deve avere esattamente un clv:officialStreetName (xsd:string)."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:isDedicatedTo ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class cpv:Person ;
+        sh:message "Ogni clv:StreetToponym deve essere collegato a esattamente una cpv:Person tramite ex:isDedicatedTo."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:quartiere ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:quartiere deve essere xsd:string e apparire al massimo una volta."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:geoPoint ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:geoPoint deve apparire al massimo una volta."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:dataIstituzione ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:dataIstituzione deve essere xsd:string e apparire al massimo una volta."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:tipologiaLuogo ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:tipologiaLuogo deve essere xsd:string e apparire al massimo una volta."@it
+    ] .
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SHAPE 2 — cpv:Person (persone storiche)
+# Ogni istanza deve avere: fullName (1), hasSex ∈ {sex:M, sex:F} (1).
+# Proprietà biografiche opzionali con vincolo di unicità.
+# ─────────────────────────────────────────────────────────────────────────────
+
+ex:PersonShape
+    a sh:NodeShape ;
+    sh:targetClass cpv:Person ;
+    rdfs:label "Vincoli su cpv:Person"@it ;
+
+    sh:property [
+        sh:path cpv:fullName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "Ogni cpv:Person deve avere esattamente un cpv:fullName."@it
+    ] ;
+
+    sh:property [
+        sh:path cpv:hasSex ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in ( sex:M sex:F ) ;
+        sh:message "cpv:hasSex deve essere esattamente sex:M o sex:F (vocabolario controllato CPV-AP_IT)."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:professione ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:professione deve essere xsd:string e apparire al massimo una volta."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:macroCategoriaOccupazionale ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:macroCategoriaOccupazionale deve essere xsd:string e apparire al massimo una volta."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:dataNascita ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:dataNascita deve essere xsd:string e apparire al massimo una volta."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:luogoNascita ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:luogoNascita deve essere xsd:string e apparire al massimo una volta."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:dataMorte ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:dataMorte deve essere xsd:string e apparire al massimo una volta."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:luogoMorte ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:luogoMorte deve essere xsd:string e apparire al massimo una volta."@it
+    ] ;
+
+    sh:property [
+        sh:path ex:datiAnagrafici ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "ex:datiAnagrafici deve essere xsd:string e apparire al massimo una volta."@it
+    ] .

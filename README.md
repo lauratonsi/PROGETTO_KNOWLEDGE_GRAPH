@@ -91,7 +91,7 @@ python arricchimento_kg.py
 
 Aggiunge a `clv:StreetToponym`: `ex:quartiere`, `ex:geoPoint`, `ex:dataIstituzione`, `ex:tipologiaLuogo`.  
 Aggiunge a `cpv:Person`: `ex:macroCategoriaOccupazionale`, `ex:datiAnagrafici`, `ex:professione` (completamento).  
-Il TTL risultante conta 27.251 righe (16.244 triple RDF).
+Il TTL risultante conta 18.486 righe (16.222 triple RDF).
 
 ---
 
@@ -114,7 +114,7 @@ Il TTL risultante conta 27.251 righe (16.244 triple RDF).
 |---|---|
 | `bologna_entita_uniche_comma.csv` | Classificazione LLM grezza (input) |
 | `bologna_KG_ready.csv` | CSV classificato e corretto (output di `equita.py`) |
-| `bologna_KG_corretto.ttl` | Knowledge Graph finale (27.251 righe, 16.244 triple) |
+| `bologna_KG_corretto.ttl` | Knowledge Graph finale (18.486 righe, 16.222 triple) |
 | `F_M DATE.xlsx` | Dati biografici Wikidata per 1.129 persone |
 | `classificazione_professioni.csv` | Macro-categorie occupazionali |
 | `proposte_intitolazioni_future.csv` | 34 proposte di nuove intitolazioni |
@@ -126,7 +126,7 @@ Il TTL risultante conta 27.251 righe (16.244 triple RDF).
 
 ## Usare il Knowledge Graph
 
-Il file `bologna_KG_corretto.ttl` è un grafo RDF in formato Turtle (16.244 triple) interrogabile con qualsiasi strumento SPARQL.
+Il file `bologna_KG_corretto.ttl` è un grafo RDF in formato Turtle (16.222 triple) interrogabile con qualsiasi strumento SPARQL.
 
 ### Caricare il grafo
 

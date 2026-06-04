@@ -1,0 +1,27 @@
+# SHACL Validation Report — Bologna Gender Gap Knowledge Graph
+# Generated: 2026-06-04T08:17:45Z
+# Tool: pyshacl 0.31.0 (Python 3.13.11)
+# Data graph: bologna_KG_corretto.ttl (16222 triple)
+# Shapes graph: validation/shapes.ttl
+# Shapes: StreetToponymShape (7 vincoli) + PersonShape (10 vincoli)
+#
+# Ontologies validated:
+#   CLV-AP_IT v1.0 — https://w3id.org/italia/onto/CLV/
+#   CPV-AP_IT v0.8 — https://w3id.org/italia/onto/CPV/
+#   Vocabolario sesso — https://w3id.org/italia/controlled-vocabulary/classifications-for-people/sex/
+
+Validation Report
+Conforms: True
+
+# Summary
+# -------
+# Conforms: True
+# Violations: 0
+# Shapes checked:
+#   - clv:StreetToponym: officialStreetName (1..1, xsd:string)
+#                        ex:isDedicatedTo (1..1, class cpv:Person)
+#                        ex:quartiere, ex:geoPoint, ex:dataIstituzione, ex:tipologiaLuogo (0..1)
+#   - cpv:Person: cpv:fullName (1..1)
+#                 cpv:hasSex (1..1, sh:in [sex:M, sex:F])
+#                 ex:professione, ex:macroCategoriaOccupazionale, ex:dataNascita,
+#                 ex:luogoNascita, ex:dataMorte, ex:luogoMorte, ex:datiAnagrafici (0..1)

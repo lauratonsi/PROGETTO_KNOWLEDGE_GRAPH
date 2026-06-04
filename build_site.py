@@ -636,7 +636,7 @@ METHODOLOGY = page('Metodologia', '''
     <li><div><strong>Costruzione del Knowledge Graph</strong><br>
       Lo script <code>genera_ttl.py</code> (Python + <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>)
       legge il CSV classificato e genera il file <code>bologna_KG_corretto.ttl</code>
-      in formato Turtle (16.244 triple). Ogni strada è un nodo <code>clv:StreetToponym</code>;
+      in formato Turtle (16.222 triple). Ogni strada è un nodo <code>clv:StreetToponym</code>;
       le strade dedicate a persone sono collegate tramite <code>ex:isDedicatedTo</code> a un nodo <code>cpv:Person</code>.</div></li>
     <li><div><strong>Arricchimento biografico via Wikidata</strong><br>
       Per le ~470 persone identificate, lo script <code>wikidata_fetch.py</code> interroga
@@ -860,7 +860,7 @@ SPARQL = page('Query SPARQL', f'''
 <div class="section">
   <h2>Interrogazione interattiva</h2>
   <p>Scrivi o modifica una query SPARQL ed eseguila direttamente nel browser sul Knowledge Graph di Bologna.
-  Il file <code>bologna_KG_corretto.ttl</code> (16.244 triple) viene caricato in memoria
+  Il file <code>bologna_KG_corretto.ttl</code> (16.222 triple) viene caricato in memoria
   tramite <a href="https://oxigraph.org/" target="_blank">Oxigraph</a>, un motore SPARQL&nbsp;1.1
   compilato in WebAssembly.</p>
   <p style="font-size:0.88rem;color:var(--text-muted)"><strong>Nota:</strong>
@@ -883,7 +883,7 @@ SPARQL = page('Query SPARQL', f'''
   <div class="info-box">
     Il Knowledge Graph è disponibile come file Turtle nel repository:
     <a href="https://github.com/lauratonsi/PROGETTO_KNOWLEDGE_GRAPH/blob/classificazioni-corrette/bologna_KG_corretto.ttl" target="_blank">
-    bologna_KG_corretto.ttl</a> (16.244 triple).
+    bologna_KG_corretto.ttl</a> (16.222 triple).
     Per eseguire le query localmente: <code>python run_queries.py</code> (usa
     <a href="https://rdflib.readthedocs.io/" target="_blank">rdflib</a>).
   </div>
